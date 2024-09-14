@@ -5,6 +5,7 @@ import Dashboard from "./pages/Dashboard"
 import Supervisors from './pages/Supervisors';
 import Users from './pages/Users';
 import Categories from './pages/Categories';
+import PendingCourses from './pages/Courses/PendingCourses';
 
 function App() {
  
@@ -17,6 +18,7 @@ function App() {
              <Route path="supervisors" element={<Supervisors />} />
              <Route path="users" element={<Users />} />
              <Route path="categories" element={<Categories />} />
+             <Route path="pendingCourses" element={<PendingCourses />} /> 
           </Route>
       </Routes>
     </>

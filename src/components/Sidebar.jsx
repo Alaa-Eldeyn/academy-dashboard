@@ -39,8 +39,8 @@ function Sidebar() {
          icon: <LiaFileVideoSolid  className="text-2xl" />,
          dropdown: true,
          items: [
-            { link: "/published-courses", title: "Published Courses" },
-            { link: "/pending-courses", title: "Pending Courses" }
+            { link: "pendingCourses", title: "Pending Courses" },
+            { link: "/published-courses", title: "Published Courses" }
          ]
       }
    ];
