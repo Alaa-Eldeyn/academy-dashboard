@@ -1,6 +1,7 @@
 import { FaBarsStaggered } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { MdWindow } from "react-icons/md";
+import { TbUserCog } from "react-icons/tb";
 
 function Sidebar() {
   return (
@@ -16,11 +17,17 @@ function Sidebar() {
         </Link>
          <ul class="space-y-2 font-medium mt-10">
             <li>
-               <Link to={"/pages/Dashboard"} class="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 dark:hover:bg-gray-200 group">
-                   <MdWindow className="text-lg" />
+               <Link to={"/"} class="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 dark:hover:bg-gray-200 group">
+                   <MdWindow className="text-2xl" />
                   <span class="ms-3 text-lg">Dashboard</span>
                </Link>
             </li>
+            <li>
+               <Link to={"supervisors"} class="flex items-center p-2 text-gray-900 rounded-lg  hover:bg-gray-100 dark:hover:bg-gray-200 group">
+                   <TbUserCog  className="text-2xl" />
+                  <span class="ms-3 text-lg">Supervisors</span>
+               </Link>
+            </li>  
          </ul>
       </div>
    </aside>
