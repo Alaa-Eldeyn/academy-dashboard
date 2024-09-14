@@ -1,19 +1,20 @@
-import { TbUserStar } from "react-icons/tb";
 import { MdDelete } from "react-icons/md";
 import { IoEyeOutline } from "react-icons/io5";
 import { IoAddCircleOutline } from "react-icons/io5";
 import PaginatedItems from "../components/PaginatedItems";
+import { FaUsers } from "react-icons/fa6";
+import { MdOutlineCategory } from "react-icons/md";
 
-function Supervisors() {
-  const items = [1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
+function Categories() {
+  const items = [1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
 
   return (
-    <div className="flex flex-col  -ml-[1rem]  sm:ml-[12rem]     md:ml-[14rem]    lg:ml-[11rem]     lg:flex-row">
+    <div className="flex flex-col  -ml-[1rem]  sm:ml-[12rem]    md:ml-[14rem]    lg:ml-[11rem]    lg:flex-row">
       {/* Main Content */}
       <div className="flex-1 px-2 lg:px-8">
-        <h1 className="flex font-bold   text-2xl items-center gap-2 mt-4 lg:mt-0">
-          <TbUserStar className="text-xl" />
-          Supervisors
+        <h1 className="flex font-bold text-2xl items-center gap-2 mt-4 lg:mt-0">
+          <MdOutlineCategory   className="text-2xl" />
+          Categories
         </h1>
 
         {/* Search and Add button */}
@@ -30,7 +31,7 @@ function Supervisors() {
           </div>
           <button className="bg-gray-200 p-3 flex items-center gap-2 rounded-xl w-full sm:w-auto">
             <IoAddCircleOutline />
-            Add a Supervisor
+            Add a Users
           </button>
         </div>
 
@@ -90,7 +91,7 @@ function Supervisors() {
 
           {/* Pagination and Delete Button */}
           <div className="flex flex-wrap flex-col sm:flex-row items-center justify-between mt-4 w-full">
-            <PaginatedItems items={items} itemsPerPage={1} />
+            <PaginatedItems items={items} itemsPerPage={4} />
             <button className="bg-slate-200 p-2 rounded-lg flex items-center gap-1 mt-4 sm:mt-0">
               <MdDelete className="text-lg" />
               Delete Selected Items
@@ -102,4 +103,4 @@ function Supervisors() {
   );
 }
 
-export default Supervisors;
+export default Categories;

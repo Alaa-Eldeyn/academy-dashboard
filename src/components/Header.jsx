@@ -13,7 +13,7 @@ function Header() {
     <header className="flex border-b-2   py-3 -z-10 px-4 sm:px-10 bg-white font-[sans-serif] min-h-[70px] tracking-wide relative">
       <div className="flex flex-wrap items-center justify-between lg:gap-y-4 gap-y-6 gap-x-4 w-full">
         <Link to={"/"} className='cursor-pointer'>
-          <h1 className='font-bold text-xl'>MedLearn Hub</h1>
+        < h1 className='font-bold text-xl hidden lg:flex md:flex '>MedLearn Hub</h1>
         </Link>
         <div className="flex items-center max-sm:ml-auto space-x-6">
         <FaBell className='text-3xl' />

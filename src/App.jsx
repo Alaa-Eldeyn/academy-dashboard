@@ -3,6 +3,8 @@ import './App.css'
 import { Route, Routes } from 'react-router-dom';
 import Dashboard from "./pages/Dashboard"
 import Supervisors from './pages/Supervisors';
+import Users from './pages/Users';
+import Categories from './pages/Categories';
 
 function App() {
  
@@ -13,6 +15,8 @@ function App() {
           <Route path='/' element={<Layout/>}>
              <Route index element={<Dashboard/>} />
              <Route path="supervisors" element={<Supervisors />} />
+             <Route path="users" element={<Users />} />
+             <Route path="categories" element={<Categories />} />
           </Route>
       </Routes>
     </>

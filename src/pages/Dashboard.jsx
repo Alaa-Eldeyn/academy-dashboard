@@ -9,7 +9,7 @@ function Dashboard() {
         </div>
 
         <div className="flex-1 -ml-[65px] sm:ml-72 md:ml-5 lg:ml-4 ">
-            <h1 className="flex font-bold items-center gap-2">
+            <h1 className="flex font-bold text-2xl items-center gap-2">
               <TbBrandWindows  className="text-xl" />
               Dashboard
             </h1>
