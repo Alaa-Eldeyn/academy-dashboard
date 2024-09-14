@@ -1,19 +1,20 @@
+
 import { MdDelete } from "react-icons/md";
 import { IoEyeOutline } from "react-icons/io5";
 import { IoAddCircleOutline } from "react-icons/io5";
 import PaginatedItems from "../components/PaginatedItems";
-import { FaUsers } from "react-icons/fa6";
+import { SlBookOpen } from "react-icons/sl";
 
-function Users() {
-  const items = [1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18];
+function Supervisors() {
+  const items = [1, 2, 3, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23];
 
   return (
-    <div className="flex flex-col  -ml-[1rem]  sm:ml-[12rem]    md:ml-[14rem]    lg:ml-[11rem]    lg:flex-row">
+    <div className="flex flex-col  -ml-[1rem]  sm:ml-[12rem]     md:ml-[14rem]    lg:ml-[11rem]     lg:flex-row">
       {/* Main Content */}
       <div className="flex-1 px-2 lg:px-16">
-        <h1 className="flex font-bold text-2xl items-center gap-2 mt-4 lg:mt-0">
-          <FaUsers  className="text-xl" />
-          Users
+        <h1 className="flex font-bold   text-2xl items-center gap-2 mt-4 lg:mt-0">
+          <SlBookOpen  className="text-xl" />
+            Exams
         </h1>
 
         {/* Search and Add button */}
@@ -30,7 +31,7 @@ function Users() {
           </div>
           <button className="bg-gray-200 p-3 flex items-center gap-2 rounded-xl w-full sm:w-auto">
             <IoAddCircleOutline />
-            Add a Users
+            Add a Supervisor
           </button>
         </div>
 
@@ -90,7 +91,7 @@ function Users() {
 
           {/* Pagination and Delete Button */}
           <div className="flex flex-wrap flex-col sm:flex-row items-center justify-between mt-4 w-full">
-            <PaginatedItems items={items} itemsPerPage={4} />
+            <PaginatedItems items={items} itemsPerPage={1} />
             <button className="bg-slate-200 p-2 rounded-lg flex items-center gap-1 mt-4 sm:mt-0">
               <MdDelete className="text-lg" />
               Delete Selected Items
@@ -102,4 +103,4 @@ function Users() {
   );
 }
 
-export default Users;
+export default Supervisors;

@@ -11,7 +11,7 @@ function Categories() {
   return (
     <div className="flex flex-col  -ml-[1rem]  sm:ml-[12rem]    md:ml-[14rem]    lg:ml-[11rem]    lg:flex-row">
       {/* Main Content */}
-      <div className="flex-1 px-2 lg:px-8">
+      <div className="flex-1 px-2 lg:px-16">
         <h1 className="flex font-bold text-2xl items-center gap-2 mt-4 lg:mt-0">
           <MdOutlineCategory   className="text-2xl" />
           Categories

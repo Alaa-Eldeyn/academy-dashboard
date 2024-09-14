@@ -6,6 +6,12 @@ import Supervisors from './pages/Supervisors';
 import Users from './pages/Users';
 import Categories from './pages/Categories';
 import PendingCourses from './pages/Courses/PendingCourses';
+import PublishedCourses from './pages/Courses/PublishedCourses';
+import Exams from './pages/Exams';
+import Blogs from './pages/Blogs';
+import Books from './pages/Books';
+import Profile from './pages/Profile';
+ 
 
 function App() {
  
@@ -19,6 +25,11 @@ function App() {
              <Route path="users" element={<Users />} />
              <Route path="categories" element={<Categories />} />
              <Route path="pendingCourses" element={<PendingCourses />} /> 
+             <Route path="publishedCourses" element={<PublishedCourses />} /> 
+             <Route path="exams" element={<Exams />} /> 
+             <Route path="blogs" element={<Blogs />} /> 
+             <Route path="books" element={<Books />} /> 
+             <Route path="profile" element={<Profile />} /> 
           </Route>
       </Routes>
     </>

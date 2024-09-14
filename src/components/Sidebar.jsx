@@ -7,6 +7,9 @@ import { MdOutlineCategory } from "react-icons/md";
 import { useState } from "react";
 import { FaChevronDown } from "react-icons/fa";
 import { LiaFileVideoSolid } from "react-icons/lia";
+import { GiNotebook } from "react-icons/gi";
+import { MdOutlineLibraryBooks } from "react-icons/md";
+import { IoBookSharp } from "react-icons/io5";
 
 function Sidebar() {
    const [isCoursesOpen, setIsCoursesOpen] = useState(false);
@@ -40,9 +43,24 @@ function Sidebar() {
          dropdown: true,
          items: [
             { link: "pendingCourses", title: "Pending Courses" },
-            { link: "/published-courses", title: "Published Courses" }
+            { link: "publishedCourses", title: "Published Courses" }
          ]
-      }
+      },
+      {
+         link:"exams",
+         icon: <GiNotebook   className="text-2xl" />,
+         title:"Exams"
+      },
+      {
+         link:"blogs",
+         icon: <MdOutlineLibraryBooks    className="text-2xl" />,
+         title:"Blogs"
+      },
+      {
+         link:"books",
+         icon: <IoBookSharp     className="text-2xl" />,
+         title:"Medical Books"
+      },
    ];
 
    const handleDropdownClick = (index) => {
@@ -60,7 +78,7 @@ function Sidebar() {
          <FaBarsStaggered className="text-2xl" />
       </button>
 
-      <aside id="default-sidebar" className="shadow-lg fixed top-0 left-0 z-50 w-[210px] h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
+      <aside id="default-sidebar" className="shadow-lg fixed top-0 left-0 z-50 w-[237px] h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar">
          <div className="h-full px-3 py-6 overflow-y-auto bg-white">
             <Link to={"/"} className="cursor-pointer">
                <h1 className="font-bold text-xl lg:flex md:flex">MedLearn Hub</h1>
@@ -70,7 +88,7 @@ function Sidebar() {
                   <li key={index}>
                      <Link
                         to={item.link || "#"}
-                        className={`my-2 flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-200 group ${activeLink === item.link ? 'bg-gray-200' : ''}`}
+                        className={`my-2 font-normal text-sm flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-200 group ${activeLink === item.link ? 'bg-gray-200' : ''}`}
                         onClick={() => {
                            handleLinkClick(item.link);
                            handleDropdownClick(index);
