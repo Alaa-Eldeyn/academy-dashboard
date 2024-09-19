@@ -12,6 +12,7 @@ import Blogs from './pages/Blogs';
 import Books from './pages/Books';
 import Profile from './pages/Profile';
 import Login from './auth/Login';
+import ForgetPass from './auth/ForgetPass';
  
 
 function App() {
@@ -22,6 +23,7 @@ function App() {
       <Routes>
            <Route path='/' element={<Login/>}>
              <Route index element={<Dashboard/>} />
+             <Route path="ForgetPass" element={<ForgetPass/>} />
              <Route path="supervisors" element={<Supervisors />} />
              <Route path="users" element={<Users />} />
              <Route path="categories" element={<Categories />} />

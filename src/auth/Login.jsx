@@ -1,28 +1,34 @@
 import { useState } from "react";
-import { FaAnglesLeft } from "react-icons/fa6";
+
 import { Link } from "react-router-dom";
+import axios from 'axios';
 
 
 function Login() {
+//   const baseUrl = import.meta.env.TEST;
+//   console.log(baseUrl);
+  
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleSubmit = async (e) => {
+ 
+const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     if (!email || !password) return;
     try {
-      const response = await axiosClient.post("/User/login", {
+      const response = await axios.post('http://localhost:5000/api/User/login', {
         email: email,
         password: password,
       });
 
-      if (response.statusText === "OK") {
-        router.push("/");
+      if (response) {
         console.log(response);
-        
         console.log("Login successful");
+      }else{
+        console.log("error");
+        
       }
     } catch (err) {
       setError("Error during login");
@@ -37,17 +43,10 @@ function Login() {
           image
         </div>
         <form onSubmit={handleSubmit} className="sm:p-8 my-6 w-full">
-          <Link
-            href={"/"}
-            className="font-bold flex items-center gap-2 hover:opacity-65"
-          >
-            <FaAnglesLeft />
-            Back to home
-          </Link>
           <div className="text-center my-10 w-full mx-auto">
             <span>Welcome to</span>
             <h3 className="text-blue-500 text-2xl font-extrabold max-md:text-center">
-              MedLearn Hub
+              MedLearn Hub's Dashboard
             </h3>
           </div>
           {/* email */}
@@ -100,7 +99,7 @@ function Login() {
           </div>
           {error && <p className="text-red-500 mt-2">{error}</p>}
           <div className="flex items-center mt-6">
-            <Link to={"/Forget-pass"} className="font-bold">
+            <Link to={"/ForgetPass"} className="font-bold">
               Forget Password?
             </Link>
           </div>
@@ -109,19 +108,9 @@ function Login() {
               type="submit"
               className="w-full py-3 px-6 text-sm tracking-wide font-semibold rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none transition-all"
             >
-              Sign In
+           Login
             </button>
-            <div className="w-full flex justify-center my-6">
-              <span>
-                Don’t have an account?{" "}
-                <Link
-                  href={"/sign-up"}
-                  className="ml-2 font-bold border-b-2 border-black"
-                >
-                  Join Now
-                </Link>
-              </span>
-            </div>
+           
           </div>
         </form>
       </div>
