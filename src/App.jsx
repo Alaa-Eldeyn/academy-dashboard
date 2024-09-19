@@ -11,6 +11,7 @@ import Exams from './pages/Exams';
 import Blogs from './pages/Blogs';
 import Books from './pages/Books';
 import Profile from './pages/Profile';
+import Login from './auth/Login';
  
 
 function App() {
@@ -19,7 +20,7 @@ function App() {
   return (
     <>
       <Routes>
-          <Route path='/' element={<Layout/>}>
+           <Route path='/' element={<Login/>}>
              <Route index element={<Dashboard/>} />
              <Route path="supervisors" element={<Supervisors />} />
              <Route path="users" element={<Users />} />
