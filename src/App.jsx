@@ -13,7 +13,8 @@ import Books from './pages/Books';
 import Profile from './pages/Profile';
 import Login from './auth/Login';
 import ForgetPass from './auth/ForgetPass';
- 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function App() {
  
@@ -35,6 +36,7 @@ function App() {
              <Route path="profile" element={<Profile />} /> 
           </Route>
       </Routes>
+      <ToastContainer />
     </>
   )
 }
