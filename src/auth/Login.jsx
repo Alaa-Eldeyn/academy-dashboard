@@ -1,18 +1,18 @@
 import { useState } from "react";
-import { toast } from 'react-toastify';
-import axios from 'axios';
+import { toast } from "react-toastify";
+import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
+import { addUser } from "../utils/LocalStorage";
 function Login() {
-  const baseUrl ='http://localhost:5000/api';
-//   const baseUrl = import.meta.env.TEST;
-//   console.log(baseUrl);
-const Navigate = useNavigate();
-  
+  const baseUrl = "http://localhost:5000/api";
+  //   const baseUrl = import.meta.env.TEST;
+  //   console.log(baseUrl);
+  const Navigate = useNavigate();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
- 
-const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     try {
@@ -22,15 +22,12 @@ const handleSubmit = async (e) => {
       });
 
       if (response.data.isSuccess) {
-        console.log(response.data);
-        console.log("Login successful");
-        // localStorage.setItem("user_token", res.data.access_token);
-        // localStorage.setItem("user_role_name", res.data.user.role_name);
-        // toast("Successfuly Login", { type: "success" });
-      }else{
-        Navigate("/Dashboard");
-        console.log("error",response?.data);
-        toast.error(response?.data?.message)
+        Navigate("/");
+        addUser(response.data.token);
+        toast("Successfully Login", { type: "success" });
+      } else {
+        console.log("error", response?.data);
+        toast.error(response?.data?.message);
       }
     } catch (error) {
       console.error("Error:", error);
@@ -47,7 +44,7 @@ const handleSubmit = async (e) => {
           <div className="text-center my-10 w-full mx-auto">
             <span>Welcome to</span>
             <h3 className="text-blue-500 text-2xl font-extrabold max-md:text-center">
-              MedLearn Hub's Dashboard
+              {`MedLearn Hub's Dashboard`}
             </h3>
           </div>
           {/* email */}
@@ -81,7 +78,8 @@ const handleSubmit = async (e) => {
                   onChange={(e) => setPassword(e.target.value)}
                   required
                   className="bg-transparent border border-gray-400 w-full text-gray-800 text-sm pl-4 pr-10 py-3 rounded-xl outline-blue-600"
-                  placeholder="Enter Password" />
+                  placeholder="Enter Password"
+                />
               </div>
             </div>
           </div>
@@ -95,9 +93,8 @@ const handleSubmit = async (e) => {
               type="submit"
               className="w-full py-3 px-6 text-sm tracking-wide font-semibold rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none transition-all"
             >
-           Login
+              Login
             </button>
-           
           </div>
         </form>
       </div>
