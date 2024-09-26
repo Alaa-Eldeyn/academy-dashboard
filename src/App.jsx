@@ -8,7 +8,6 @@ import Categories from "./pages/Categories";
 import PendingCourses from "./pages/Courses/PendingCourses";
 import PublishedCourses from "./pages/Courses/PublishedCourses";
 import Exams from "./pages/Exams";
-import Blogs from "./pages/Blogs";
 import Profile from "./pages/Profile";
 import Login from "./auth/Login";
 import ForgetPass from "./auth/ForgetPass";
@@ -16,6 +15,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProtectedRoute from "./ProtectedRoute";
 import { Books, AddBooks } from "./pages/Books";
+import { Blogs, AddBlog, ViewBlog } from "./pages/Blogs";
 
 function App() {
   return (
@@ -39,6 +39,9 @@ function App() {
           <Route path="published-courses" element={<PublishedCourses />} />
           <Route path="exams" element={<Exams />} />
           <Route path="blogs" element={<Blogs />} />
+          <Route path="blogs/add-blog" element={<AddBlog />} />
+          <Route path="blogs/update-blog/:id" element={<AddBlog isUpdateMode={true}/>} />
+          <Route path="blogs/blog/:id" element={<ViewBlog />} />
           <Route path="books" element={<Books />} />
           <Route
             path="books/add-book"

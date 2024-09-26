@@ -4,13 +4,13 @@ import Sidebar from "./components/Sidebar";
 
 const Layout = () => {
   return (
-    <main className="grid grid-cols-12 min-h-screen bg-gray-100 ">
+    <main className="grid grid-cols-12 min-h-screen bg-gray-50 ">
       <div className="col-span-2">
         <Sidebar />
       </div>
       <div className="col-span-10">
         <Header />
-        <div className="p-5 h-[90vh] overflow-auto">
+        <div className="p-5 h-[90vh] overflow-auto ">
           <Outlet />
         </div>
       </div>

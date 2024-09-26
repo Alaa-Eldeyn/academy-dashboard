@@ -7,21 +7,21 @@ const schema = z.object({
     .string()
     .min(3, { message: "Name must contain at least 3 character" })
     .max(255, { message: "Name is too long." }),
-  description: z
+  intro: z.string().min(1, { message: "You must add an introduction" }),
+  content: z
     .string()
-    .min(10, { message: "Description must contain at least 10 character" })
-    .max(1000, { message: "Description is too long." }),
+    .min(10, { message: "Content must contain at least 10 character" }),
+  conclusion: z.string().min(1, { message: "You must add a conclusion" }),
+  subcategory: z.string().min(1, { message: "Please select a subcategory" }),
   category: z.string().min(1, {
     message: "Please select a category",
   }),
-  subcategory: z.string().min(1, { message: "Please select a subcategory" }),
-  downloadLink: z.string().url(),
-  cover: z.any(),
+  image: z.any(),
 });
 
-const addBook = async (data) => {
+const addBlog = async (data) => {
   try {
-    let response = await customAxios.post("Book", data);
+    let response = await customAxios.post("Blog", data);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -29,9 +29,9 @@ const addBook = async (data) => {
   }
 };
 
-const getBook = async (id) => {
+const getBlog = async (id) => {
   try {
-    let response = await customAxios.get(`Book/${id}`);
+    let response = await customAxios.get(`Blog/${id}`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -39,9 +39,9 @@ const getBook = async (id) => {
   }
 };
 
-const getAllBooks = async () => {
+const getAllBlogs = async () => {
   try {
-    let response = await customAxios.get(`Book`);
+    let response = await customAxios.get(`Blog`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -49,7 +49,7 @@ const getAllBooks = async () => {
   }
 };
 
-const deleteBook = async (id) => {
+const deleteBlog = async (id) => {
   const customSwal = Swal.mixin({
     customClass: {
       confirmButton: "bg-red-500 text-white mr-5 py-3 px-8 rounded-full",
@@ -61,14 +61,17 @@ const deleteBook = async (id) => {
   });
   const result = await customSwal.fire({
     icon: "warning",
-    title: "Delete This Book ?",
-    text: "Are You Sure that you want to delete this Book ? ",
+    title: "Delete This Blog?",
+    text: "Are You Sure that you want to delete this Blog?",
     showCancelButton: true,
     confirmButtonText: "Delete",
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
   });
+
   if (result.isConfirmed) {
     try {
-      let response = await customAxios.delete(`Book/${id}`);
+      let response = await customAxios.delete(`Blog/${id}`);
       if (response.data.isSuccess) {
         await Swal.fire({
           icon: "success",
@@ -83,12 +86,13 @@ const deleteBook = async (id) => {
       return { isSuccess: false };
     }
   }
+
   return { isSuccess: false };
 };
 
-const updateBook = async (id, data) => {
+const updateBlog = async (id, data) => {
   try {
-    let response = await customAxios.put(`Book/${id}`, data);
+    let response = await customAxios.put(`Blog/${id}`, data);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -96,4 +100,4 @@ const updateBook = async (id, data) => {
   }
 };
 
-export { schema, addBook, updateBook, getBook, getAllBooks, deleteBook };
+export { schema, addBlog, updateBlog, getBlog, getAllBlogs, deleteBlog };

@@ -15,7 +15,7 @@ function Sidebar() {
     },
     {
       link: "supervisors",
-      icon: <Icon icon="flowbite:user-settings-outline" className="text-3xl" />,
+      icon: <Icon icon="mingcute:user-setting-line" className="text-2xl" />,
       title: "Supervisors",
     },
     {
@@ -90,23 +90,23 @@ function Sidebar() {
         aria-label="Sidebar"
       >
         <div className="h-full p-3 overflow-y-auto bg-white">
-          <Link to={"/"} className="cursor-pointer">
-            <h1 className="font-bold text-xl md:flex mt-2">MedLearn Hub</h1>
+          <Link to={"/"} className="cursor-pointer center">
+            <h1 className="font-bold text-xl md:flex mt-2 text-primary">MedLearn Hub</h1>
           </Link>
-          <ul className="font-medium mt-6">
+          <ul className="font-medium mt-10">
             {sidebarItem.map((item, index) => (
               <li key={index}>
                 <Link
                   to={item.link || "#"}
-                  className={`my-1 font-normal text-sm flex items-center p-2 text-gray-900 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-200 group line-clamp-1 ${
-                    activeLink?.includes(item.link) ? "bg-gray-200" : ""
+                  className={`my-1 font-normal text-sm flex items-center p-2 text-gray-900 rounded-lg hover:bg-[#FEEFFF] dark:hover:bg-[#FEEFFF] group line-clamp-1 ${
+                    activeLink?.includes(item.link) ? "bg-[#FEEFFF]" : ""
                   }`}
                   onClick={() => {
                     handleLinkClick(item.link);
                     handleDropdownClick(index);
                   }}
                 >
-                  <div className="w-6 h-6">{item.icon}</div>
+                  <div className="w-6 h-6 text-primary">{item.icon}</div>
                   <span className="ms-3 text-lg flex items-center">
                     <span>{item.title}</span>
                     <span
@@ -124,14 +124,14 @@ function Sidebar() {
                       <li key={subIndex}>
                         <Link
                           to={subItem.link}
-                          className={`my-2 flex items-center p-2 gap-3 text-gray-900 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-200 group ${
+                          className={`my-2 flex items-center p-2 gap-3 text-gray-900 rounded-lg hover:bg-[#FEEFFF] dark:hover:bg-[#FEEFFF] group ${
                             activeLink?.includes(subItem.link)
-                              ? "bg-gray-200"
+                              ? "bg-[#FEEFFF]"
                               : ""
                           }`}
                           onClick={() => handleLinkClick(subItem.link)}
                         >
-                          <div className="w-4 h-4">{subItem.icon}</div>
+                          <div className="w-4 h-4 text-primary">{subItem.icon}</div>
                           <span className="text-sm font-normal">
                             {subItem.title}
                           </span>

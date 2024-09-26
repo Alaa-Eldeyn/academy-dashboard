@@ -2,14 +2,17 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { addBook, getBook, schema } from "../../utils/books";
+import { addBook, getBook, schema, updateBook } from "../../utils/books";
 import { toast } from "react-toastify";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import { getAllCategories, getAllSubCategories } from "../../utils/categories";
 
 const AddBooks = ({ isUpdateMode, details }) => {
   const params = useParams();
   const navigate = useNavigate();
   const [bookCover, setBookCover] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
   const handlePhotoChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -59,7 +62,7 @@ const AddBooks = ({ isUpdateMode, details }) => {
     data.append("SubCategoryId", getValues("subcategory"));
     data.append("CategoryId", getValues("category"));
 
-    let response = await addBook(data);
+    let response = await updateBook(params?.id, data);
     if (response?.isSuccess) {
       toast.success("Book Updated successfully");
       return navigate("/books");
@@ -67,6 +70,15 @@ const AddBooks = ({ isUpdateMode, details }) => {
       toast.error("Failed to update book");
     }
   };
+  useEffect(() => {
+    const getAllCategoriesAndSubs = async () => {
+      let cat = await getAllCategories();
+      setCategories(cat?.data);
+      let subs = await getAllSubCategories();
+      setSubCategories(subs?.data);
+    };
+    getAllCategoriesAndSubs();
+  }, []);
 
   useEffect(() => {
     if (details || isUpdateMode) {
@@ -74,9 +86,9 @@ const AddBooks = ({ isUpdateMode, details }) => {
         const book = await getBook(params?.id);
         setValue("name", book?.data?.title);
         setValue("description", book?.data?.description);
-        setValue("category", book?.data?.categoryId.toString());
-        setValue("subcategory", book?.data?.subCategoryId.toString());
-        setValue("downloadLink", book?.data?.downloadLink);
+        setValue("category", book?.data?.categoryId?.toString() || "");
+        setValue("subcategory", book?.data?.subCategoryId?.toString() || "");
+        setValue("downloadLink", book?.data?.url);
         setBookCover(book?.data?.thumbnailURL);
       };
       fetchBook();
@@ -84,7 +96,7 @@ const AddBooks = ({ isUpdateMode, details }) => {
   }, [isUpdateMode, details, params?.id]);
 
   return (
-    <div className="px-6">
+    <div className="px-6 ">
       <h1 className="font-bold text-xl mb-8">Add a Books</h1>
       <div>
         <form className="flex gap-8 flex-col md:flex-row">
@@ -106,25 +118,25 @@ const AddBooks = ({ isUpdateMode, details }) => {
             {bookCover ? (
               <div className="relative">
                 {isUpdateMode && (
-                  <div className="text-md absolute -top-3 rounded-full bg-gray-300 p-1 border border-white left-1/2 -translate-x-1/2 text-gray-700">
+                  <div className="text-md absolute -top-3 rounded-full bg-[#FEEFFF] p-1 border border-white left-1/2 -translate-x-1/2 text-gray-700">
                     <Icon icon="ic:outline-cloud-upload" />
                   </div>
                 )}
-                <span
-                  className="w-40 h-56 rounded bg-gray-300 center cursor-pointer"
-                  style={{
-                    backgroundSize: "cover",
-                    backgroundRepeat: "no-repeat",
-                    backgroundPosition: "center center",
-                    backgroundImage: `url(${bookCover})`,
-                  }}
-                ></span>
+                <img
+                  src={
+                    getValues("cover").length > 0
+                      ? `${bookCover}`
+                      : `http://localhost:5000/Images/${bookCover}`
+                  }
+                  alt=""
+                  className="w-40 h-56 rounded bg-[#FEEFFF] center cursor-pointer"
+                />
               </div>
             ) : (
-              <div className="w-40 h-56 rounded bg-gray-300 center cursor-pointer">
+              <div className="w-40 h-56 rounded bg-[#FEEFFF] border border-primary/30 center cursor-pointer">
                 <Icon
                   icon="ic:outline-cloud-upload"
-                  className="text-4xl text-gray-700"
+                  className="text-4xl text-primary"
                 />
               </div>
             )}
@@ -135,7 +147,10 @@ const AddBooks = ({ isUpdateMode, details }) => {
             )}
           </div>
           <div className="flex-1 max-w-[600px]">
-            <label htmlFor="bookName" className="text-sm mb-1 block">
+            <label
+              htmlFor="bookName"
+              className="text-sm mb-1 block text-primary"
+            >
               Book Name
             </label>
             <input
@@ -152,7 +167,9 @@ const AddBooks = ({ isUpdateMode, details }) => {
               </span>
             )}
 
-            <label className="text-sm mb-1 block">Book Description</label>
+            <label className="text-sm mb-1 block text-primary">
+              Book Description
+            </label>
             <textarea
               {...register("description")}
               placeholder="Enter Book Description here"
@@ -167,7 +184,9 @@ const AddBooks = ({ isUpdateMode, details }) => {
 
             <div className="flex justify-between">
               <div className="w-1/2 mr-2">
-                <label className="text-sm mb-1 block">Book Category</label>
+                <label className="text-sm mb-1 block text-primary">
+                  Book Category
+                </label>
                 <select
                   {...register("category")}
                   className={`${errors?.category ? "mb-0" : "mb-3"} input`}
@@ -177,8 +196,13 @@ const AddBooks = ({ isUpdateMode, details }) => {
                   <option value="" disabled hidden>
                     Choose Category
                   </option>
-                  <option value="1">Anatomy</option>
-                  <option value="2">Biology</option>
+                  {categories?.map((category) => {
+                    return (
+                      <option key={category.id} value={category.id}>
+                        {category.name}
+                      </option>
+                    );
+                  })}
                 </select>
                 {errors && errors?.category && (
                   <span className="mb-3 text-sm text-red-500 block">
@@ -188,7 +212,9 @@ const AddBooks = ({ isUpdateMode, details }) => {
               </div>
 
               <div className="w-1/2 ml-2">
-                <label className="text-sm mb-1 block">Book Subcategory</label>
+                <label className="text-sm mb-1 block text-primary">
+                  Book Subcategory
+                </label>
                 <select
                   {...register("subcategory")}
                   className={`${errors?.subcategory ? "mb-0" : "mb-3"} input`}
@@ -198,8 +224,13 @@ const AddBooks = ({ isUpdateMode, details }) => {
                   <option value="" disabled hidden>
                     Choose Subcategory
                   </option>
-                  <option value="1">Anat Part</option>
-                  <option value="2">Biology Part</option>
+                  {subCategories?.map((subcategory) => {
+                    return (
+                      <option key={subcategory.id} value={subcategory.id}>
+                        {subcategory.name}
+                      </option>
+                    );
+                  })}
                 </select>
                 {errors && errors?.subcategory && (
                   <span className="mb-3 text-sm text-red-500 block">
@@ -208,7 +239,9 @@ const AddBooks = ({ isUpdateMode, details }) => {
                 )}
               </div>
             </div>
-            <label className="text-sm mb-1 block">Download Link</label>
+            <label className="text-sm mb-1 block text-primary">
+              Download Link
+            </label>
             <input
               type="text"
               {...register("downloadLink")}
@@ -225,7 +258,7 @@ const AddBooks = ({ isUpdateMode, details }) => {
               {details ? (
                 <Link
                   to={`/books/update-book/${params?.id}`}
-                  className="px-4 py-3 bg-gray-400 text-white  rounded-full focus:outline-none  border border-transparent"
+                  className="px-4 py-3 bg-primary text-white  rounded-full focus:outline-none  border border-transparent"
                   disabled={isSubmitting}
                 >
                   Edit Your Book Now
@@ -234,7 +267,7 @@ const AddBooks = ({ isUpdateMode, details }) => {
                 <button
                   type="button"
                   onClick={handleSubmit(handleUpdateBook)}
-                  className="px-4 py-3 bg-gray-400 text-white  rounded-full focus:outline-none  border border-transparent"
+                  className="px-4 py-3 bg-primary text-white  rounded-full focus:outline-none  border border-transparent"
                   disabled={isSubmitting}
                 >
                   Save changes
@@ -243,7 +276,7 @@ const AddBooks = ({ isUpdateMode, details }) => {
                 <button
                   type="button"
                   onClick={handleSubmit(handleAddBook)}
-                  className="px-4 py-3 bg-gray-400 text-white  rounded-full focus:outline-none  border border-transparent"
+                  className="px-4 py-3 bg-primary text-white  rounded-full focus:outline-none  border border-transparent"
                   disabled={isSubmitting}
                 >
                   Publish Your Book Now
@@ -252,7 +285,7 @@ const AddBooks = ({ isUpdateMode, details }) => {
               <Link
                 to={"/books"}
                 type="button"
-                className="px-8 py-3 text-black rounded-full border border-gray-400"
+                className="px-8 py-3 text-black rounded-full border border-primary text-primary"
               >
                 Cancel
               </Link>

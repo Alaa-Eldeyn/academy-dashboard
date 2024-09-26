@@ -1,31 +1,31 @@
+import { Icon } from "@iconify/react/dist/iconify.js";
 import { Link } from "react-router-dom";
 import PaginatedItems from "../../components/PaginatedItems";
-import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEffect, useState } from "react";
-import { deleteBook, getAllBooks } from "../../utils/books";
+import { deleteBlog, getAllBlogs } from "../../utils/blogs";
 
-function Books() {
-  const [books, setBooks] = useState([]);
+const Blogs = () => {
+  const [blogs, setBlogs] = useState([]);
   useEffect(() => {
-    const fetchAllBooks = async () => {
-      let res = await getAllBooks();
-      setBooks(res.data);
+    const fetchAllBlogs = async () => {
+      let res = await getAllBlogs();
+      setBlogs(res.data);
     };
-    fetchAllBooks();
+    fetchAllBlogs();
   }, []);
-  const handleDeleteBook = async (id) => {
-    const res = await deleteBook(id);
-    if (res?.isSuccess) {
-      setBooks(books.filter((book) => book.id !== id));
-    }
-  };
+    const handleDeleteBlog = async (id) => {
+      const res = await deleteBlog(id);
+      if (res?.isSuccess) {
+        setBlogs(blogs.filter((blog) => blog.id !== id));
+      }
+    };
   return (
     <div className="px-6">
       <div className=" flex flex-wrap flex-col sm:flex-row items-center justify-between gap-8 w-auto mb-6">
         <div className="bg-white flex w-full sm:max-w-md p-1 rounded-full overflow-hidden">
           <input
             type="text"
-            placeholder="Search By Book Title here"
+            placeholder="Search By Blog Title here"
             className="rounded-full w-full outline-none bg-white border-none pl-4 text-sm"
           />
           <button
@@ -37,11 +37,11 @@ function Books() {
         </div>
         <div className="flex justify-center items-center gap-5">
           <Link
-            to="/books/add-book"
+            to="/Blogs/add-blog"
             className="border border-pink-600 text-pink-600 text-sm px-4 py-3 flex items-center gap-2 rounded-xl w-full sm:w-auto"
           >
             <Icon icon="octicon:plus-circle-16" />
-            Add a Book
+            Add a Blog
           </Link>
           <Icon icon="ion:filter" className="text-3xl text-secondary" />
         </div>
@@ -62,7 +62,7 @@ function Books() {
                   className="w-4 h-4 text-center focus:ring-1 focus:ring-offset-purple-200 focus:ring-offset-4 focus:ring-[#007bff]"
                 />
               </td>
-              {["Book Cover", "Book Title", "Publisher", "Date", "Action"].map(
+              {["Blog Cover", "Blog Title", "Publisher", "Date", "Action"].map(
                 (item, index) => (
                   <th
                     key={index}
@@ -76,7 +76,7 @@ function Books() {
           </thead>
 
           <tbody className="text-center whitespace-nowrap divide-y bg-white divide-gray-200">
-            {books.map((book, index) => (
+            {blogs.map((blog, index) => (
               <tr key={index}>
                 <td className="pl-4 w-8">
                   <label
@@ -91,24 +91,24 @@ function Books() {
                 </td>
                 <td>
                   <img
-                    src={`http://localhost:5000/Images/${book?.thumbnailURL}`}
+                    src={`http://localhost:5000${blog?.imageURL}`}
                     alt=""
                     className="w-8 h-8 rounded-lg mx-auto"
                   />
                 </td>
-                <td className="p-4 text-sm">{book?.title}</td>
+                <td className="p-4 text-sm">{blog?.title}</td>
                 <td className="px-6 py-3">Hisham Mousa</td>
                 <td className="px-6 py-3">21 Sep 2024</td>
                 <td className="py-3 flex items-center gap-2 justify-center">
                   <button
-                    onClick={() => handleDeleteBook(book?.id)}
+                    onClick={() => handleDeleteBlog(blog?.id)}
                     className="bg-[#FFF8F8] text-[#E23F3F] px-2 justify-center py-1 rounded-md flex items-center gap-1"
                   >
                     <Icon icon="fluent:delete-12-regular" />
                     Delete
                   </button>
                   <Link
-                    to={`/books/${book?.id}`}
+                    to={`/blogs/blog/${blog?.id}`}
                     className="bg-[#FEF8FF] text-[#984D9F] px-2 justify-center py-1 rounded-md flex items-center gap-1"
                   >
                     <Icon icon="ph:eye" />
@@ -122,7 +122,7 @@ function Books() {
 
         {/* Pagination and Delete Button */}
         <div className="flex flex-wrap flex-col sm:flex-row items-center justify-between mt-4 w-full">
-          <PaginatedItems items={books} itemsPerPage={1} />
+          <PaginatedItems items={blogs} itemsPerPage={1} />
           <button className="border border-secondary text-secondary p-2 rounded-lg flex items-center gap-1 mt-4 sm:mt-0">
             <Icon icon="fluent:delete-12-regular" />
             Delete Selected Items
@@ -131,6 +131,6 @@ function Books() {
       </div>
     </div>
   );
-}
+};
 
-export default Books;
+export default Blogs;
