@@ -16,12 +16,15 @@ import ProtectedRoute from "./ProtectedRoute";
 import { Books, AddBooks } from "./pages/Books";
 import { Blogs, AddBlog, ViewBlog } from "./pages/Blogs";
 import { Taps } from "./pages/Categories";
+import RestPass from "./auth/RestPass";
 
 function App() {
   return (
     <>
       <Routes>
         <Route path="/login" element={<Login />} />
+        <Route path="Forget-pass" element={<ForgetPass />} />
+        <Route path="Rest-pass" element={<RestPass/>} />
         <Route
           path="/"
           element={
@@ -31,7 +34,6 @@ function App() {
           }
         >
           <Route index element={<Dashboard />} />
-          <Route path="forget-password" element={<ForgetPass />} />
           <Route path="supervisors" element={<Supervisors />} />
           <Route path="users" element={<Users />} />
           <Route path="categories" element={<Taps />} />
