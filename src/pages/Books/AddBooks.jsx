@@ -285,7 +285,7 @@ const AddBooks = ({ isUpdateMode, details }) => {
               <Link
                 to={"/books"}
                 type="button"
-                className="px-8 py-3 text-black rounded-full border border-primary text-primary"
+                className="px-8 py-3 rounded-full border border-primary text-primary"
               >
                 Cancel
               </Link>

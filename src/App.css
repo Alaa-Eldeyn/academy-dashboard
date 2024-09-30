@@ -26,6 +26,10 @@ body {
   background: #555;
 }
 
+.pink-sc::-webkit-scrollbar-thumb,#cat::-webkit-scrollbar-thumb {
+  background: #ec8ab3;
+}
+
 @layer utilities {
   .center {
     @apply flex items-center justify-center;

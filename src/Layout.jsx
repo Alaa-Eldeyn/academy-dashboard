@@ -8,7 +8,7 @@ const Layout = () => {
       <div className="col-span-2">
         <Sidebar />
       </div>
-      <div className="col-span-10">
+      <div className="col-span-12 sm:col-span-10">
         <Header />
         <div className="p-5 h-[90vh] overflow-auto ">
           <Outlet />

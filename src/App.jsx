@@ -4,7 +4,6 @@ import { Route, Routes } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
 import Supervisors from "./pages/Supervisors";
 import Users from "./pages/Users";
-import Categories from "./pages/Categories";
 import PendingCourses from "./pages/Courses/PendingCourses";
 import PublishedCourses from "./pages/Courses/PublishedCourses";
 import Exams from "./pages/Exams";
@@ -16,6 +15,7 @@ import "react-toastify/dist/ReactToastify.css";
 import ProtectedRoute from "./ProtectedRoute";
 import { Books, AddBooks } from "./pages/Books";
 import { Blogs, AddBlog, ViewBlog } from "./pages/Blogs";
+import { Taps } from "./pages/Categories";
 
 function App() {
   return (
@@ -34,7 +34,7 @@ function App() {
           <Route path="forget-password" element={<ForgetPass />} />
           <Route path="supervisors" element={<Supervisors />} />
           <Route path="users" element={<Users />} />
-          <Route path="categories" element={<Categories />} />
+          <Route path="categories" element={<Taps />} />
           <Route path="pending-courses" element={<PendingCourses />} />
           <Route path="published-courses" element={<PublishedCourses />} />
           <Route path="exams" element={<Exams />} />

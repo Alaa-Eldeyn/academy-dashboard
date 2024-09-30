@@ -22,7 +22,7 @@ const schema = z.object({
 const addBook = async (data) => {
   try {
     let response = await customAxios.post("Book", data);
-    return response.data;
+    return response?.data;
   } catch (error) {
     console.log(error);
     return { isSuccess: false };
@@ -32,7 +32,7 @@ const addBook = async (data) => {
 const getBook = async (id) => {
   try {
     let response = await customAxios.get(`Book/${id}`);
-    return response.data;
+    return response?.data;
   } catch (error) {
     console.log(error);
     return { isSuccess: false };
@@ -42,7 +42,7 @@ const getBook = async (id) => {
 const getAllBooks = async () => {
   try {
     let response = await customAxios.get(`Book`);
-    return response.data;
+    return response?.data;
   } catch (error) {
     console.log(error);
     return { isSuccess: false };
@@ -76,7 +76,7 @@ const deleteBook = async (id) => {
           showConfirmButton: false,
           timer: 1000,
         });
-        return response.data;
+        return response?.data;
       }
     } catch (error) {
       console.log(error);
@@ -89,7 +89,7 @@ const deleteBook = async (id) => {
 const updateBook = async (id, data) => {
   try {
     let response = await customAxios.put(`Book/${id}`, data);
-    return response.data;
+    return response?.data;
   } catch (error) {
     console.log(error);
     return { isSuccess: false };

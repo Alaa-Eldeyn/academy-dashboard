@@ -5,7 +5,8 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 
 function Sidebar() {
   const [isCoursesOpen, setIsCoursesOpen] = useState(false);
-  const [activeLink, setActiveLink] = useState("/");
+  const [activeLink, setActiveLink] = useState("");
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const sidebarItem = [
     {
@@ -74,9 +75,7 @@ function Sidebar() {
   return (
     <>
       <button
-        data-drawer-target="default-sidebar"
-        data-drawer-toggle="default-sidebar"
-        aria-controls="default-sidebar"
+        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         type="button"
         className="fixed bg-slate-300 rounded-sm items-center p-3 top-3 left-6 text-gray-600 sm:hidden z-10"
       >
@@ -84,14 +83,24 @@ function Sidebar() {
         <FaBarsStaggered className="text-2xl" />
       </button>
 
+      {isSidebarOpen && (
+        <div
+          className="fixed soft top-0 left-0 w-full h-full bg-black bg-opacity-50 z-40"
+          onClick={() => setIsSidebarOpen(false)}
+        ></div>
+      )}
       <aside
-        id="default-sidebar"
-        className="shadow-lg fixed sm:static top-0 left-0 z-50 h-screen soft -translate-x-full sm:translate-x-0"
+        style={{
+          transform: isSidebarOpen ? "translateX(0)" : "translateX(-100%)",
+        }}
+        className={`shadow-lg fixed top-0 left-0 z-50 h-screen soft sm:static sm:!translate-x-0 ${isSidebarOpen ? "translate-x-[100%]" : "translate-x-0"} `}
         aria-label="Sidebar"
       >
         <div className="h-full p-3 overflow-y-auto bg-white">
           <Link to={"/"} className="cursor-pointer center">
-            <h1 className="font-bold text-xl md:flex mt-2 text-primary">MedLearn Hub</h1>
+            <h1 className="font-bold text-xl md:flex mt-2 text-primary">
+              MedLearn Hub
+            </h1>
           </Link>
           <ul className="font-medium mt-10">
             {sidebarItem.map((item, index) => (
@@ -131,7 +140,9 @@ function Sidebar() {
                           }`}
                           onClick={() => handleLinkClick(subItem.link)}
                         >
-                          <div className="w-4 h-4 text-primary">{subItem.icon}</div>
+                          <div className="w-4 h-4 text-primary">
+                            {subItem.icon}
+                          </div>
                           <span className="text-sm font-normal">
                             {subItem.title}
                           </span>
