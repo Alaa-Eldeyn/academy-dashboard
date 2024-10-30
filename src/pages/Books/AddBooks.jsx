@@ -5,11 +5,13 @@ import { useForm } from "react-hook-form";
 import { addBook, getBook, schema, updateBook } from "../../utils/books";
 import { toast } from "react-toastify";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { getAllCategories, getAllSubCategories } from "../../utils/categories";
+import { getAllCategories, getSubs } from "../../utils/categories";
+import { getID } from "../../utils/LocalStorage";
 
 const AddBooks = ({ isUpdateMode, details }) => {
   const params = useParams();
   const navigate = useNavigate();
+  let userId = getID();
   const [bookCover, setBookCover] = useState(null);
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
@@ -38,12 +40,14 @@ const AddBooks = ({ isUpdateMode, details }) => {
       return;
     }
     const data = new FormData();
+    data.append("UserID", userId);
     data.append("Title", getValues("name"));
     data.append("Description", getValues("description"));
     data.append("Thumbnail", getValues("cover.0"));
     data.append("Url", getValues("downloadLink"));
     data.append("SubCategoryId", getValues("subcategory"));
     data.append("CategoryId", getValues("category"));
+    data.append("CreatedDate", getValues("createdDate"));
 
     let response = await addBook(data);
     if (response?.isSuccess) {
@@ -55,12 +59,14 @@ const AddBooks = ({ isUpdateMode, details }) => {
   };
   const handleUpdateBook = async () => {
     const data = new FormData();
+    data.append("UserID", userId);
     data.append("Title", getValues("name"));
     data.append("Description", getValues("description"));
     data.append("Thumbnail", getValues("cover.0"));
     data.append("Url", getValues("downloadLink"));
     data.append("SubCategoryId", getValues("subcategory"));
     data.append("CategoryId", getValues("category"));
+    data.append("CreatedDate", getValues("createdDate"));
 
     let response = await updateBook(params?.id, data);
     if (response?.isSuccess) {
@@ -70,25 +76,30 @@ const AddBooks = ({ isUpdateMode, details }) => {
       toast.error("Failed to update book");
     }
   };
+  const getCategories = async () => {
+    let cat = await getAllCategories("Books");
+    setCategories(cat?.data);
+  };
+  const getAllSubs = async (id) => {
+    let subs = await getSubs(id);
+    setSubCategories(subs?.data || []);
+  };
   useEffect(() => {
-    const getAllCategoriesAndSubs = async () => {
-      let cat = await getAllCategories();
-      setCategories(cat?.data);
-      let subs = await getAllSubCategories();
-      setSubCategories(subs?.data);
-    };
-    getAllCategoriesAndSubs();
+    getCategories();
   }, []);
 
   useEffect(() => {
     if (details || isUpdateMode) {
       const fetchBook = async () => {
+        if (categories.length === 0) await getCategories();
         const book = await getBook(params?.id);
         setValue("name", book?.data?.title);
         setValue("description", book?.data?.description);
-        setValue("category", book?.data?.categoryId?.toString() || "");
-        setValue("subcategory", book?.data?.subCategoryId?.toString() || "");
+        setValue("category", book?.data?.categoryId?.toString());
+        await getAllSubs(book?.data?.categoryId);
+        setValue("subcategory", book?.data?.subCategoryId?.toString());
         setValue("downloadLink", book?.data?.url);
+        setValue("createdDate", book?.data?.createdDate?.split("T")[0]);
         setBookCover(book?.data?.thumbnailURL);
       };
       fetchBook();
@@ -126,7 +137,7 @@ const AddBooks = ({ isUpdateMode, details }) => {
                   src={
                     getValues("cover").length > 0
                       ? `${bookCover}`
-                      : `http://localhost:5000/Images/${bookCover}`
+                      : `http://localhost:5000/${bookCover}`
                   }
                   alt=""
                   className="w-40 h-56 rounded bg-[#FEEFFF] center cursor-pointer"
@@ -188,7 +199,13 @@ const AddBooks = ({ isUpdateMode, details }) => {
                   Book Category
                 </label>
                 <select
-                  {...register("category")}
+                  {...register("category", {
+                    onChange: (e) => {
+                      setValue("subcategory", "");
+                      let res = getAllSubs(e?.target?.value);
+                      setSubCategories(res?.data || []);
+                    },
+                  })}
                   className={`${errors?.category ? "mb-0" : "mb-3"} input`}
                   defaultValue={""}
                   disabled={details}
@@ -240,6 +257,21 @@ const AddBooks = ({ isUpdateMode, details }) => {
               </div>
             </div>
             <label className="text-sm mb-1 block text-primary">
+              Creation Date
+            </label>
+            <input
+              type="date"
+              {...register("createdDate")}
+              className={`${errors?.createdDate ? "mb-0" : "mb-3"} input`}
+              disabled={details}
+              defaultValue={new Date().toISOString().split("T")[0]}
+            />
+            {errors && errors?.createdDate && (
+              <span className="mb-3 text-sm text-red-500 block">
+                {errors?.createdDate?.message}
+              </span>
+            )}
+            <label className="text-sm mb-1 block text-primary">
               Download Link
             </label>
             <input
@@ -282,11 +314,7 @@ const AddBooks = ({ isUpdateMode, details }) => {
                   Publish Your Book Now
                 </button>
               )}
-              <Link
-                to={"/books"}
-                type="button"
-                className="px-8 py-3 rounded-full border border-primary text-primary"
-              >
+              <Link to={"/books"} type="button" className="second-btn">
                 Cancel
               </Link>
             </div>

@@ -1,24 +1,25 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Link } from "react-router-dom";
-import PaginatedItems from "../../components/PaginatedItems";
 import { useEffect, useState } from "react";
 import { deleteBlog, getAllBlogs } from "../../utils/blogs";
+import Pagination from "../../components/Pagination";
 
 const Blogs = () => {
   const [blogs, setBlogs] = useState([]);
+  const [page, setPage] = useState(1);
   useEffect(() => {
     const fetchAllBlogs = async () => {
-      let res = await getAllBlogs();
+      let res = await getAllBlogs(page);
       setBlogs(res.data);
     };
     fetchAllBlogs();
-  }, []);
-    const handleDeleteBlog = async (id) => {
-      const res = await deleteBlog(id);
-      if (res?.isSuccess) {
-        setBlogs(blogs.filter((blog) => blog.id !== id));
-      }
-    };
+  }, [page]);
+  const handleDeleteBlog = async (id) => {
+    const res = await deleteBlog(id);
+    if (res?.isSuccess) {
+      setBlogs(blogs.filter((blog) => blog.id !== id));
+    }
+  };
   return (
     <div className="px-6">
       <div className=" flex flex-wrap flex-col sm:flex-row items-center justify-between gap-8 w-auto mb-6">
@@ -51,17 +52,7 @@ const Blogs = () => {
         <table className="min-w-full bg-gray-100 rounded-lg">
           <thead className="bg-white  whitespace-nowrap">
             <tr>
-              <td className="px-4 py-3 w-8">
-                <label
-                  htmlFor="checkbox1"
-                  className="text-black text-sm"
-                ></label>
-                <input
-                  id="checkbox1"
-                  type="checkbox"
-                  className="w-4 h-4 text-center focus:ring-1 focus:ring-offset-purple-200 focus:ring-offset-4 focus:ring-[#007bff]"
-                />
-              </td>
+              <td className="size-10 bg-gray-50"></td>
               {["Blog Cover", "Blog Title", "Publisher", "Date", "Action"].map(
                 (item, index) => (
                   <th
@@ -76,19 +67,9 @@ const Blogs = () => {
           </thead>
 
           <tbody className="text-center whitespace-nowrap divide-y bg-white divide-gray-200">
-            {blogs.map((blog, index) => (
+            {blogs?.blogs?.map((blog, index) => (
               <tr key={index}>
-                <td className="pl-4 w-8">
-                  <label
-                    htmlFor="checkbox1"
-                    className="text-black text-sm"
-                  ></label>
-                  <input
-                    id="checkbox1"
-                    type="checkbox"
-                    className="w-4 h-4 mr-3 focus:ring-1 focus:ring-offset-slate-200 focus:ring-offset-4 focus:ring-[#007bff]"
-                  />
-                </td>
+                <td className="size-10 bg-gray-100">{index + 1}</td>
                 <td>
                   <img
                     src={`http://localhost:5000${blog?.imageURL}`}
@@ -119,15 +100,7 @@ const Blogs = () => {
             ))}
           </tbody>
         </table>
-
-        {/* Pagination and Delete Button */}
-        <div className="flex flex-wrap flex-col sm:flex-row items-center justify-between mt-4 w-full">
-          <PaginatedItems items={blogs} itemsPerPage={1} />
-          <button className="border border-secondary text-secondary p-2 rounded-lg flex items-center gap-1 mt-4 sm:mt-0">
-            <Icon icon="fluent:delete-12-regular" />
-            Delete Selected Items
-          </button>
-        </div>
+        <Pagination page={page} setPage={setPage} info={blogs} />
       </div>
     </div>
   );

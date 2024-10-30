@@ -1,25 +1,30 @@
-import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEffect, useState } from "react";
-import { deleteBook, getAllBooks } from "../../utils/books";
-import Pagination from "../../components/Pagination";
+import { Link } from "react-router-dom";
+import {
+  addUserToCourse,
+  getApprovedCourses,
+  requestDelete,
+} from "../../utils/courses";
 
-function Books() {
-  const [books, setBooks] = useState([]);
-  const [page, setPage] = useState(1);
-
+const Published = () => {
+  const [courses, setCourses] = useState([]);
   useEffect(() => {
-    const fetchAllBooks = async () => {
-      let res = await getAllBooks(page);
-      setBooks(res?.data);
+    const fetchCourses = async () => {
+      let res = await getApprovedCourses();
+      setCourses(res?.data);
     };
-    fetchAllBooks();
-  }, [page]);
-  const handleDeleteBook = async (id) => {
-    const res = await deleteBook(id);
+    fetchCourses();
+  }, []);
+  const requestDeleteCourse = async (id) => {
+    let res = await requestDelete(id);
     if (res?.isSuccess) {
-      setBooks(books.filter((book) => book.id !== id));
+      setCourses(courses.filter((course) => course.id !== id));
     }
+  };
+  const handleAddUser = async (id) => {
+    let res = await addUserToCourse(id);
+    console.log(res);
   };
   return (
     <div className="px-6">
@@ -27,7 +32,7 @@ function Books() {
         <div className="bg-white flex w-full sm:max-w-md p-1 rounded-full overflow-hidden">
           <input
             type="text"
-            placeholder="Search By Book Title here"
+            placeholder="Search By course Title here"
             className="rounded-full w-full outline-none bg-white border-none pl-4 text-sm"
           />
           <button
@@ -39,11 +44,11 @@ function Books() {
         </div>
         <div className="flex justify-center items-center gap-5">
           <Link
-            to="/books/add-book"
+            to="/Courses/add-course"
             className="border border-pink-600 text-pink-600 text-sm px-4 py-3 flex items-center gap-2 rounded-xl w-full sm:w-auto"
           >
             <Icon icon="octicon:plus-circle-16" />
-            Add a Book
+            Add a course
           </Link>
           <Icon icon="ion:filter" className="text-3xl text-secondary" />
         </div>
@@ -54,12 +59,13 @@ function Books() {
           <thead className="bg-white  whitespace-nowrap">
             <tr>
               <td className="size-10 bg-gray-50"></td>
+
               {[
-                "Book Cover",
-                "Book Title",
-                "Publisher",
+                "course title",
+                "course creator",
                 "Role",
-                "Date",
+                "Price ($)",
+                "Subscribers",
                 "Action",
               ].map((item, index) => (
                 <th
@@ -73,47 +79,53 @@ function Books() {
           </thead>
 
           <tbody className="text-center whitespace-nowrap divide-y bg-white divide-gray-200">
-            {books?.books?.map((book, index) => (
+            {courses?.map((course, index) => (
               <tr key={index}>
                 <td className="size-10 bg-gray-100">{index + 1}</td>
-                <td>
-                  <img
-                    src={`http://localhost:5000${book?.thumbnailURL}`}
-                    alt=""
-                    className="w-8 h-8 rounded-lg mx-auto"
-                  />
-                </td>
-                {console.log(book)}
-                <td className="p-4 text-sm">{book?.title}</td>
-                <td className="px-6 py-3">{book?.publisherName}</td>
-                <td className="px-6 py-3">{book?.publisherRole}</td>
-                <td className="px-6 py-3">
-                  {book?.createdDate?.split("T")[0]}
-                </td>
+                <td className="p-4 text-sm">{course?.title}</td>
+                <td className="px-6 py-3">{course?.instructorFullName}</td>
+                <td className="px-6 py-3">User</td>
+                <td className="px-6 py-3">{course?.price}</td>
+                <td className="px-6 py-3">{24}</td>
                 <td className="py-3 flex items-center gap-2 justify-center">
                   <button
-                    onClick={() => handleDeleteBook(book?.id)}
+                    onClick={() => requestDeleteCourse(course?.id)}
                     className="bg-[#FFF8F8] text-[#E23F3F] px-2 justify-center py-1 rounded-md flex items-center gap-1"
                   >
                     <Icon icon="fluent:delete-12-regular" />
                     Delete
                   </button>
                   <Link
-                    to={`/books/${book?.id}`}
+                    to={`/course-details/${course?.id}`}
                     className="bg-[#FEF8FF] text-[#984D9F] px-2 justify-center py-1 rounded-md flex items-center gap-1"
                   >
                     <Icon icon="ph:eye" />
                     View
                   </Link>
+                  <button
+                    onClick={() => handleAddUser(course?.id)}
+                    className="bg-[#FEF8FF] text-[#E2508D] px-2 justify-center py-1 rounded-md flex items-center gap-1"
+                  >
+                    <Icon icon="mynaui:plus-square" />
+                    add
+                  </button>
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-        <Pagination page={page} setPage={setPage} info={books} />
+
+        {/* Pagination and Delete Button
+        <div className="flex flex-wrap flex-col sm:flex-row items-center justify-between mt-4 w-full">
+          <PaginatedItems items={Courses} itemsPerPage={1} />
+          <button className="border border-secondary text-secondary p-2 rounded-lg flex items-center gap-1 mt-4 sm:mt-0">
+            <Icon icon="fluent:delete-12-regular" />
+            Delete Selected Items
+          </button>
+        </div> */}
       </div>
     </div>
   );
-}
+};
 
-export default Books;
+export default Published;

@@ -1,8 +1,10 @@
 import customAxios from "./axios";
 
-const getAllCategories = async () => {
+const getAllCategories = async (type) => {
   try {
-    let response = await customAxios.get(`Category/GetAllCategories`);
+    let response = await customAxios.get(
+      `Category/GetAllCategoriesByType${type}`
+    );
     return response.data;
   } catch (error) {
     console.log(error);
@@ -10,9 +12,11 @@ const getAllCategories = async () => {
   }
 };
 
-const getAllSubCategories = async () => {
+const getAllSubCategories = async (type) => {
   try {
-    let response = await customAxios.get(`SubCategory/GetAllSubCategories`);
+    let response = await customAxios.get(
+      `SubCategory/GetAllSubCategoriesByType${type}`
+    );
     return response.data;
   } catch (error) {
     console.log(error);
@@ -20,11 +24,11 @@ const getAllSubCategories = async () => {
   }
 };
 
-const addCategory = async (categoryName) => {
+const addCategory = async (categoryName, type) => {
   try {
     let response = await customAxios.post(
       "/Category",
-      { name: `${categoryName}` },
+      { name: `${categoryName}`, type: `${type}` },
       {
         headers: {
           "Content-Type": "application/json",
@@ -76,6 +80,26 @@ const moveSubCategory = async (id, data) => {
   }
 };
 
+const deleteCategory = async (id) => {
+  try {
+    let response = await customAxios.delete(`/Category/${id}`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return { isSuccess: false };
+  }
+};
+
+const deleteSubCategory = async (id) => {
+  try {
+    let response = await customAxios.delete(`/SubCategory/${id}`);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return { isSuccess: false };
+  }
+};
+
 export {
   getAllCategories,
   getAllSubCategories,
@@ -83,4 +107,6 @@ export {
   addSubCategory,
   getSubs,
   moveSubCategory,
+  deleteCategory,
+  deleteSubCategory,
 };

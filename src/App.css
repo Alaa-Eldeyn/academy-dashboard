@@ -26,7 +26,8 @@ body {
   background: #555;
 }
 
-.pink-sc::-webkit-scrollbar-thumb,#cat::-webkit-scrollbar-thumb {
+.pink-sc::-webkit-scrollbar-thumb,
+#cat::-webkit-scrollbar-thumb {
   background: #ec8ab3;
 }
 
@@ -39,5 +40,11 @@ body {
   }
   .input {
     @apply w-full p-3 border border-gray-300 rounded-lg focus:outline-none;
+  }
+  .main-btn {
+    @apply px-8 py-3 bg-primary text-white  rounded-full focus:outline-none  border border-transparent;
+  }
+  .second-btn {
+    @apply px-8 py-3 rounded-full border border-primary text-primary;
   }
 }

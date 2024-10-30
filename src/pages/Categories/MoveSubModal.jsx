@@ -39,7 +39,7 @@ const MoveSubModal = ({
           <h1 className="text-xl font-bold text-[#E2508D]">
             Subcategory Transfer Confirmation
           </h1>
-          <p className="text-sm max-w-[400px] mx-auto text-[#434343">
+          <p className="text-sm max-w-[400px] mx-auto text-[#434343]">
             You are about to move this subcategory to a new category. Please
             confirm your selection. Once moved, all related items will be
             organized under the new category.

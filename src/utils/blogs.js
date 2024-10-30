@@ -39,9 +39,11 @@ const getBlog = async (id) => {
   }
 };
 
-const getAllBlogs = async () => {
+const getAllBlogs = async (page) => {
   try {
-    let response = await customAxios.get(`Blog`);
+    let response = await customAxios.get(
+      `Blog/GetAllPaginated?page=${page}&pageSize=10`
+    );
     return response.data;
   } catch (error) {
     console.log(error);
@@ -86,13 +88,12 @@ const deleteBlog = async (id) => {
       return { isSuccess: false };
     }
   }
-
   return { isSuccess: false };
 };
 
-const updateBlog = async (id, data) => {
+const updateBlog = async (data) => {
   try {
-    let response = await customAxios.put(`Blog/${id}`, data);
+    let response = await customAxios.put(`Blog`, data);
     return response.data;
   } catch (error) {
     console.log(error);

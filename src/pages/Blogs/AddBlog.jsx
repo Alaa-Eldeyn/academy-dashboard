@@ -5,7 +5,8 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { addBlog, getBlog, schema, updateBlog } from "../../utils/blogs";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
-import { getAllCategories, getAllSubCategories } from "../../utils/categories";
+import { getAllCategories, getSubs } from "../../utils/categories";
+import { getID } from "../../utils/LocalStorage";
 
 const AddBlog = ({ isUpdateMode }) => {
   const params = useParams();
@@ -26,6 +27,8 @@ const AddBlog = ({ isUpdateMode }) => {
       return;
     }
     let data = new FormData();
+    let id = getID();
+    data.append("AuthorId", id);
     data.append("Title", getValues("name"));
     data.append("Intro", getValues("intro"));
     data.append("Content", getValues("content"));
@@ -39,37 +42,41 @@ const AddBlog = ({ isUpdateMode }) => {
       navigate("/blogs");
     } else {
       toast.error("Failed to add Blog");
+      console.log(response);
     }
   };
-  const getAllCategoriesAndSubs = async () => {
-    let cat = await getAllCategories();
+  const getCategories = async () => {
+    let cat = await getAllCategories("Blogs");
     setCategories(cat?.data);
-    let subs = await getAllSubCategories();
-    setSubCategories(subs?.data);
+  };
+  const getAllSubs = async (id) => {
+    let subs = await getSubs(id);
+    setSubCategories(subs?.data || []);
   };
   useEffect(() => {
-    getAllCategoriesAndSubs();
+    getCategories();
   }, []);
   useEffect(() => {
     if (isUpdateMode) {
       const fetchBlog = async () => {
-        if (categories.length === 0 || subCategories.length === 0)
-          await getAllCategoriesAndSubs();
+        if (categories.length === 0) await getCategories();
         const { data } = await getBlog(params?.id);
         setValue("name", data?.title);
         setValue("intro", data?.intro);
         setValue("content", data?.content);
         setValue("conclusion", data?.conclusion);
         setValue("category", data?.categoryId?.toString() || "");
+        await getAllSubs(data?.categoryId);
         setValue("subcategory", data?.subCategoryId?.toString() || "");
         setImageName(data?.imageURL?.split("/").pop());
       };
       fetchBlog();
     }
   }, [isUpdateMode, params?.id]);
-  
+
   const handleUpdateBlog = async () => {
     let data = new FormData();
+    data.append("Id", params?.id);
     data.append("Title", getValues("name"));
     data.append("Intro", getValues("intro"));
     data.append("Content", getValues("content"));
@@ -77,7 +84,7 @@ const AddBlog = ({ isUpdateMode }) => {
     data.append("CategoryId", getValues("category"));
     data.append("SubCategoryId", getValues("subcategory"));
     data.append("image", getValues("image.0"));
-    let response = await updateBlog(params?.id, data);
+    let response = await updateBlog(data);
     if (response.isSuccess) {
       toast.success("Blog Updated Successfully");
       navigate("/blogs");
@@ -120,8 +127,15 @@ const AddBlog = ({ isUpdateMode }) => {
             <select
               id="category"
               name="category"
-              {...register("category")}
+              {...register("category", {
+                onChange: (e) => {
+                  setValue("subcategory", "");
+                  let res = getAllSubs(e?.target?.value);
+                  setSubCategories(res?.data || []);
+                },
+              })}
               className={`${errors?.category ? "mb-0" : "mb-3"} input`}
+              defaultValue={""}
             >
               <option value="" disabled hidden>
                 Select Category
@@ -152,6 +166,7 @@ const AddBlog = ({ isUpdateMode }) => {
               name="subcategory"
               {...register("subcategory")}
               className={`${errors?.subcategory ? "mb-0" : "mb-3"} input`}
+              defaultValue={""}
             >
               <option value="" disabled hidden>
                 Select Subcategory
@@ -285,11 +300,7 @@ const AddBlog = ({ isUpdateMode }) => {
               Publish this Blog
             </button>
           )}
-          <Link
-            to={"/blogs"}
-            type="button"
-            className="px-8 py-3 rounded-full border border-primary text-primary"
-          >
+          <Link to={"/blogs"} type="button" className="second-btn">
             Cancel
           </Link>
         </div>

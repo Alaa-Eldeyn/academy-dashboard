@@ -39,9 +39,11 @@ const getBook = async (id) => {
   }
 };
 
-const getAllBooks = async () => {
+const getAllBooks = async (page) => {
   try {
-    let response = await customAxios.get(`Book`);
+    let response = await customAxios.get(
+      `Book/GetAllBooksPaginated?page=${page}&pageSize=10`
+    );
     return response?.data;
   } catch (error) {
     console.log(error);

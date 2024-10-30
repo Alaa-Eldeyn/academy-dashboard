@@ -10,9 +10,9 @@ const ViewBlog = () => {
   const params = useParams();
   useEffect(() => {
     const getAllCategoriesAndSubs = async () => {
-      let cat = await getAllCategories();
+      let cat = await getAllCategories("Blogs");
       setCategories(cat?.data);
-      let subs = await getAllSubCategories();
+      let subs = await getAllSubCategories("Blogs");
       setSubCategories(subs?.data);
     };
     const fetchBlog = async () => {
@@ -27,7 +27,7 @@ const ViewBlog = () => {
       <h1 className="font-bold text-xl mb-5">{blog?.title}</h1>
       <div className="relative w-full h-52 bg-gray-200 rounded-lg overflow-hidden">
         <img
-          src={`http://localhost:5000/${blog?.imageURL}`}
+          src={`http://localhost:5000${blog?.imageURL}`}
           alt=""
           className="w-full object-cover"
           loading="lazy"

@@ -1,12 +1,6 @@
 import Layout from "./Layout";
 import "./App.css";
 import { Route, Routes } from "react-router-dom";
-import Dashboard from "./pages/Dashboard";
-import Supervisors from "./pages/Supervisors";
-import Users from "./pages/Users";
-import PendingCourses from "./pages/Courses/PendingCourses";
-import PublishedCourses from "./pages/Courses/PublishedCourses";
-import Exams from "./pages/Exams";
 import Profile from "./pages/Profile";
 import Login from "./auth/Login";
 import ForgetPass from "./auth/ForgetPass";
@@ -17,6 +11,11 @@ import { Books, AddBooks } from "./pages/Books";
 import { Blogs, AddBlog, ViewBlog } from "./pages/Blogs";
 import { Taps } from "./pages/Categories";
 import RestPass from "./auth/RestPass";
+import { DeletePending, Details, Pending, Published } from "./pages/Courses";
+import { AddExam, Exams, Questions } from "./pages/Exams";
+import { Dashboard } from "./pages/Dashboard";
+import { Supervisors } from "./pages/Supervisors";
+import { AddUsers, Users } from "./pages/Users";
 
 function App() {
   return (
@@ -24,7 +23,7 @@ function App() {
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="Forget-pass" element={<ForgetPass />} />
-        <Route path="Rest-pass" element={<RestPass/>} />
+        <Route path="Rest-pass" element={<RestPass />} />
         <Route
           path="/"
           element={
@@ -36,13 +35,28 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="supervisors" element={<Supervisors />} />
           <Route path="users" element={<Users />} />
+          <Route path="users/add-user" element={<AddUsers />} />
           <Route path="categories" element={<Taps />} />
-          <Route path="pending-courses" element={<PendingCourses />} />
-          <Route path="published-courses" element={<PublishedCourses />} />
+          <Route path="pending-courses" element={<Pending />} />
+          <Route path="pending-deletion-courses" element={<DeletePending />} />
+          <Route path="course-details/:id" element={<Details />} />
+          <Route path="published-courses" element={<Published />} />
           <Route path="exams" element={<Exams />} />
+          <Route
+            path="exams/add-exam"
+            element={<AddExam isUpdateMode={false} />}
+          />
+          <Route
+            path="exams/update-exam/:id"
+            element={<AddExam isUpdateMode={true} />}
+          />
+          <Route path="exams/exam-questions/:id" element={<Questions />} />
           <Route path="blogs" element={<Blogs />} />
           <Route path="blogs/add-blog" element={<AddBlog />} />
-          <Route path="blogs/update-blog/:id" element={<AddBlog isUpdateMode={true}/>} />
+          <Route
+            path="blogs/update-blog/:id"
+            element={<AddBlog isUpdateMode={true} />}
+          />
           <Route path="blogs/blog/:id" element={<ViewBlog />} />
           <Route path="books" element={<Books />} />
           <Route

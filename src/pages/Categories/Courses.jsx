@@ -8,6 +8,8 @@ import {
 } from "../../utils/categories";
 import { toast } from "react-toastify";
 import MoveSubModal from "./MoveSubModal";
+import DeleteSubModal from "./DeleteSubModal";
+import DeleteCategoryModal from "./DeleteCategoryModal";
 
 const Courses = () => {
   const [categories, setCategories] = useState([]);
@@ -15,15 +17,11 @@ const Courses = () => {
   const [newCategoryName, setNewCategoryName] = useState("");
   const [newSubCategoryName, setNewSubCategoryName] = useState("");
   const [selectedCategory, setSelectedCategory] = useState({});
-  const [MoveSubModalOpen, setMoveSubModalOpen] = useState(false);
   const [subCategoryId, setSubCategoryId] = useState("");
-  useEffect(() => {
-    const getCategories = async () => {
-      let cat = await getAllCategories();
-      setCategories(cat?.data);
-    };
-    getCategories();
-  }, []);
+  const [categoryToDelete, setCategoryToDelete] = useState("");
+  const [MoveSubModalOpen, setMoveSubModalOpen] = useState(false);
+  const [deleteSubCategoryModal, setDeleteSubCategoryModal] = useState(false);
+  const [deleteCategoryModal, setDeleteCategoryModal] = useState(false);
 
   const getAllSubs = async (id) => {
     let subs = await getSubs(id);
@@ -34,7 +32,7 @@ const Courses = () => {
       toast.error("You must enter a category name");
       return;
     }
-    let res = await addCategory(newCategoryName);
+    let res = await addCategory(newCategoryName, "Courses");
     if (res?.isSuccess) {
       toast.success("Category added successfully");
       setNewCategoryName("");
@@ -59,6 +57,13 @@ const Courses = () => {
       setSubCategories(subs?.data || []);
     }
   };
+  useEffect(() => {
+    const getCategories = async () => {
+      let cat = await getAllCategories("Courses");
+      setCategories(cat?.data);
+    };
+    getCategories();
+  }, []);
 
   return (
     <>
@@ -69,6 +74,25 @@ const Courses = () => {
           categories={categories}
           selectedCategory={selectedCategory}
           setSubCategories={setSubCategories}
+        />
+      )}
+      {deleteSubCategoryModal && (
+        <DeleteSubModal
+          subCategoryToDelete={subCategoryId}
+          subCategories={subCategories}
+          setDeleteSubCategoryModal={setDeleteSubCategoryModal}
+          setSubCategories={setSubCategories}
+          selectedCategory={selectedCategory}
+        />
+      )}
+      {deleteCategoryModal && (
+        <DeleteCategoryModal
+          categoryToDelete={categoryToDelete}
+          categories={categories}
+          setCategories={setCategories}
+          setDeleteCategoryModal={setDeleteCategoryModal}
+          setSubCategories={setSubCategories}
+          type="Courses"
         />
       )}
       <div className="flex gap-5 flex-wrap">
@@ -86,7 +110,7 @@ const Courses = () => {
             <button
               onClick={() => addNewCategory()}
               type="button"
-              className="px-8 py-2 text-white bg-[#E2508D]  rounded-lg cursor-pointer select-none soft"
+              className="px-8 py-2 text-white bg-[#E2508D] rounded-lg cursor-pointer select-none soft"
             >
               Add
             </button>
@@ -107,7 +131,7 @@ const Courses = () => {
                 <option value="" disabled hidden>
                   Choose category
                 </option>
-                {categories.map(({ id, name }) => {
+                {categories?.map(({ id, name }) => {
                   return (
                     <option key={id} value={id}>
                       {name}
@@ -158,16 +182,19 @@ const Courses = () => {
                         setSelectedCategory({ id, name });
                         getAllSubs(id);
                       }}
-                      className="flex-1 line-clamp-1 px-4 py-3 "
+                      className="flex-1 line-clamp-1 px-4 py-3"
                     >
                       {name}
-                      <span className="bg-[#FFF2F7] w-8 h-8 text-black text-xs rounded-full mx-3 py-1 px-3">
+                      <span className="bg-[#FFF2F7] inline-block text-black text-xs rounded-full mx-3 py-1 px-3">
                         10 Sub Categories
                       </span>
                     </span>
                     <span>
                       <Icon
-                        onClick={() => console.log("delete")}
+                        onClick={() => {
+                          setCategoryToDelete(id);
+                          setDeleteCategoryModal(true);
+                        }}
                         icon="fluent:delete-28-regular"
                         className="bg-[#FFF2F7] w-8 h-8 p-2 mr-4 text-[#E23F3F] rounded-lg cursor-pointer"
                       />
@@ -187,12 +214,9 @@ const Courses = () => {
                       key={i}
                       className="bg-white shadow-sm px-4 py-2 rounded-lg flex items-center justify-between"
                     >
-                      <span
-                        onClick={() => console.log("clicked")}
-                        className="flex-1 line-clamp-1"
-                      >
+                      <span className="flex-1 line-clamp-1">
                         {name}
-                        <span className="bg-[#FFF2F7] w-8 h-8 text-black text-xs rounded-full mx-3 py-1 px-3">
+                        <span className="bg-[#FFF2F7] inline-block text-black text-xs rounded-full mx-3 py-1 px-3">
                           Category name
                         </span>
                       </span>
@@ -207,7 +231,10 @@ const Courses = () => {
                         />
                         <Icon
                           icon="fluent:delete-28-regular"
-                          onClick={() => console.log("Deleted")}
+                          onClick={() => {
+                            setSubCategoryId(id);
+                            setDeleteSubCategoryModal(true);
+                          }}
                           className="bg-[#FFF2F7] w-8 h-8 p-2 text-[#E23F3F] rounded-lg cursor-pointer"
                         />
                       </span>

@@ -45,6 +45,11 @@ function Sidebar() {
           title: "Published Courses",
           icon: <Icon icon="solar:video-library-outline" className="text-xl" />,
         },
+        {
+          link: "pending-deletion-courses",
+          title: "Pending Deletion Courses",
+          icon: <Icon icon="solar:video-library-outline" className="text-xl" />,
+        },
       ],
     },
     {
@@ -93,7 +98,9 @@ function Sidebar() {
         style={{
           transform: isSidebarOpen ? "translateX(0)" : "translateX(-100%)",
         }}
-        className={`shadow-lg fixed top-0 left-0 z-50 h-screen soft sm:static sm:!translate-x-0 ${isSidebarOpen ? "translate-x-[100%]" : "translate-x-0"} `}
+        className={`shadow-lg fixed top-0 left-0 z-50 h-screen soft sm:static sm:!translate-x-0 ${
+          isSidebarOpen ? "translate-x-[100%]" : "translate-x-0"
+        } `}
         aria-label="Sidebar"
       >
         <div className="h-full p-3 overflow-y-auto bg-white">
@@ -128,12 +135,12 @@ function Sidebar() {
                   </span>
                 </Link>
                 {item.dropdown && isCoursesOpen && (
-                  <ul className="pl-8 mt-2">
+                  <ul className="pl-4">
                     {item.items.map((subItem, subIndex) => (
                       <li key={subIndex}>
                         <Link
                           to={subItem.link}
-                          className={`my-2 flex items-center p-2 gap-3 text-gray-900 rounded-lg hover:bg-[#FEEFFF] dark:hover:bg-[#FEEFFF] group ${
+                          className={`my-2 flex items-center py-2 px-4 gap-3 text-gray-900 rounded-lg hover:bg-[#FEEFFF] dark:hover:bg-[#FEEFFF] group line-clamp-1 ${
                             activeLink?.includes(subItem.link)
                               ? "bg-[#FEEFFF]"
                               : ""
