@@ -1,127 +1,92 @@
-import { toast } from "react-toastify";
-import axios from "axios";
-import { Link, useNavigate } from "react-router-dom";
-import { addID, addUser } from "../utils/LocalStorage";
-import { signinValidation } from "./Validation";
+import { Link } from "react-router-dom";
+import login from "../assets/login.svg";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { logIn, signInSchema } from "../utils/auth";
 
-function Login() {
-  const baseUrl = "http://localhost:5000/api";
+const Login = () => {
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm({
-    resolver: zodResolver(signinValidation),
+    resolver: zodResolver(signInSchema),
   });
-  const Navigate = useNavigate();
-
-  const onSubmit = async (formData) => {
-    try {
-      const response = await axios.post(`${baseUrl}/User/login`, formData);
-      if (response.data.isSuccess) {
-        toast("Successfully Login", { type: "success" });
-        addUser(response.data.token);
-        addID(response?.data?.data?.id);
-        Navigate("/");
-      } else {
-        if (response?.data?.message === "Can't find this username") {
-          toast.error("Please enter the email you registered with");
-        } else {
-          toast.error(response?.data?.message);
-        }
-        console.log("error", response?.data?.message);
-      }
-    } catch (error) {
-      console.error("Error:", error);
+  const handleLogin = async (data) => {
+    let res = await logIn(data);
+    if (res?.isSuccess) {
+      window.location.href = "/";
     }
   };
   return (
-    <div className="flex flex-col justify-center items-center  lg:h-screen p-6">
-      <div className="grid md:grid-cols-2 items-center gap-y-8 bg-white max-w-7xl w-full shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] rounded-3xl overflow-hidden">
-        <div className="max-md:order-1 flex flex-col justify-center items-center sm:p-8 p-4 bg-gradient-to-b from-bgFontColor to-[#AC59FF] w-full h-full">
-          <img
-            src="src\assets\login.png"
-            alt="hero image"
-            srcSet="/signup-2x.png 2x, /signup-3x.png 3x"
-            width={"350"}
-            height={"300"}
-          />
-        </div>
-        <form onSubmit={handleSubmit(onSubmit)} className="sm:p-8 my-6 w-full">
-          <div className="text-center my-10 w-full mx-auto">
-            <span className="text-secondary">Welcome to</span>
-            <h3 className="text-bgFontColor text-2xl font-extrabold max-md:text-center">
-              MedLearn Hub
-            </h3>
+    <>
+      <div className="min-h-screen center bg-slate-100 py-4 sm:py-0">
+        <div className="rounded-3xl grid gap-5 grid-cols-1 md:grid-cols-2 items-center p-5 bg-white container max-w-[60rem] w-full">
+          <div className="rounded-3xl p-4 !hidden md:!flex center bg-gradient-to-b from-[#59248E] to-99% to-[#AC59FF] w-full h-full">
+            <img src={login} alt="hero image" />
+            <div className="absolute bg-[#0f0f0f28] w-36 h-5 rounded-full blur bottom-40"></div>
           </div>
-          <div className="grid lg:grid-cols-1 my-6">
-            <div>
-              <label className="text-base font-normal mb-2 block text-bgFontColor">
-                Email *
-              </label>
-              <input
-                {...register("email")}
-                type="email"
-                className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3 rounded-md outline-bgColor"
-                placeholder="Enter Email"
-              />
-              {errors.email && (
-                <p className="text-red-500 mt-2 text-sm">
-                  {errors.email.message}
-                </p>
-              )}
+          <form className="py-10 w-full">
+            <div className="text-center w-full mx-auto">
+              <span className="text-secondary">Welcome to</span>
+              <h3 className="text-primary text-2xl font-bold max-md:text-center">
+                MedLearn Hub
+              </h3>
             </div>
-          </div>
-          <div className="grid lg:grid-cols-1 gap-6">
+            <div className="my-6">
+              <div>
+                <label className="text-base font-normal mb-2 block text-primary">
+                  Email *
+                </label>
+                <input
+                  {...register("email")}
+                  type="email"
+                  className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3 rounded-md outline-primary"
+                  placeholder="Enter Email"
+                />
+                {errors?.email && (
+                  <p className="text-red-500 mt-2 text-sm">
+                    {errors?.email?.message}
+                  </p>
+                )}
+              </div>
+            </div>
             <div>
-              <label className="text-base font-normal mb-2 block text-bgFontColor">
+              <label className="text-base font-normal mb-2 block text-primary">
                 Password *
               </label>
               <div className="relative flex items-center">
                 <input
                   {...register("password")}
                   type="password"
-                  className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3 rounded-md outline-bgColor"
+                  className="bg-gray-100 w-full text-gray-800 text-sm px-4 py-3 rounded-md outline-primary"
                   placeholder="Enter Password"
                 />
               </div>
-              {errors.password && (
+              {errors?.password && (
                 <p className="text-red-500 mt-2 text-sm">
-                  {errors.password.message}
+                  {errors?.password?.message}
                 </p>
               )}
             </div>
-          </div>
-          <div className="flex items-center mt-6">
-            <Link to={"/Forget-pass"} className="font-bold">
-              Forget Password ?
+            <Link to={"/Forget-pass"} className=" block mt-5 font-bold">
+              Forget Password?
             </Link>
-          </div>
-          <div className="mt-6">
-            <button
-              type="submit"
-              className="w-full py-2 px-6 text-lg tracking-wide font-bold rounded-md text-white bg-[#984D9F] focus:outline-none transition-all"
-            >
-              Sign In
-            </button>
-            <div className="w-full flex justify-center my-6 font-bold text-lg">
-              <span>
-                Don’t have an account?{" "}
-                <Link
-                  href={"/sign-up"}
-                  className="ml-2 font-bold underline text-bgColor"
-                >
-                  Join Now
-                </Link>
-              </span>
+            <div className="mt-6">
+              <button
+                type="button"
+                onClick={handleSubmit(handleLogin)}
+                disabled={isSubmitting}
+                className="w-full py-2 px-6 text-lg tracking-wide font-bold rounded-xl text-white bg-primary focus:outline-none soft"
+              >
+                Sign In
+              </button>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
-}
+};
 
 export default Login;

@@ -6,12 +6,12 @@ import { addBook, getBook, schema, updateBook } from "../../utils/books";
 import { toast } from "react-toastify";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { getAllCategories, getSubs } from "../../utils/categories";
-import { getID } from "../../utils/LocalStorage";
+import { getUser } from "../../utils/LocalStorage";
 
 const AddBooks = ({ isUpdateMode, details }) => {
   const params = useParams();
   const navigate = useNavigate();
-  let userId = getID();
+  let { id, firstName, lastName } = getUser();
   const [bookCover, setBookCover] = useState(null);
   const [categories, setCategories] = useState([]);
   const [subCategories, setSubCategories] = useState([]);
@@ -40,14 +40,15 @@ const AddBooks = ({ isUpdateMode, details }) => {
       return;
     }
     const data = new FormData();
-    data.append("UserID", userId);
     data.append("Title", getValues("name"));
     data.append("Description", getValues("description"));
     data.append("Thumbnail", getValues("cover.0"));
     data.append("Url", getValues("downloadLink"));
-    data.append("SubCategoryId", getValues("subcategory"));
-    data.append("CategoryId", getValues("category"));
+    data.append("UserID", `${id}`);
+    data.append("PublisherName", `${firstName} ${lastName}`);
     data.append("CreatedDate", getValues("createdDate"));
+    data.append("SubCategoryId", +getValues("subcategory"));
+    data.append("CategoryId", +getValues("category"));
 
     let response = await addBook(data);
     if (response?.isSuccess) {
@@ -55,17 +56,18 @@ const AddBooks = ({ isUpdateMode, details }) => {
       return navigate("/books");
     } else {
       toast.error("Failed to add book");
+      console.log(response);
     }
   };
   const handleUpdateBook = async () => {
     const data = new FormData();
-    data.append("UserID", userId);
+    data.append("UserID", id);
     data.append("Title", getValues("name"));
     data.append("Description", getValues("description"));
     data.append("Thumbnail", getValues("cover.0"));
     data.append("Url", getValues("downloadLink"));
-    data.append("SubCategoryId", getValues("subcategory"));
-    data.append("CategoryId", getValues("category"));
+    data.append("SubCategoryId", +getValues("subcategory"));
+    data.append("CategoryId", +getValues("category"));
     data.append("CreatedDate", getValues("createdDate"));
 
     let response = await updateBook(params?.id, data);

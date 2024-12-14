@@ -1,25 +1,25 @@
-export const addUser = (token) => {
+export const addToken = (token) => {
   localStorage.setItem("token", token);
 };
 
-export const removeUser = () => {
-  localStorage.removeItem("token");
-};
-
-export const getUser = () => {
+export const getToken = () => {
   const token = localStorage.getItem("token");
   return token;
 };
 
-export const addID = (id) => {
-  localStorage.setItem("id", id);
+export const addUser = (user) => {
+  localStorage.setItem("user", JSON.stringify(user));
 };
 
-export const removeID = () => {
-  localStorage.removeItem("id");
+export const getUser = () => {
+  const storedUser = localStorage.getItem("user");
+  if (storedUser) {
+    return JSON.parse(storedUser);
+  }
+  return null;
 };
 
-export const getID = () => {
-  const id = localStorage.getItem("id");
-  return id;
+export const removeUser = () => {
+  localStorage.removeItem("user");
+  localStorage.removeItem("token");
 };

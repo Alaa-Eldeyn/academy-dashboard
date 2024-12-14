@@ -19,7 +19,11 @@ const schema = z
     email: z.string().email({ message: "Invalid Email" }),
     phoneNumber: z
       .string()
-      .min(5, { message: "Please enter a valid phone number" }),
+      .min(5, { message: "Please enter a valid phone number" })
+      .regex(
+        /^\+\d{1,3}\d{4,14}$/,
+        "Phone Number Format: +[country code][number] (e.g., +1234567890)"
+      ),
   })
   .superRefine((data, ctx) => {
     if (data.password !== data.confirmPassword) {

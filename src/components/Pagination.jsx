@@ -8,42 +8,42 @@ const Pagination = (props) => {
       <div className="center gap-2">
         <button
           onClick={() => {
-            if (page <= 1) {
+            if (Number(page) <= 1) {
               return;
             } else {
-              setPage(page - 1);
+              setPage(Number(page) - 1);
             }
           }}
-          disabled={page === 1}
+          disabled={Number(page) === 1}
         >
           <Icon
             icon="icon-park-solid:left-one"
             className={`text-2xl text-primary cursor-pointer ${
-              page === 1 ? "opacity-50 cursor-default" : ""
+              Number(page) === 1 ? "opacity-50 cursor-default" : ""
             }`}
           />
-          Prev
         </button>
         <div className="rounded-full text-white bg-primary p-1 w-7 h-7 center">
           {page}
         </div>
         <button
           onClick={() => {
-            if (page === info?.totalPages) {
+            if (Number(page) === info?.totalPages) {
               return;
             } else {
-              setPage(page + 1);
+              setPage(Number(page) + 1);
             }
           }}
-          disabled={page === info?.totalPages}
+          disabled={Number(page) === info?.totalPages}
         >
           <Icon
             icon="icon-park-solid:right-one"
             className={`text-2xl text-primary cursor-pointer ${
-              !page === info?.totalPages ? "opacity-50 cursor-default" : ""
+              !Number(page) === info?.totalPages
+                ? "opacity-50 cursor-default"
+                : ""
             }`}
           />
-          Next
         </button>
       </div>
       <div>

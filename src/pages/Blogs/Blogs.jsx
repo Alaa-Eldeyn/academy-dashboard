@@ -10,14 +10,18 @@ const Blogs = () => {
   useEffect(() => {
     const fetchAllBlogs = async () => {
       let res = await getAllBlogs(page);
-      setBlogs(res.data);
+      setBlogs(res?.data);
+      console.log(res?.data);
     };
     fetchAllBlogs();
   }, [page]);
   const handleDeleteBlog = async (id) => {
     const res = await deleteBlog(id);
     if (res?.isSuccess) {
-      setBlogs(blogs.filter((blog) => blog.id !== id));
+      setBlogs((prevBlogs) => ({
+        ...prevBlogs,
+        blogs: prevBlogs.blogs.filter((blog) => blog.id !== id),
+      }));
     }
   };
   return (
@@ -36,16 +40,13 @@ const Blogs = () => {
             Search
           </button>
         </div>
-        <div className="flex justify-center items-center gap-5">
-          <Link
-            to="/Blogs/add-blog"
-            className="border border-pink-600 text-pink-600 text-sm px-4 py-3 flex items-center gap-2 rounded-xl w-full sm:w-auto"
-          >
-            <Icon icon="octicon:plus-circle-16" />
-            Add a Blog
-          </Link>
-          <Icon icon="ion:filter" className="text-3xl text-secondary" />
-        </div>
+        <Link
+          to="/Blogs/add-blog"
+          className="border border-pink-600 text-pink-600 text-sm px-4 py-3 flex items-center gap-2 rounded-xl w-full sm:w-auto"
+        >
+          <Icon icon="octicon:plus-circle-16" />
+          Add a Blog
+        </Link>
       </div>
 
       <div className="overflow-x-auto">

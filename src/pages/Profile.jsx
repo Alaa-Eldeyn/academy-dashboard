@@ -1,12 +1,11 @@
 import { Link } from "react-router-dom";
-import { FaUserTie } from "react-icons/fa";
 
 
 function Profile() {
   return (
      <section className=" flex flex-col items-center">
        <h1 className="my-2 text-lg flex items-center gap-2">
-       <FaUserTie className="text-2xl" />
+       {/* <FaUserTie className="text-2xl" /> */}
         My profile 
         </h1>
       

@@ -195,6 +195,72 @@ const addUserToCourse = async (courseId) => {
   return { isSuccess: false };
 };
 
+const getCourseQuestions = async (courseId) => {
+  try {
+    let response = await customAxios.get(`/Question/course/${courseId}`);
+    return response?.data;
+  } catch (error) {
+    console.error(error);
+    return { isSuccess: false };
+  }
+};
+
+const getPendingEnrolls = async () => {
+  try {
+    let response = await customAxios.get(
+      "Dashboard/GetPendingApprovalEnrollRequests"
+    );
+    return response?.data;
+  } catch (error) {
+    console.error(error);
+    return { isSuccess: false };
+  }
+};
+
+const approveEnroll = async (data) => {
+  try {
+    let response = await customAxios.post(
+      `/Dashboard/ApprovePendingApprovalEnrollRequests`,
+      {
+        studentId: data.studentId,
+        instructorId: data.instructorId,
+        courseId: data.courseId,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error(error);
+    return { isSuccess: false };
+  }
+};
+
+const rejectEnroll = async (data) => {
+  try {
+    let response = await customAxios.post(
+      `/Dashboard/RejectPendingApprovalEnrollRequests`,
+      {
+        studentId: data.studentId,
+        instructorId: data.instructorId,
+        courseId: data.courseId,
+      },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    return response?.data;
+  } catch (error) {
+    console.error(error);
+    return { isSuccess: false };
+  }
+};
+
 export {
   getAllCourses,
   getOneCourse,
@@ -206,4 +272,8 @@ export {
   addUserToCourse,
   getPendingDeleteCourses,
   requestDelete,
+  getCourseQuestions,
+  getPendingEnrolls,
+  approveEnroll,
+  rejectEnroll,
 };

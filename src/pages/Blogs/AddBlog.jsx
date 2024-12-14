@@ -6,7 +6,7 @@ import { addBlog, getBlog, schema, updateBlog } from "../../utils/blogs";
 import { toast } from "react-toastify";
 import { useEffect, useState } from "react";
 import { getAllCategories, getSubs } from "../../utils/categories";
-import { getID } from "../../utils/LocalStorage";
+import {  getUser } from "../../utils/LocalStorage";
 
 const AddBlog = ({ isUpdateMode }) => {
   const params = useParams();
@@ -27,7 +27,7 @@ const AddBlog = ({ isUpdateMode }) => {
       return;
     }
     let data = new FormData();
-    let id = getID();
+    let {id} = getUser();
     data.append("AuthorId", id);
     data.append("Title", getValues("name"));
     data.append("Intro", getValues("intro"));

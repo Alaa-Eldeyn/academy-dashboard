@@ -17,7 +17,10 @@ const Users = () => {
   const handleDeleteUser = async (id) => {
     const res = await deleteUser(id);
     if (res?.isSuccess) {
-      setUsers(users.filter((user) => user.id !== id));
+      setUsers((prevUsers) => ({
+        ...prevUsers,
+        users: prevUsers.users.filter((user) => user.id !== id),
+      }));
     }
   };
   return (
@@ -36,16 +39,13 @@ const Users = () => {
             Search
           </button>
         </div>
-        <div className="flex justify-center items-center gap-5">
-          <Link
-            to="/users/add-user"
-            className="border border-pink-600 text-pink-600 text-sm px-4 py-3 flex items-center gap-2 rounded-xl w-full sm:w-auto"
-          >
-            <Icon icon="octicon:plus-circle-16" />
-            Add a user
-          </Link>
-          <Icon icon="ion:filter" className="text-3xl text-secondary" />
-        </div>
+        <Link
+          to="/users/add-user"
+          className="border border-pink-600 text-pink-600 text-sm px-4 py-3 flex items-center gap-2 rounded-xl w-full sm:w-auto"
+        >
+          <Icon icon="octicon:plus-circle-16" />
+          Add a user
+        </Link>
       </div>
 
       <div className="overflow-x-auto">
@@ -75,7 +75,7 @@ const Users = () => {
                 </td>
                 <td className="p-4 text-sm">{user?.email}</td>
                 <td className="px-6 py-3">{user?.phoneNumber}</td>
-                <td className="py-3 flex items-center gap-2 justify-center">
+                <td className="p-3 center">
                   <button
                     onClick={() => handleDeleteUser(user?.id)}
                     className="bg-[#FFF8F8] text-[#E23F3F] px-2 justify-center py-1 rounded-md flex items-center gap-1"
@@ -83,13 +83,6 @@ const Users = () => {
                     <Icon icon="fluent:delete-12-regular" />
                     Delete
                   </button>
-                  <Link
-                    to={`/users/${user?.id}`}
-                    className="bg-[#FEF8FF] text-[#984D9F] px-2 justify-center py-1 rounded-md flex items-center gap-1"
-                  >
-                    <Icon icon="ph:eye" />
-                    View
-                  </Link>
                 </td>
               </tr>
             ))}

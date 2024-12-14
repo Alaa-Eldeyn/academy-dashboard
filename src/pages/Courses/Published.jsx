@@ -2,7 +2,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  addUserToCourse,
+  // addUserToCourse,
   getApprovedCourses,
   requestDelete,
 } from "../../utils/courses";
@@ -22,10 +22,10 @@ const Published = () => {
       setCourses(courses.filter((course) => course.id !== id));
     }
   };
-  const handleAddUser = async (id) => {
-    let res = await addUserToCourse(id);
-    console.log(res);
-  };
+  // const handleAddUser = async (id) => {
+  //   let res = await addUserToCourse(id);
+  //   console.log(res);
+  // };
   return (
     <div className="px-6">
       <div className=" flex flex-wrap flex-col sm:flex-row items-center justify-between gap-8 w-auto mb-6">
@@ -42,16 +42,13 @@ const Published = () => {
             Search
           </button>
         </div>
-        <div className="flex justify-center items-center gap-5">
-          <Link
-            to="/Courses/add-course"
-            className="border border-pink-600 text-pink-600 text-sm px-4 py-3 flex items-center gap-2 rounded-xl w-full sm:w-auto"
-          >
-            <Icon icon="octicon:plus-circle-16" />
-            Add a course
-          </Link>
-          <Icon icon="ion:filter" className="text-3xl text-secondary" />
-        </div>
+        <Link
+          to="/Courses/add-course"
+          className="border border-pink-600 text-pink-600 text-sm px-4 py-3 flex items-center gap-2 rounded-xl w-full sm:w-auto"
+        >
+          <Icon icon="octicon:plus-circle-16" />
+          Add a course
+        </Link>
       </div>
 
       <div className="overflow-x-auto">
@@ -96,33 +93,24 @@ const Published = () => {
                     Delete
                   </button>
                   <Link
-                    to={`/course-details/${course?.id}`}
+                    to={`/published-course-details/${course?.id}`}
                     className="bg-[#FEF8FF] text-[#984D9F] px-2 justify-center py-1 rounded-md flex items-center gap-1"
                   >
                     <Icon icon="ph:eye" />
                     View
                   </Link>
-                  <button
+                  {/* <button
                     onClick={() => handleAddUser(course?.id)}
                     className="bg-[#FEF8FF] text-[#E2508D] px-2 justify-center py-1 rounded-md flex items-center gap-1"
                   >
                     <Icon icon="mynaui:plus-square" />
                     add
-                  </button>
+                  </button> */}
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
-
-        {/* Pagination and Delete Button
-        <div className="flex flex-wrap flex-col sm:flex-row items-center justify-between mt-4 w-full">
-          <PaginatedItems items={Courses} itemsPerPage={1} />
-          <button className="border border-secondary text-secondary p-2 rounded-lg flex items-center gap-1 mt-4 sm:mt-0">
-            <Icon icon="fluent:delete-12-regular" />
-            Delete Selected Items
-          </button>
-        </div> */}
       </div>
     </div>
   );

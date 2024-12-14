@@ -1,10 +1,7 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import {
-  deleteCourse,
-  getPendingDeleteCourses
-} from "../../utils/courses";
+import { deleteCourse, getPendingDeleteCourses } from "../../utils/courses";
 import Swal from "sweetalert2";
 
 const DeletePending = () => {
@@ -65,7 +62,7 @@ const DeletePending = () => {
                 </p>
                 <span className="text-xs">{item?.instructorFullName}</span>
                 <Link
-                  to={`/course-details/${item?.id}`}
+                  to={`/deletion-course-details/${item?.id}`}
                   className="center text-[#E2508D] border border-[#E2508D] p-3 w-full rounded-full mt-2"
                 >
                   Show Content

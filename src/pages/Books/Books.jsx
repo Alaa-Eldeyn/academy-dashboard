@@ -18,7 +18,10 @@ function Books() {
   const handleDeleteBook = async (id) => {
     const res = await deleteBook(id);
     if (res?.isSuccess) {
-      setBooks(books.filter((book) => book.id !== id));
+      setBooks((prevBooks) => ({
+        ...prevBooks,
+        books: prevBooks?.books?.filter((book) => book?.id !== id),
+      }));
     }
   };
   return (
@@ -37,16 +40,13 @@ function Books() {
             Search
           </button>
         </div>
-        <div className="flex justify-center items-center gap-5">
-          <Link
-            to="/books/add-book"
-            className="border border-pink-600 text-pink-600 text-sm px-4 py-3 flex items-center gap-2 rounded-xl w-full sm:w-auto"
-          >
-            <Icon icon="octicon:plus-circle-16" />
-            Add a Book
-          </Link>
-          <Icon icon="ion:filter" className="text-3xl text-secondary" />
-        </div>
+        <Link
+          to="/books/add-book"
+          className="border border-pink-600 text-pink-600 text-sm px-4 py-3 flex items-center gap-2 rounded-xl w-full sm:w-auto"
+        >
+          <Icon icon="octicon:plus-circle-16" />
+          Add a Book
+        </Link>
       </div>
 
       <div className="overflow-x-auto">

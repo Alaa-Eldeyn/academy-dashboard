@@ -3,14 +3,17 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getAllExams } from "../../utils/Exams";
 import { deleteExam } from "../../utils/Exams";
-import { addUserToExam } from "../../utils/Exams";
 
 const Exams = () => {
   const [exams, setExams] = useState([]);
   useEffect(() => {
     const fetchCourses = async () => {
       let res = await getAllExams();
-      setExams(res?.data);
+      if (res?.isSuccess) {
+        setExams(res?.data);
+      } else {
+        setExams([]);
+      }
     };
     fetchCourses();
   }, []);
@@ -20,10 +23,10 @@ const Exams = () => {
       setExams(exams.filter((exam) => exam.id !== id));
     }
   };
-  const handleAddUser = async (id) => {
-    let res = await addUserToExam(id);
-    console.log(res);
-  };
+  // const handleAddUser = async (id) => {
+  //   let res = await addUserToExam(id);
+  //   console.log(res);
+  // };
   return (
     <div className="px-6">
       <div className=" flex flex-wrap flex-col sm:flex-row items-center justify-between gap-8 w-auto mb-6">
@@ -40,19 +43,16 @@ const Exams = () => {
             Search
           </button>
         </div>
-        <div className="flex justify-center items-center gap-5">
-          <Link
-            to="/exams/add-exam"
-            className="border border-pink-600 text-pink-600 text-sm px-4 py-3 flex items-center gap-2 rounded-xl w-full sm:w-auto"
-          >
-            <Icon icon="octicon:plus-circle-16" />
-            Add a exam
-          </Link>
-          <Icon icon="ion:filter" className="text-3xl text-secondary" />
-        </div>
+        <Link
+          to="/exams/add-exam"
+          className="border border-pink-600 text-pink-600 text-sm px-4 py-3 flex items-center gap-2 rounded-xl w-full sm:w-auto"
+        >
+          <Icon icon="octicon:plus-circle-16" />
+          Add a exam
+        </Link>
       </div>
       <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {exams?.map((item) => (
+        {[1,1,1,1,1]?.map((item) => (
           <div
             key={item?.id}
             className="rounded-3xl p-3 overflow-hidden shadow-md border"
@@ -122,12 +122,12 @@ const Exams = () => {
                   Delete
                 </button>
               </div>
-              <button
+              {/* <button
                 onClick={() => handleAddUser(item?.id)}
                 className="center text-[#E2508D] border border-[#E2508D] p-3 w-full rounded-xl mt-2"
               >
                 Add user access
-              </button>
+              </button> */}
             </div>
           </div>
         ))}

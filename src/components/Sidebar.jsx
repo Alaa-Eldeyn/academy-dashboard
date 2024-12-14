@@ -1,4 +1,3 @@
-import { FaBarsStaggered } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
@@ -14,11 +13,11 @@ function Sidebar() {
       icon: <Icon icon="radix-icons:dashboard" className="text-xl" />,
       title: "Dashboard",
     },
-    {
-      link: "supervisors",
-      icon: <Icon icon="mingcute:user-setting-line" className="text-2xl" />,
-      title: "Supervisors",
-    },
+    // {
+    //   link: "supervisors",
+    //   icon: <Icon icon="mingcute:user-setting-line" className="text-2xl" />,
+    //   title: "Supervisors",
+    // },
     {
       link: "users",
       icon: <Icon icon="solar:user-outline" className="text-2xl" />,
@@ -50,7 +49,19 @@ function Sidebar() {
           title: "Pending Deletion Courses",
           icon: <Icon icon="solar:video-library-outline" className="text-xl" />,
         },
+        {
+          link: "pending-enrolls",
+          title: "Pending Enrolls",
+          icon: <Icon icon="solar:video-library-outline" className="text-xl" />,
+        },
       ],
+    },
+    {
+      link: "local-subscription",
+      icon: (
+        <Icon icon="streamline:subscription-cashflow" className="text-2xl" />
+      ),
+      title: "Subscription",
     },
     {
       link: "exams",
@@ -70,7 +81,7 @@ function Sidebar() {
   ];
 
   const handleDropdownClick = (index) => {
-    if (index === 4) setIsCoursesOpen(!isCoursesOpen);
+    if (index === 3) setIsCoursesOpen(!isCoursesOpen);
   };
 
   const handleLinkClick = (link) => {
@@ -82,17 +93,17 @@ function Sidebar() {
       <button
         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
         type="button"
-        className="fixed bg-slate-300 rounded-sm items-center p-3 top-3 left-6 text-gray-600 sm:hidden z-10"
+        className="fixed bg-[#FEEFFF] rounded-sm items-center p-2 top-4 left-4 text-primary sm:hidden z-10"
       >
         <span className="sr-only">Open sidebar</span>
-        <FaBarsStaggered className="text-2xl" />
+        <Icon icon="heroicons:bars-3-16-solid" className="text-2xl" />
       </button>
 
       {isSidebarOpen && (
         <div
           className="fixed soft top-0 left-0 w-full h-full bg-black bg-opacity-50 z-40"
           onClick={() => setIsSidebarOpen(false)}
-        ></div>
+        />
       )}
       <aside
         style={{
@@ -113,8 +124,8 @@ function Sidebar() {
             {sidebarItem.map((item, index) => (
               <li key={index}>
                 <Link
-                  to={item.link || "#"}
-                  className={`my-1 font-normal text-sm flex items-center p-2 text-gray-900 rounded-lg hover:bg-[#FEEFFF] dark:hover:bg-[#FEEFFF] group line-clamp-1 ${
+                  to={item?.link || "#"}
+                  className={`my-2 font-normal text-sm flex items-center p-2 text-gray-900 rounded-lg hover:bg-[#FEEFFF] dark:hover:bg-[#FEEFFF] group line-clamp-1 ${
                     activeLink?.includes(item.link) ? "bg-[#FEEFFF]" : ""
                   }`}
                   onClick={() => {
@@ -134,7 +145,7 @@ function Sidebar() {
                     </span>
                   </span>
                 </Link>
-                {item.dropdown && isCoursesOpen && (
+                {item?.dropdown && isCoursesOpen && (
                   <ul className="pl-4">
                     {item.items.map((subItem, subIndex) => (
                       <li key={subIndex}>
@@ -158,7 +169,6 @@ function Sidebar() {
                     ))}
                   </ul>
                 )}
-                <hr />
               </li>
             ))}
           </ul>

@@ -28,9 +28,12 @@ const AddExam = ({ isUpdateMode }) => {
       subCategoryId: +getValues("subCategoryID"),
       durationInMinutes: +getValues("duration"),
       type: +isPaid,
+      price: isPaid ? +getValues("price") : 0,
       difficulty: +getValues("difficulty"),
     };
     let res = await addExam(data);
+    console.log(data);
+
     if (res?.isSuccess) {
       toast.success("Exam Added Successfully");
       navigate(`/exams/update-exam/${res?.data?.id}`);
@@ -43,6 +46,7 @@ const AddExam = ({ isUpdateMode }) => {
       subCategoryId: +getValues("subCategoryID"),
       durationInMinutes: +getValues("duration"),
       type: +isPaid,
+      price: isPaid ? +getValues("price") : 0,
       difficulty: +getValues("difficulty"),
     };
     let res = await updateExam(params?.id, data);
@@ -67,6 +71,7 @@ const AddExam = ({ isUpdateMode }) => {
         setValue("difficulty", data?.difficulty?.toString());
         setValue("duration", data?.durationInMinutes?.toString());
         setValue("fullMark", data?.fullmark?.toString());
+        setValue("price", data?.price?.toString());
         setIsPaid(data?.type === 1);
       };
       fetchExam();
@@ -145,6 +150,7 @@ const AddExam = ({ isUpdateMode }) => {
               type="number"
               placeholder="Enter Price"
               className={`input`}
+              {...register("price")}
             />
           </div>
         </div>

@@ -1,29 +1,28 @@
-import Layout from "./Layout";
 import "./App.css";
+import Layout from "./Layout";
 import { Route, Routes } from "react-router-dom";
 import Profile from "./pages/Profile";
-import Login from "./auth/Login";
-import ForgetPass from "./auth/ForgetPass";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import ProtectedRoute from "./ProtectedRoute";
 import { Books, AddBooks } from "./pages/Books";
 import { Blogs, AddBlog, ViewBlog } from "./pages/Blogs";
 import { Taps } from "./pages/Categories";
-import RestPass from "./auth/RestPass";
-import { DeletePending, Details, Pending, Published } from "./pages/Courses";
+import { DeletePending, Details, Pending, PendingEnrolls, Published } from "./pages/Courses";
 import { AddExam, Exams, Questions } from "./pages/Exams";
 import { Dashboard } from "./pages/Dashboard";
 import { Supervisors } from "./pages/Supervisors";
 import { AddUsers, Users } from "./pages/Users";
+import { ForgetPass, Login, ResetPass } from "./auth";
+import Subscription from "./pages/Subscription/Subscription";
 
 function App() {
   return (
     <>
       <Routes>
         <Route path="/login" element={<Login />} />
-        <Route path="Forget-pass" element={<ForgetPass />} />
-        <Route path="Rest-pass" element={<RestPass />} />
+        <Route path="/forget-pass" element={<ForgetPass />} />
+        <Route path="/reset-pass" element={<ResetPass />} />
         <Route
           path="/"
           element={
@@ -38,8 +37,20 @@ function App() {
           <Route path="users/add-user" element={<AddUsers />} />
           <Route path="categories" element={<Taps />} />
           <Route path="pending-courses" element={<Pending />} />
+          <Route path="pending-enrolls" element={<PendingEnrolls />} />
           <Route path="pending-deletion-courses" element={<DeletePending />} />
-          <Route path="course-details/:id" element={<Details />} />
+          <Route
+            path="deletion-course-details/:id"
+            element={<Details isPublished={true} />}
+          />
+          <Route
+            path="course-details/:id"
+            element={<Details isPublished={false} />}
+          />
+          <Route
+            path="published-course-details/:id"
+            element={<Details isPublished={true} />}
+          />
           <Route path="published-courses" element={<Published />} />
           <Route path="exams" element={<Exams />} />
           <Route
@@ -72,6 +83,7 @@ function App() {
             element={<AddBooks isUpdateMode={false} details={true} />}
           />
           <Route path="profile" element={<Profile />} />
+          <Route path="local-subscription" element={<Subscription />} />
         </Route>
       </Routes>
       <ToastContainer />

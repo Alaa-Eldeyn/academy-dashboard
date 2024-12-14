@@ -13,8 +13,8 @@ const Totals = () => {
     fetchData();
   }, []);
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-      <div className=" bg-white rounded-lg flex justify-between shadow-sm gap-5 ">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5">
+      <div className="bg-white rounded-lg flex justify-between shadow gap-5 ">
         <div className="p-4">
           <Icon
             icon="solar:user-bold"
@@ -22,7 +22,7 @@ const Totals = () => {
           mb-2"
           />
           <p className="text-xl font-bold text-semiBlack mb-1 pl-1">
-            {totals?.totalUsersCount}
+            {totals?.totalUsersCount || 0}
           </p>
           <h2 className="pl-1 text-xs">Users</h2>
         </div>
@@ -30,15 +30,15 @@ const Totals = () => {
           <img src={graph} alt="" />
         </div>
       </div>
-      <div className=" bg-white rounded-lg flex justify-between shadow-sm gap-5 ">
+      <div className="bg-white rounded-lg flex justify-between shadow gap-5 ">
         <div className="p-4">
           <Icon
             icon="clarity:video-gallery-solid"
             className="bg-[#F3FDF5] text-[#56C66F] w-10 h-10 rounded-full p-2
-          mb-2"
+          mb-2" 
           />
           <p className="text-xl font-bold text-semiBlack mb-1 pl-1">
-            {totals?.totalCoursesCount}
+            {totals?.totalCoursesCount || 0}
           </p>
           <h2 className="pl-1 text-xs">Total Courses</h2>
         </div>
@@ -46,7 +46,7 @@ const Totals = () => {
           <img src={graph} alt="" />
         </div>
       </div>
-      <div className=" bg-white rounded-lg flex justify-between shadow-sm gap-5 ">
+      <div className="bg-white rounded-lg flex justify-between shadow gap-5 ">
         <div className="p-4">
           <Icon
             icon="wpf:books"
@@ -54,7 +54,7 @@ const Totals = () => {
           mb-2"
           />
           <p className="text-xl font-bold text-semiBlack mb-1 pl-1">
-            {totals?.totalBooksCount}
+            {totals?.totalBooksCount || 0}
           </p>
           <h2 className="pl-1 text-xs">Total Books</h2>
         </div>
@@ -62,7 +62,7 @@ const Totals = () => {
           <img src={graph} alt="" />
         </div>
       </div>
-      <div className=" bg-white rounded-lg flex justify-between shadow-sm gap-5 ">
+      <div className="bg-white rounded-lg flex justify-between shadow gap-5 ">
         <div className="p-4">
           <Icon
             icon="carbon:blog"
@@ -70,7 +70,7 @@ const Totals = () => {
           mb-2"
           />
           <p className="text-xl font-bold text-semiBlack mb-1 pl-1">
-            {totals?.totalBlogsCount}
+            {totals?.totalBlogsCount || 0}
           </p>
           <h2 className="pl-1 text-xs">Total Blogs</h2>
         </div>
@@ -78,7 +78,7 @@ const Totals = () => {
           <img src={graph} alt="" />
         </div>
       </div>
-      <div className=" bg-white rounded-lg flex justify-between shadow-sm gap-5 ">
+      <div className="bg-white rounded-lg flex justify-between shadow gap-5 ">
         <div className="p-4">
           <Icon
             icon="healthicons:i-exam-multiple-choice"
@@ -86,7 +86,7 @@ const Totals = () => {
           mb-2"
           />
           <p className="text-xl font-bold text-semiBlack mb-1 pl-1">
-            {totals?.totalExamsCount}
+            {totals?.totalExamsCount || 0}
           </p>
           <h2 className="pl-1 text-xs">Total Exams</h2>
         </div>

@@ -9,7 +9,6 @@ const AddUsers = () => {
   const {
     register,
     handleSubmit,
-    // setValue,
     getValues,
     formState: { errors, isSubmitting },
   } = useForm({ resolver: zodResolver(schema) });
@@ -35,6 +34,8 @@ const AddUsers = () => {
         timer: 500,
       });
       window.location.href = "/users";
+    } else {
+      toast.error(res?.message || "An error occurred while adding the user");
     }
   };
   return (
@@ -96,7 +97,7 @@ const AddUsers = () => {
             id="phoneNumber"
             className={`input ${errors?.phoneNumber ? "mb-0" : "mb-3"}`}
             {...register("phoneNumber")}
-            placeholder="Enter phone number"
+            placeholder="Phone Number Format: +[country code][number] (e.g., +1234567890)"
           />
           {errors && errors?.phoneNumber && (
             <span className="text-sm text-red-500 mb-3 block">

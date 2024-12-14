@@ -49,7 +49,7 @@ const QuestionModal = ({ setQuestionModal }) => {
             onChange={(e) => setQuestionTitle(e.target.value)}
           />
           <p className="mt-3 mb-2 text-primary text-sm">Available Options</p>
-          {["A", "B", "C", "D"].map(
+          {Object.keys(answers).map(
             (key, index) =>
               option === index && (
                 <div key={key} className="flex gap-5">
@@ -87,7 +87,7 @@ const QuestionModal = ({ setQuestionModal }) => {
           )}
           <p className="mt-3 mb-2 text-primary text-sm">Correct Answer</p>
           <div className="flex gap-5 select-none">
-            {["A", "B", "C", "D"].map((key) => (
+            {Object.keys(answers).map((key) => (
               <label key={key} className=" cursor-pointer">
                 <input
                   type="radio"
