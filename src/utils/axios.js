@@ -2,7 +2,7 @@ import axios from "axios";
 import { getToken } from "./LocalStorage";
 
 const customAxios = axios.create({
-  baseURL: "http://localhost:5000/api/",
+  baseURL: "http://naserehab-001-site1.mtempurl.com/api/",
   headers: {
     "Content-Type": "multipart/form-data",
   },

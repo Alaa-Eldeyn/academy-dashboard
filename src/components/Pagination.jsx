@@ -19,7 +19,7 @@ const Pagination = (props) => {
           <Icon
             icon="icon-park-solid:left-one"
             className={`text-2xl text-primary cursor-pointer ${
-              Number(page) === 1 ? "opacity-50 cursor-default" : ""
+              Number(page) === 1 ? "opacity-50 !cursor-default" : ""
             }`}
           />
         </button>
@@ -27,6 +27,7 @@ const Pagination = (props) => {
           {page}
         </div>
         <button
+          disabled={Number(page) === info?.totalPages}
           onClick={() => {
             if (Number(page) === info?.totalPages) {
               return;
@@ -34,13 +35,12 @@ const Pagination = (props) => {
               setPage(Number(page) + 1);
             }
           }}
-          disabled={Number(page) === info?.totalPages}
         >
           <Icon
             icon="icon-park-solid:right-one"
             className={`text-2xl text-primary cursor-pointer ${
-              !Number(page) === info?.totalPages
-                ? "opacity-50 cursor-default"
+              Number(page) === info?.totalPages
+                ? "opacity-50 !cursor-default"
                 : ""
             }`}
           />

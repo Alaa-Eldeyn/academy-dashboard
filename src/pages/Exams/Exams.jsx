@@ -9,6 +9,8 @@ const Exams = () => {
   useEffect(() => {
     const fetchCourses = async () => {
       let res = await getAllExams();
+      console.log(res);
+      
       if (res?.isSuccess) {
         setExams(res?.data);
       } else {
@@ -52,7 +54,7 @@ const Exams = () => {
         </Link>
       </div>
       <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {[1,1,1,1,1]?.map((item) => (
+        {exams?.map((item) => (
           <div
             key={item?.id}
             className="rounded-3xl p-3 overflow-hidden shadow-md border"

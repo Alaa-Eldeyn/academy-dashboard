@@ -73,7 +73,7 @@ const Blogs = () => {
                 <td className="size-10 bg-gray-100">{index + 1}</td>
                 <td>
                   <img
-                    src={`http://localhost:5000${blog?.imageURL}`}
+                    src={`http://naserehab-001-site1.mtempurl.com/${blog?.imageURL}`}
                     alt=""
                     className="w-8 h-8 rounded-lg mx-auto"
                   />

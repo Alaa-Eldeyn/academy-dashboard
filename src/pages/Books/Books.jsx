@@ -78,7 +78,7 @@ function Books() {
                 <td className="size-10 bg-gray-100">{index + 1}</td>
                 <td>
                   <img
-                    src={`http://localhost:5000${book?.thumbnailURL}`}
+                    src={`http://naserehab-001-site1.mtempurl.com/${book?.thumbnailURL}`}
                     alt=""
                     className="w-8 h-8 rounded-lg mx-auto"
                   />

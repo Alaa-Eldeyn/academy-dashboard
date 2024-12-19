@@ -22,6 +22,10 @@ const AddExam = ({ isUpdateMode }) => {
     formState: { errors, isSubmitting },
   } = useForm({ resolver: zodResolver(schema) });
   const handleAddExam = async () => {
+    if (!Number.isInteger(+getValues("price"))) {
+      toast.error("السعر يجب أن يكون عدد صحيح");
+      return;
+    }
     let data = {
       title: getValues("examName"),
       fullmark: +getValues("fullMark"),
@@ -32,14 +36,16 @@ const AddExam = ({ isUpdateMode }) => {
       difficulty: +getValues("difficulty"),
     };
     let res = await addExam(data);
-    console.log(data);
-
     if (res?.isSuccess) {
       toast.success("Exam Added Successfully");
-      navigate(`/exams/update-exam/${res?.data?.id}`);
+      navigate(`/exams/exam-questions/${res?.data?.id}`);
     }
   };
   const handleUpdateExam = async () => {
+    if (!Number.isInteger(+getValues("price"))) {
+      toast.error("السعر يجب أن يكون عدد صحيح");
+      return;
+    }
     let data = {
       title: getValues("examName"),
       fullmark: +getValues("fullMark"),

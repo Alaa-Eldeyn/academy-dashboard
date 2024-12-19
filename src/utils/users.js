@@ -52,7 +52,7 @@ const addUser = async (data) => {
 const getAllUsers = async (page) => {
   try {
     let response = await customAxios.get(
-      `User/GetAllUsersPaginated?page=${page}&pageSize=10`
+      `Dashboard/GetAllUsersPaginated?page=${page}&pageSize=10`
     );
     return response.data;
   } catch (error) {

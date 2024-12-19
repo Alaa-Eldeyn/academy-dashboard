@@ -8,10 +8,10 @@ const LocalEnrollModal = ({ setIsModalOpen, enroll }) => {
   const navigate = useNavigate();
   const handleAcceptEnroll = async (data) => {
     console.log(data);
-    
+
     let res = await approveLocalEnroll(data);
     console.log(res);
-    
+
     if (res?.isSuccess) {
       setIsModalOpen(false);
       navigate(0);
@@ -48,7 +48,10 @@ const LocalEnrollModal = ({ setIsModalOpen, enroll }) => {
           <div className="flex gap-2">
             <div className="max-w-xs border rounded-lg max-h-72 overflow-auto">
               <img
-                src={"http://localhost:5000/" + enroll.transactionImageURL}
+                src={
+                  "http://naserehab-001-site1.mtempurl.com//" +
+                  enroll.transactionImageURL
+                }
                 alt="Transaction"
                 className="h-fit rounded-lg"
               />
@@ -67,7 +70,6 @@ const LocalEnrollModal = ({ setIsModalOpen, enroll }) => {
                   </td>
                   <td className="">{enroll.userId}</td>
                 </tr>
-                
               </tbody>
             </table>
           </div>
