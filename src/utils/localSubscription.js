@@ -12,13 +12,12 @@ const getPendingLocalEnrolls = async () => {
   }
 };
 
-const approveLocalEnroll = async (data) => {
+const approveLocalEnroll = async (id) => {
+  console.log(id);
+
   try {
     let response = await customAxios.post(
-      `/Dashboard/ApproveLocalSubscriptionRequest`,
-      {
-        localSubscriptionId: data.userId,
-      },
+      `/Dashboard/ApproveLocalSubscriptionRequest?localSubscriptionId=${id}`,
       {
         headers: {
           "Content-Type": "application/json",
@@ -32,13 +31,10 @@ const approveLocalEnroll = async (data) => {
   }
 };
 
-const rejectLocalEnroll = async (data) => {
+const rejectLocalEnroll = async (id) => {
   try {
     let response = await customAxios.post(
-      `/Dashboard/RejectLocalSubscriptionRequest`,
-      {
-        localSubscriptionId: data.userId,
-      },
+      `/Dashboard/RejectLocalSubscriptionRequest?localSubscriptionId=${id}`,
       {
         headers: {
           "Content-Type": "application/json",

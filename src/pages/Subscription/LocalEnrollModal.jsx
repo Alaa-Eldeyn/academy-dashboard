@@ -6,19 +6,15 @@ import {
 
 const LocalEnrollModal = ({ setIsModalOpen, enroll }) => {
   const navigate = useNavigate();
-  const handleAcceptEnroll = async (data) => {
-    console.log(data);
-
-    let res = await approveLocalEnroll(data);
-    console.log(res);
-
+  const handleAcceptEnroll = async (id) => {
+    let res = await approveLocalEnroll(id);
     if (res?.isSuccess) {
       setIsModalOpen(false);
       navigate(0);
     }
   };
-  const handleRejectEnroll = async (data) => {
-    let res = await rejectLocalEnroll(data);
+  const handleRejectEnroll = async (id) => {
+    let res = await rejectLocalEnroll(id);
     if (res?.isSuccess) {
       setIsModalOpen(false);
       navigate(0);
@@ -75,13 +71,13 @@ const LocalEnrollModal = ({ setIsModalOpen, enroll }) => {
           </div>
           <div className="center gap-5">
             <button
-              onClick={() => handleRejectEnroll(enroll)}
+              onClick={() => handleRejectEnroll(enroll.id)}
               className="px-8 py-3 rounded-full text-sm border bg-red-500 text-white"
             >
               Reject
             </button>
             <button
-              onClick={() => handleAcceptEnroll(enroll)}
+              onClick={() => handleAcceptEnroll(enroll.id)}
               className="px-8 py-3 rounded-full text-sm border bg-green-600 text-white"
             >
               Accept

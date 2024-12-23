@@ -11,8 +11,6 @@ const Subscription = () => {
     const fetchEnrolls = async () => {
       let res = await getPendingLocalEnrolls();
       setEnrolls(res?.data);
-      console.log(res?.data);
-      
     };
     fetchEnrolls();
   }, []);
