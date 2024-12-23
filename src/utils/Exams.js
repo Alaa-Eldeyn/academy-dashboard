@@ -94,7 +94,15 @@ const deleteExam = async (id) => {
   }
   return { isSuccess: false };
 };
-
+const editQuestion = async (questionId, data) => {
+  try {
+    let response = await customAxios.patch(`/Question/${questionId}`, data);
+    return response?.data;
+  } catch (error) {
+    console.error(error);
+    return { isSuccess: false };
+  }
+};
 // const addUserToExam = async (courseId) => {
 //   const customSwal = Swal.mixin({
 //     customClass: {
@@ -204,4 +212,5 @@ export {
   addQuestion,
   getTestQuestions,
   deleteQuestion,
+  editQuestion,
 };

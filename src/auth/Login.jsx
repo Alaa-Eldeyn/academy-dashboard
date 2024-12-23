@@ -1,10 +1,11 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import login from "../assets/login.svg";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { logIn, signInSchema } from "../utils/auth";
 
 const Login = () => {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -15,7 +16,7 @@ const Login = () => {
   const handleLogin = async (data) => {
     let res = await logIn(data);
     if (res?.isSuccess) {
-      window.location.href = "/";
+      navigate("/")
     }
   };
   return (
@@ -79,7 +80,7 @@ const Login = () => {
                 disabled={isSubmitting}
                 className="w-full py-2 px-6 text-lg tracking-wide font-bold rounded-xl text-white bg-primary focus:outline-none soft"
               >
-                Sign In
+                {isSubmitting ? "Loading..." : "Login"}
               </button>
             </div>
           </form>

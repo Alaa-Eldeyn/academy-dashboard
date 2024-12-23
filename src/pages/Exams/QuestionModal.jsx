@@ -3,7 +3,7 @@ import { addQuestion } from "../../utils/Exams";
 import { useParams } from "react-router-dom";
 import Swal from "sweetalert2";
 
-const QuestionModal = ({ setQuestionModal }) => {
+const QuestionModal = ({ setQuestionModal, fetchExam }) => {
   let params = useParams();
   const [option, setOption] = useState(0);
   const [correctAnswer, setCorrectAnswer] = useState(null);
@@ -20,8 +20,9 @@ const QuestionModal = ({ setQuestionModal }) => {
       answers: Object.values(answers),
     };
     let res = await addQuestion(params?.id, data);
-    if (res.isSuccess) {
+    if (res?.isSuccess) {
       setQuestionModal(false);
+      fetchExam();
       Swal.fire({
         icon: "success",
         title: "Question Added Successfully",

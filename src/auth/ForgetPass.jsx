@@ -8,7 +8,7 @@ const ForgetPass = () => {
     register,
     handleSubmit,
     getValues,
-    formState: { errors },
+    formState: { errors, isSubmitting },
   } = useForm();
   const handleForgetPass = async () => {
     let res = await forgetPass(getValues("email"));
@@ -63,9 +63,10 @@ const ForgetPass = () => {
             <button
               type="submit"
               onClick={handleSubmit(handleForgetPass)}
+              disabled={isSubmitting}
               className="w-full py-3 px-6 tracking-wide rounded-xl text-white font-bold text-lg bg-primary focus:outline-none transition-all"
             >
-              Send
+              {isSubmitting ? "Sending..." : "Send"}
             </button>
             <Link className="block mt-5" to={"/login"}>
               Back

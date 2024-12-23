@@ -2,20 +2,56 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useParams } from "react-router-dom";
 import QuestionModal from "./QuestionModal";
 import { useEffect, useState } from "react";
-import { deleteQuestion, getExam, getTestQuestions } from "../../utils/Exams";
+import {
+  deleteQuestion,
+  editQuestion,
+  getExam,
+  getTestQuestions,
+} from "../../utils/Exams";
+import EditQuestionModal from "./EditQuestionModal";
 
 const Questions = () => {
   let params = useParams();
   const [questionModal, setQuestionModal] = useState(false);
   const [questions, setQuestions] = useState([]);
   const [exam, setExam] = useState({});
-  useEffect(() => {
-    const fetchExam = async () => {
-      let { data } = await getExam(params?.id);
-      setExam(data);
-      let questions = await getTestQuestions(params?.id);
-      setQuestions(questions?.data);
+  const [editQuestionModal, setEditQuestionModal] = useState(false);
+  const [questionTitle, setQuestionTitle] = useState("");
+  const [answers, setAnswers] = useState({
+    A: { description: "", reason: "", isCorrect: false },
+    B: { description: "", reason: "", isCorrect: false },
+    C: { description: "", reason: "", isCorrect: false },
+    D: { description: "", reason: "", isCorrect: false },
+  });
+  const [correctAnswer, setCorrectAnswer] = useState(null);
+  const [questionId, setQuestionId] = useState(null);
+  const handleEditQuestion = async () => {
+    let data = {
+      description: questionTitle,
+      answers: Object.values(answers),
     };
+    let res = await editQuestion(questionId, data);
+    if (res?.isSuccess) {
+      fetchExam();
+      setEditQuestionModal(false);
+      setQuestionTitle("");
+      setAnswers({
+        A: { description: "", reason: "", isCorrect: false },
+        B: { description: "", reason: "", isCorrect: false },
+        C: { description: "", reason: "", isCorrect: false },
+        D: { description: "", reason: "", isCorrect: false },
+      });
+      setCorrectAnswer(null);
+    }
+  };
+
+  const fetchExam = async () => {
+    let { data } = await getExam(params?.id);
+    setExam(data);
+    let questions = await getTestQuestions(params?.id);
+    setQuestions(questions?.data);
+  };
+  useEffect(() => {
     fetchExam();
   }, [params?.id]);
   const handleDeleteQuestion = async (id) => {
@@ -26,7 +62,24 @@ const Questions = () => {
   };
   return (
     <>
-      {questionModal && <QuestionModal setQuestionModal={setQuestionModal} />}
+      {editQuestionModal && (
+        <EditQuestionModal
+          setEditQuestionModal={setEditQuestionModal}
+          questionTitle={questionTitle}
+          setQuestionTitle={setQuestionTitle}
+          answers={answers}
+          setAnswers={setAnswers}
+          correctAnswer={correctAnswer}
+          setCorrectAnswer={setCorrectAnswer}
+          handleEditQuestion={handleEditQuestion}
+        />
+      )}
+      {questionModal && (
+        <QuestionModal
+          setQuestionModal={setQuestionModal}
+          fetchExam={fetchExam}
+        />
+      )}
       <div className="px-6 max-w-[1000px]">
         <div className="flex font-bold text-lg flex-col md:flex-row">
           <div className="flex-1 line-clamp-1 mb-3">
@@ -79,26 +132,43 @@ const Questions = () => {
             return (
               <li
                 key={i}
-                className={`bg-white shadow-sm select-none rounded-lg flex items-center justify-between border border-transparent hover:border-[#E2508D] soft`}
+                className={`bg-white shadow-sm select-none rounded-lg flex items-center justify-between gap-5 border border-transparent hover:border-[#E2508D] soft px-4 py-3`}
               >
-                <span className="flex-1 line-clamp-1 px-4 py-3">
+                <div className="flex-1 line-clamp-1 ">
                   {i + 1}. {question?.description}
-                </span>
-                <span>
-                  <Icon
-                    icon="bx:edit"
-                    onClick={() => console.log("edit")}
-                    className="bg-[#FEF6FF] w-8 h-8 p-2 mr-4 text-primary
-                  rounded-lg cursor-pointer"
-                  />
-                </span>
-                <span>
-                  <Icon
-                    icon="fluent:delete-28-regular"
-                    onClick={() => handleDeleteQuestion(question?.id)}
-                    className="bg-[#FFF2F7] w-8 h-8 p-2 mr-4 text-[#E23F3F] rounded-lg cursor-pointer"
-                  />
-                </span>
+                </div>
+                <div className="flex gap-4">
+                  <span>
+                    <Icon
+                      icon="bx:edit"
+                      onClick={() => {
+                        setQuestionId(question?.id);
+                        setQuestionTitle(question?.description);
+                        setAnswers({
+                          A: question?.answers[0],
+                          B: question?.answers[1],
+                          C: question?.answers[2],
+                          D: question?.answers[3],
+                        });
+                        const answerMap = { 0: "A", 1: "B", 2: "C", 3: "D" };
+                        const correctAnswerKey = Object.keys(answerMap).find(
+                          (key) => question?.answers[key]?.isCorrect
+                        );
+                        setCorrectAnswer(answerMap[correctAnswerKey]);
+                        setEditQuestionModal(true);
+                        console.log(question);
+                      }}
+                      className="bg-[#FEF6FF] w-8 h-8 p-2  text-primary rounded-lg cursor-pointer"
+                    />
+                  </span>
+                  <span>
+                    <Icon
+                      icon="fluent:delete-28-regular"
+                      onClick={() => handleDeleteQuestion(question?.id)}
+                      className="bg-[#FFF2F7] w-8 h-8 p-2 text-[#E23F3F] rounded-lg cursor-pointer"
+                    />
+                  </span>
+                </div>
               </li>
             );
           })}
