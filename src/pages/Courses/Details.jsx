@@ -149,7 +149,7 @@ const Details = ({ isPublished }) => {
               {course?.videos?.map((vid) => (
                 <li key={vid.id}>
                   <a
-                    href={`http://naserehab-001-site1.mtempurl.com//${vid.videoURL}`}
+                    href={`${import.meta.env.VITE_BASE_URL}/${vid.videoURL}`}
                     className="center gap-5 max-w-[50%] bg-white shadow hover:bg-[#FFF2F7] soft px-4 py-2 rounded-lg !justify-start"
                     target="_blank"
                     rel="noreferrer"

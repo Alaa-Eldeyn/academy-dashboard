@@ -139,7 +139,7 @@ const AddBooks = ({ isUpdateMode, details }) => {
                   src={
                     getValues("cover").length > 0
                       ? `${bookCover}`
-                      : `http://naserehab-001-site1.mtempurl.com//${bookCover}`
+                      : `${import.meta.env.VITE_BASE_URL}/${bookCover}`
                   }
                   alt=""
                   className="w-40 h-56 rounded bg-[#FEEFFF] center cursor-pointer"

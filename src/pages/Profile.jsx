@@ -1,137 +1,260 @@
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { addUser, getUser } from "../utils/LocalStorage";
+import { Icon } from "@iconify/react/dist/iconify.js";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { profileInfoSchema, updateProfile } from "../utils/auth";
 
+const Profile = () => {
+  const [isEdit, setIsEdit] = useState(false);
+  const [photoPreview, setPhotoPreview] = useState(null);
+  const user = getUser();
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    getValues,
+    formState: { errors, isSubmitting },
+  } = useForm({
+    resolver: zodResolver(profileInfoSchema),
+  });
+  const handleEditInfo = async () => {
+    const data = new FormData();
+    data.append("FirstName", getValues("firstName"));
+    data.append("LastName", getValues("lastName"));
+    data.append("PhoneNumber", getValues("phoneNumber"));
+    data.append("UserName", user?.userName);
+    data.append("NewPassword", getValues("newPassword") || "");
+    data.append("ConfirmNewPassword", getValues("confirmPassword") || "");
+    if (getValues("image.0")) {
+      data.append("Image", getValues("image.0"));
+    }
+    let res = await updateProfile(user?.id, data);
+    if (res?.isSuccess) {
+      setIsEdit(false);
+      let data = {
+        email: res?.data?.email,
+        firstName: res?.data?.firstName,
+        id: res?.data?.id,
+        imageUrl: res?.data?.imageUrl,
+        lastName: res?.data?.lastName,
+        phoneNumber: res?.data?.phoneNumber,
+        userName: res?.data?.userName,
+      };
+      setPhotoPreview(res?.data?.imageUrl);
+      addUser(data);
+    }
+  };
+  useEffect(() => {
+    if (!user) return;
+    setValue("firstName", user?.firstName);
+    setValue("lastName", user?.lastName);
+    setValue("phoneNumber", user?.phoneNumber);
+    setPhotoPreview(user?.imageUrl);
+  }, []);
 
-function Profile() {
+  const handleFileDrop = (e) => {
+    e.preventDefault();
+    const droppedFiles = e?.dataTransfer?.files;
+    if (droppedFiles.length > 0) {
+      setValue("image", droppedFiles);
+      handlePhotoChange({ target: { files: droppedFiles } });
+    }
+  };
+
+  const handlePhotoChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      handleEditInfo();
+    }
+  };
+
   return (
-     <section className=" flex flex-col items-center">
-       <h1 className="my-2 text-lg flex items-center gap-2">
-       {/* <FaUserTie className="text-2xl" /> */}
-        My profile 
-        </h1>
-      
-{/* User Info Section */}
-<div className="w-full md:w-1/2 flex flex-col md:flex-row items-center text-center">
-  <img
-    className="inline-flex object-cover border-4  rounded-full  h-24 w-24 md:h-32 md:w-32 mb-4 md:mb-0 md:mr-5"
-    src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NzEyNjZ8MHwxfHNlYXJjaHwyfHxoZWFkc2hvdHxlbnwwfDB8fHwxNjk1ODE3MjEzfDA&ixlib=rb-4.0.3&q=80&w=1080"
-    alt="Hesham Hassan"
-  />
-  <div className="flex text-left flex-col">
-    <p className="text-indigo-900 font-bold text-xl">
-    Hesham Mousa
-    </p>
-    <p className="text-indigo-300 font-semibold text-center my-1 ">
-    hisham.mosa.910@gmail.com
-    </p>
-    <span className="bg-gray-200 py-1 px-4 w-fit rounded-xl my-1">Admin</span>
-  </div>
-</div>
-{/* Wallet Section */}
-<div className="bg-slate-100 w-full md:w-[750px] p-6 mt-8 rounded-lg flex flex-col md:flex-row justify-between items-center text-center md:text-left">
-  <div className="flex flex-col md:flex-row items-center gap-3 mb-4 md:mb-0">
-    <h2 className="text-3xl font-bold">$250</h2>
-    <span className="text-sm text-gray-600">Available Balance</span>
-  </div>
-  <div className="flex flex-col md:flex-row items-center gap-3">
-    <Link href="/" className="bg-slate-500 text-white p-2 rounded-xl font-semibold">
-      Withdraw Your Money
-    </Link>
-  </div>
-</div>
-{/* Personal Information Section */}
-<div className="flex flex-col items-start w-full md:w-[660px] my-11">
-  <h2 className="font-bold mb-6 ml-3 text-xl">Personal Information</h2>
-  <div className="w-full bg-white p-6 rounded-lg shadow-md">
-    <form>
-      <div className="mb-5">
-        <label htmlFor="name" className="mb-3 block text-base font-medium text-[#07074D]">
-          Full Name
-        </label>
-        <input
-          type="text"
-          name="name"
-          id="name"
-          placeholder="Full Name"
-          className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
-        />
-      </div>
-      <div className="mb-5">
-        <label htmlFor="phone" className="mb-3 block text-base font-medium text-[#07074D]">
-          Phone Number
-        </label>
-        <input
-          type="text"
-          name="phone"
-          id="phone"
-          placeholder="Enter your phone number"
-          className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"/>
-      </div>
-      <div className="mb-5">
-        <label htmlFor="email" className="mb-3 block text-base font-medium text-[#07074D]">
-          Job Title
-        </label>
-        <input
-          type="email"
-          name="email"
-          id="email"
-          placeholder="Enter your email"
-          className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" />
-      </div>
-      <div>
-        <button className="w-full md:w-[175px] hover:shadow-form rounded-3xl bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none">
-          Save Changes
-        </button>
-      </div>
-    </form>
-  </div>
-</div>
-<div className="flex flex-col items-start w-full md:w-[650px] my-11">
-  <h2 className="font-bold mb-6  ml-3 text-xl">Change Password</h2>
-  <div className="w-full bg-white p-6 rounded-lg shadow-md">
-    <form>
-      <div className="mb-6">
-        <label className="text-gray-800 text-sm mb-2 block">Password *</label>
-        <div className="relative flex items-center">
-          <input
-            name="password"
-            type="password"
-            required
-            className="bg-transparent border border-gray-400 w-full text-gray-800 text-sm pl-4 pr-10 py-3 rounded-xl outline-blue-600"
-              placeholder="***************" />
+    <>
+      <div className="bg-gray-50 center">
+        <div className="container pt-5 pb-16 max-w-[600px]">
+          <div className="center gap-3">
+            <div className="relative">
+              <input
+                type="file"
+                className="hidden"
+                id="photoInput"
+                accept="image/*"
+                {...register("image", {
+                  onChange: (e) => handlePhotoChange(e),
+                })}
+              />
+              {photoPreview ? (
+                <>
+                  <div className="relative size-32">
+                    <Icon
+                      icon="tdesign:edit-filled"
+                      className={`cursor-pointer size-8 absolute z-10 right-0 border-4 border-white bg-[#EC8AB3] rounded-full p-1 text-white`}
+                      onClick={() => {
+                        setIsEdit(true);
+                        document.getElementById("photoInput").click();
+                      }}
+                    />
+                    <img
+                      src={import.meta.env.VITE_BASE_URL + "/" + photoPreview}
+                      alt="user profile"
+                      className="rounded-full size-32 object-cover"
+                    />
+                  </div>
+                </>
+              ) : (
+                <>
+                  <Icon
+                    icon="gridicons:user-circle"
+                    className={`${
+                      isEdit && "cursor-pointer"
+                    } size-32 opacity-20`}
+                    onClick={() => {
+                      if (isEdit) document.getElementById("photoInput").click();
+                    }}
+                    onDrop={() => {
+                      if (isEdit) handleFileDrop();
+                    }}
+                    onDragOver={(e) => e.preventDefault()}
+                  />
+                </>
+              )}
+            </div>
+            <div className="text-sm">
+              <h1 className="font-bold mb-1 text-lg">
+                {user?.firstName} {user?.lastName}
+              </h1>
+              <p className="text-primary">@{user?.userName}</p>
+            </div>
+          </div>
+          <form>
+            <h2 className="mt-10 font-bold text-xl text-primary">
+              Personal Information
+            </h2>
+            <div className="flex gap-4 mt-4">
+              <div className="w-1/2">
+                <label className="text-sm text-primary" htmlFor="firstName">
+                  First Name
+                </label>
+                <input
+                  type="text"
+                  id="firstName"
+                  className="input"
+                  {...register("firstName")}
+                  disabled={!isEdit}
+                />
+                {errors && errors?.firstName && (
+                  <span className="text-red-500">
+                    {errors?.firstName?.message}
+                  </span>
+                )}
+              </div>
+              <div className="w-1/2">
+                <label className="text-sm text-primary" htmlFor="lastName">
+                  Last Name
+                </label>
+                <input
+                  type="text"
+                  id="lastName"
+                  className="input"
+                  {...register("lastName")}
+                  disabled={!isEdit}
+                />
+                {errors && errors?.lastName && (
+                  <span className="text-red-500">
+                    {errors?.lastName?.message}
+                  </span>
+                )}
+              </div>
+            </div>
+            <div className="mt-4">
+              <label className="text-sm text-primary" htmlFor="email">
+                Email
+              </label>
+              <input
+                type="email"
+                id="email"
+                className="input"
+                value={user?.email}
+                disabled
+              />
+            </div>
+            <div className="mt-4">
+              <label className="text-sm text-primary" htmlFor="phoneNumber">
+                phoneNumber
+              </label>
+              <input
+                type="text"
+                id="phoneNumber"
+                className="input"
+                {...register("phoneNumber")}
+                disabled={!isEdit}
+              />
+              {errors && errors?.phoneNumber && (
+                <span className="text-red-500">
+                  {errors?.phoneNumber?.message}
+                </span>
+              )}
+            </div>
+            <h2 className="mt-6 font-bold text-xl text-primary">
+              Change Password
+            </h2>
+            <div className="mt-4">
+              <label htmlFor="newPassword" className=" text-primary">
+                New Password
+              </label>
+              <input
+                type="password"
+                id="newPassword"
+                className="input"
+                disabled={!isEdit}
+                {...register("newPassword")}
+              />
+              {errors && errors?.newPassword && (
+                <span className="text-red-500">
+                  {errors?.newPassword?.message}
+                </span>
+              )}
+            </div>
+            <div className="mt-4">
+              <label htmlFor="confirmPassword" className=" text-primary">
+                Confirm Password
+              </label>
+              <input
+                type="password"
+                id="confirmPassword"
+                className="input"
+                disabled={!isEdit}
+                {...register("confirmPassword")}
+              />
+              {errors && errors?.confirmPassword && (
+                <span className="text-red-500">
+                  {errors?.confirmPassword?.message}
+                </span>
+              )}
+            </div>
+            {isEdit ? (
+              <button
+                type="button"
+                className="px-10 py-2 mt-5 text-white bg-primary rounded-full"
+                onClick={handleSubmit(handleEditInfo)}
+              >
+                {isSubmitting ? "Saving..." : "Save"}
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="px-10 py-2 mt-5 text-white bg-primary rounded-full"
+                onClick={() => setIsEdit(true)}
+              >
+                Edit
+              </button>
+            )}
+          </form>
         </div>
       </div>
-      <div className="mb-6">
-        <label className="text-gray-800 text-sm mb-2 block">New Password *</label>
-        <div className="relative flex items-center">
-          <input
-            name="password"
-            type="password"
-            required
-            className="bg-transparent border border-gray-400 w-full text-gray-800 text-sm pl-4 pr-10 py-3 rounded-xl outline-blue-600"
-            placeholder="***************"/>
-        </div>
-      </div>
-      <div className="mb-6">
-        <label className="text-gray-800 text-sm mb-2 block">Confirm New Password *</label>
-        <div className="relative flex items-center">
-          <input
-            name="password"
-            type="password"
-            required
-            className="bg-transparent border border-gray-400 w-full text-gray-800 text-sm pl-4 pr-10 py-3 rounded-xl outline-blue-600"
-            placeholder="***************"  />
-        </div>
-      </div>
-      <div>
-        <button className="w-full md:w-[175px] hover:shadow-form rounded-3xl bg-[#6A64F1] py-3 px-8 text-center text-base font-semibold text-white outline-none">
-        Save Changes
-        </button>
-      </div>
-    </form>
-  </div>
-</div>
-     </section>
-    
-  )
-}
+    </>
+  );
+};
+
 export default Profile;

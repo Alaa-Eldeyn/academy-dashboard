@@ -45,7 +45,8 @@ const LocalEnrollModal = ({ setIsModalOpen, enroll }) => {
             <div className="max-w-xs border rounded-lg max-h-72 overflow-auto">
               <img
                 src={
-                  "http://naserehab-001-site1.mtempurl.com//" +
+                  import.meta.env.VITE_BASE_URL +
+                  "/" +
                   enroll.transactionImageURL
                 }
                 alt="Transaction"

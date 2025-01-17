@@ -39,6 +39,15 @@ const getBlog = async (id) => {
   }
 };
 
+const searchBlogs = async (title) => {
+  try {
+    let response = await customAxios.get(`Blog/GetByTitle/${title}`);
+    return response?.data;
+  } catch (error) {
+    console.error(error);
+    return { isSuccess: false };
+  }
+};
 const getAllBlogs = async (page) => {
   try {
     let response = await customAxios.get(
@@ -101,4 +110,12 @@ const updateBlog = async (data) => {
   }
 };
 
-export { schema, addBlog, updateBlog, getBlog, getAllBlogs, deleteBlog };
+export {
+  schema,
+  addBlog,
+  updateBlog,
+  getBlog,
+  getAllBlogs,
+  deleteBlog,
+  searchBlogs,
+};

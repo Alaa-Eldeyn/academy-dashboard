@@ -1,8 +1,10 @@
 import axios from "axios";
 import { getToken } from "./LocalStorage";
 
+const apiUrl = `${import.meta.env.VITE_BASE_URL}/api`;
+
 const customAxios = axios.create({
-  baseURL: "http://naserehab-001-site1.mtempurl.com/api/",
+  baseURL: apiUrl,
   headers: {
     "Content-Type": "multipart/form-data",
   },

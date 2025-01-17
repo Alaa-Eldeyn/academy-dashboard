@@ -65,6 +65,17 @@ const getExam = async (id) => {
     return { isSuccess: false };
   }
 };
+const searchExams = async (title) => {
+  try {
+    let response = await customAxios.get(
+      `/StandardTest/GetStandardTestByTitle/${title}`
+    );
+    return response?.data;
+  } catch (error) {
+    console.error(error);
+    return { isSuccess: false };
+  }
+};
 
 const deleteExam = async (id) => {
   const customSwal = Swal.mixin({
@@ -213,4 +224,5 @@ export {
   getTestQuestions,
   deleteQuestion,
   editQuestion,
+  searchExams,
 };

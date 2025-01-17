@@ -11,6 +11,16 @@ const getAllCourses = async () => {
   }
 };
 
+const searchCourses = async (title) => {
+  try {
+    let response = await customAxios.get(`/Course/Search/${title}`);
+    return response?.data;
+  } catch (error) {
+    console.error(error);
+    return { isSuccess: false };
+  }
+};
+
 const getPendingCourses = async () => {
   try {
     let response = await customAxios.get("/Dashboard/PendingApproval");
@@ -276,4 +286,5 @@ export {
   getPendingEnrolls,
   approveEnroll,
   rejectEnroll,
+  searchCourses,
 };

@@ -38,6 +38,15 @@ const getBook = async (id) => {
     return { isSuccess: false };
   }
 };
+const searchBooks = async (title) => {
+  try {
+    let response = await customAxios.get(`Book/GetBookByTitle/${title}`);
+    return response?.data;
+  } catch (error) {
+    console.error(error);
+    return { isSuccess: false };
+  }
+};
 
 const getAllBooks = async (page) => {
   try {
@@ -98,4 +107,12 @@ const updateBook = async (id, data) => {
   }
 };
 
-export { schema, addBook, updateBook, getBook, getAllBooks, deleteBook };
+export {
+  schema,
+  addBook,
+  updateBook,
+  getBook,
+  getAllBooks,
+  deleteBook,
+  searchBooks,
+};

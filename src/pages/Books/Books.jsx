@@ -1,17 +1,20 @@
 import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEffect, useState } from "react";
-import { deleteBook, getAllBooks } from "../../utils/books";
+import { deleteBook, getAllBooks, searchBooks } from "../../utils/books";
 import Pagination from "../../components/Pagination";
 
 function Books() {
   const [books, setBooks] = useState([]);
+  const [filteredBooks, setFilteredBooks] = useState([]);
+  const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
   useEffect(() => {
     const fetchAllBooks = async () => {
       let res = await getAllBooks(page);
       setBooks(res?.data);
+      setFilteredBooks(res?.data);
     };
     fetchAllBooks();
   }, [page]);
@@ -20,26 +23,47 @@ function Books() {
     if (res?.isSuccess) {
       setBooks((prevBooks) => ({
         ...prevBooks,
-        books: prevBooks?.books?.filter((book) => book?.id !== id),
+        items: prevBooks?.items?.filter((book) => book?.id !== id),
       }));
+      setFilteredBooks((prevBooks) => ({
+        ...prevBooks,
+        items: prevBooks?.items?.filter((book) => book?.id !== id),
+      }));
+    }
+  };
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    let res = searchBooks(search);
+    if (res?.isSuccess) {
+      setFilteredBooks(res?.data);
+    } else {
+      setFilteredBooks([]);
     }
   };
   return (
     <div className="px-6">
       <div className=" flex flex-wrap flex-col sm:flex-row items-center justify-between gap-8 w-auto mb-6">
-        <div className="bg-white flex w-full sm:max-w-md p-1 rounded-full overflow-hidden">
+        <form className="bg-white flex w-full sm:max-w-md p-1 rounded-full overflow-hidden">
           <input
             type="text"
             placeholder="Search By Book Title here"
             className="rounded-full w-full outline-none bg-white border-none pl-4 text-sm"
+            value={search}
+            onChange={(e) => {
+              if (e.target.value === "") {
+                setFilteredBooks(books);
+              }
+              setSearch(e.target.value);
+            }}
           />
           <button
-            type="button"
+            type="submit"
             className="bg-[#FBE1EC] hover:bg-primary hover:text-white transition-all text-black text-sm rounded-full px-5 py-2.5"
+            onClick={(e) => handleSearch(e)}
           >
             Search
           </button>
-        </div>
+        </form>
         <Link
           to="/books/add-book"
           className="border border-pink-600 text-pink-600 text-sm px-4 py-3 flex items-center gap-2 rounded-xl w-full sm:w-auto"
@@ -73,12 +97,14 @@ function Books() {
           </thead>
 
           <tbody className="text-center whitespace-nowrap divide-y bg-white divide-gray-200">
-            {books?.books?.map((book, index) => (
+            {filteredBooks?.items?.map((book, index) => (
               <tr key={index}>
                 <td className="size-10 bg-gray-100">{index + 1}</td>
                 <td>
                   <img
-                    src={`http://naserehab-001-site1.mtempurl.com/${book?.thumbnailURL}`}
+                    src={`${import.meta.env.VITE_BASE_URL}/${
+                      book?.thumbnailURL
+                    }`}
                     alt=""
                     className="w-8 h-8 rounded-lg mx-auto"
                   />

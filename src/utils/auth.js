@@ -3,6 +3,9 @@ import { toast } from "react-toastify";
 import { z } from "zod";
 import { addToken, addUser } from "./LocalStorage";
 import Swal from "sweetalert2";
+import customAxios from "./axios";
+
+let baseURL = import.meta.env.VITE_BASE_URL;
 
 const SignupSchema = z
   .object({
@@ -36,12 +39,58 @@ const SignupSchema = z
       });
     }
   });
-
+const profileInfoSchema = z
+  .object({
+    firstName: z.string().min(1, "First name is required"),
+    lastName: z.string().min(1, "Last name is required"),
+    phoneNumber: z
+      .string()
+      .min(5, { message: "Please enter a valid phone number" })
+      .regex(
+        /^\+\d{1,3}\d{4,14}$/,
+        "Phone Number Format: +[country code][number] (e.g., +1234567890)"
+      ),
+    newPassword: z
+      .string()
+      .max(100, "Password must not exceed 100 characters.")
+      .regex(
+        /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{6,}$/,
+        "Password must contain at least one uppercase letter, one lowercase letter, one number, and one special character."
+      )
+      .optional()
+      .or(z.literal("")),
+    confirmPassword: z.string().optional(),
+  })
+  .refine(
+    (data) => !data.newPassword || data.newPassword === data.confirmPassword,
+    {
+      path: ["confirmPassword"],
+      message: "Passwords do not match.",
+    }
+  );
 const signInSchema = z.object({
   email: z.string().email("Invalid email address"),
   password: z.string().min(5, "Password must be at least 5 characters"),
 });
-
+const updateProfile = async (userId, data) => {
+  try {
+    const response = await customAxios.put(`User/update/${userId}`, data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    if (response?.data?.isSuccess) {
+      toast.success("Profile updated successfully");
+    } else {
+      toast.error(response?.data?.message);
+    }
+    return response?.data;
+  } catch (error) {
+    console.log(error);
+    toast.error("Something went wrong, please try again.");
+    return { isSuccess: false };
+  }
+};
 const resetPassSchema = z
   .object({
     password: z
@@ -63,12 +112,9 @@ const resetPassSchema = z
 
 const signUp = async (data) => {
   try {
-    const response = await axios.post(
-      "http://naserehab-001-site1.mtempurl.com/api/User/register",
-      {
-        ...data,
-      }
-    );
+    const response = await axios.post(`${baseURL}/api/User/register`, {
+      ...data,
+    });
     if (response?.data?.isSuccess) {
       toast.success(response?.data?.message);
     } else {
@@ -88,10 +134,7 @@ const signUp = async (data) => {
 
 const logIn = async (data) => {
   try {
-    const response = await axios.post(
-      "http://naserehab-001-site1.mtempurl.com/api/User/login",
-      data
-    );
+    const response = await axios.post(`${baseURL}/api/User/login`, data);
     if (response?.data?.isSuccess) {
       toast.success("Login successfully");
       addToken(response?.data?.token);
@@ -113,12 +156,9 @@ const logIn = async (data) => {
 
 const forgetPass = async (email) => {
   try {
-    const res = await axios.post(
-      `http://naserehab-001-site1.mtempurl.com/api/User/forgot-password`,
-      {
-        email: email,
-      }
-    );
+    const res = await axios.post(`${baseURL}/api/User/forgot-password`, {
+      email: email,
+    });
     if (res?.data?.isSuccess) {
       await Swal.fire({
         icon: "success",
@@ -140,7 +180,7 @@ const forgetPass = async (email) => {
 const resetPassword = async (data) => {
   try {
     const res = await axios.post(
-      `http://naserehab-001-site1.mtempurl.com/api/User/reset-password`,
+      `${baseURL}/api/User/reset-password`,
       {
         email: data?.email,
         token: data?.token,
@@ -172,4 +212,6 @@ export {
   resetPassword,
   signInSchema,
   resetPassSchema,
+  updateProfile,
+  profileInfoSchema,
 };

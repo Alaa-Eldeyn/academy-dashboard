@@ -1,20 +1,22 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getAllExams } from "../../utils/Exams";
+import { getAllExams, searchExams } from "../../utils/Exams";
 import { deleteExam } from "../../utils/Exams";
 
 const Exams = () => {
   const [exams, setExams] = useState([]);
+  const [filteredExams, setFilteredExams] = useState([]);
+  const [search, setSearch] = useState("");
   useEffect(() => {
     const fetchCourses = async () => {
       let res = await getAllExams();
-      console.log(res);
-      
       if (res?.isSuccess) {
         setExams(res?.data);
+        setFilteredExams(res?.data);
       } else {
         setExams([]);
+        setFilteredExams([]);
       }
     };
     fetchCourses();
@@ -23,28 +25,48 @@ const Exams = () => {
     let res = await deleteExam(id);
     if (res?.isSuccess) {
       setExams(exams.filter((exam) => exam.id !== id));
+      setFilteredExams(filteredExams.filter((exam) => exam.id !== id));
     }
   };
   // const handleAddUser = async (id) => {
   //   let res = await addUserToExam(id);
   //   console.log(res);
   // };
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    let res = searchExams(search);
+    if (res?.isSuccess) {
+      setFilteredExams(res?.data);
+    } else {
+      setFilteredExams([]);
+    }
+  };
   return (
     <div className="px-6">
       <div className=" flex flex-wrap flex-col sm:flex-row items-center justify-between gap-8 w-auto mb-6">
-        <div className="bg-white flex w-full sm:max-w-md p-1 rounded-full overflow-hidden">
+        <form className="bg-white flex w-full sm:max-w-md p-1 rounded-full overflow-hidden">
           <input
             type="text"
             placeholder="Search By exam name here"
             className="rounded-full w-full outline-none bg-white border-none pl-4 text-sm"
+            value={search}
+            onChange={(e) => {
+              if (e.target.value === "") {
+                setFilteredExams(exams);
+              }
+              setSearch(e.target.value);
+            }}
           />
           <button
-            type="button"
+            type="submit"
             className="bg-[#FBE1EC] hover:bg-primary hover:text-white transition-all text-black text-sm rounded-full px-5 py-2.5"
+            onClick={(e) => {
+              handleSearch(e);
+            }}
           >
             Search
           </button>
-        </div>
+        </form>
         <Link
           to="/exams/add-exam"
           className="border border-pink-600 text-pink-600 text-sm px-4 py-3 flex items-center gap-2 rounded-xl w-full sm:w-auto"
@@ -54,7 +76,7 @@ const Exams = () => {
         </Link>
       </div>
       <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {exams?.map((item) => (
+        {filteredExams?.map((item) => (
           <div
             key={item?.id}
             className="rounded-3xl p-3 overflow-hidden shadow-md border"
