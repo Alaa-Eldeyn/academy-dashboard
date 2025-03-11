@@ -156,7 +156,6 @@ const Questions = () => {
                         );
                         setCorrectAnswer(answerMap[correctAnswerKey]);
                         setEditQuestionModal(true);
-                        console.log(question);
                       }}
                       className="bg-[#FEF6FF] w-8 h-8 p-2  text-primary rounded-lg cursor-pointer"
                     />

@@ -107,7 +107,11 @@ const deleteExam = async (id) => {
 };
 const editQuestion = async (questionId, data) => {
   try {
-    let response = await customAxios.patch(`/Question/${questionId}`, data);
+    let response = await customAxios.patch(`/Question/${questionId}`, data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
     return response?.data;
   } catch (error) {
     console.error(error);

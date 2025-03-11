@@ -42,7 +42,6 @@ const AddBlog = ({ isUpdateMode }) => {
       navigate("/blogs");
     } else {
       toast.error("Failed to add Blog");
-      console.log(response);
     }
   };
   const getCategories = async () => {
@@ -286,18 +285,18 @@ const AddBlog = ({ isUpdateMode }) => {
               type="button"
               disabled={isSubmitting}
               onClick={handleSubmit(handleUpdateBlog)}
-              className="px-8 py-3 bg-primary text-white  rounded-full focus:outline-none  border border-transparent"
+              className="px-8 min-w-36 py-3 bg-primary text-white disabled:opacity-50 rounded-full focus:outline-none  border border-transparent"
             >
-              Publish this Blog
+              {isSubmitting ? "Updating..." : "Update Blog"}
             </button>
           ) : (
             <button
               type="button"
               disabled={isSubmitting}
               onClick={handleSubmit(handleAddBlog)}
-              className="px-8 py-3 bg-primary text-white  rounded-full focus:outline-none  border border-transparent"
+              className="px-8 min-w-36 py-3 bg-primary text-white disabled:opacity-50 rounded-full focus:outline-none  border border-transparent"
             >
-              Publish this Blog
+              {isSubmitting ? "Adding..." : "Add Blog"}
             </button>
           )}
           <Link to={"/blogs"} type="button" className="second-btn">

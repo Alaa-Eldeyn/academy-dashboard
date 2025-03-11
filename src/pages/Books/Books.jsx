@@ -109,7 +109,6 @@ function Books() {
                     className="w-8 h-8 rounded-lg mx-auto"
                   />
                 </td>
-                {console.log(book)}
                 <td className="p-4 text-sm">{book?.title}</td>
                 <td className="px-6 py-3">{book?.publisherName}</td>
                 <td className="px-6 py-3">{book?.publisherRole}</td>

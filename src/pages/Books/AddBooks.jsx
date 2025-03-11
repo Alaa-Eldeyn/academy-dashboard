@@ -56,7 +56,6 @@ const AddBooks = ({ isUpdateMode, details }) => {
       return navigate("/books");
     } else {
       toast.error("Failed to add book");
-      console.log(response);
     }
   };
   const handleUpdateBook = async () => {
@@ -292,28 +291,28 @@ const AddBooks = ({ isUpdateMode, details }) => {
               {details ? (
                 <Link
                   to={`/books/update-book/${params?.id}`}
-                  className="px-4 py-3 bg-primary text-white  rounded-full focus:outline-none  border border-transparent"
+                  className="px-5 min-w-36 py-3 bg-primary text-white disabled:opacity-50 rounded-full focus:outline-none  border border-transparent"
                   disabled={isSubmitting}
                 >
-                  Edit Your Book Now
+                  {isSubmitting ? "Loading..." : "Edit Book"}
                 </Link>
               ) : isUpdateMode ? (
                 <button
                   type="button"
                   onClick={handleSubmit(handleUpdateBook)}
-                  className="px-4 py-3 bg-primary text-white  rounded-full focus:outline-none  border border-transparent"
+                  className="px-5 min-w-36 py-3 bg-primary text-white disabled:opacity-50 rounded-full focus:outline-none  border border-transparent"
                   disabled={isSubmitting}
                 >
-                  Save changes
+                  {isSubmitting ? "Saving..." : "Save changes"}
                 </button>
               ) : (
                 <button
                   type="button"
                   onClick={handleSubmit(handleAddBook)}
-                  className="px-4 py-3 bg-primary text-white  rounded-full focus:outline-none  border border-transparent"
+                  className="px-5 min-w-36 py-3 bg-primary text-white disabled:opacity-50 rounded-full focus:outline-none  border border-transparent"
                   disabled={isSubmitting}
                 >
-                  Publish Your Book Now
+                  {isSubmitting ? "Adding..." : "Publish Now"}
                 </button>
               )}
               <Link to={"/books"} type="button" className="second-btn">
