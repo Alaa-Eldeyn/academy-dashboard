@@ -77,9 +77,9 @@ const Details = ({ isPublished }) => {
       <div className="flex gap-5">
         <div>
           <img
-            src="https://via.placeholder.com/120"
+            src={`${import.meta.env.VITE_BASE_URL}${course?.thumbnailURL}`}
             alt="book cover"
-            className="rounded-xl"
+            className="rounded-xl w-40"
           />
         </div>
         <div className="space-y-2">
@@ -93,11 +93,6 @@ const Details = ({ isPublished }) => {
             </div>
           </div>
           <div className="flex gap-2 items-center !mt-4">
-            <img
-              src="https://via.placeholder.com/20"
-              alt=""
-              className="rounded-full size-6"
-            />
             <span>Alaa Eldeyn</span>
           </div>
         </div>

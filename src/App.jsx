@@ -8,7 +8,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import { Books, AddBooks } from "./pages/Books";
 import { Blogs, AddBlog, ViewBlog } from "./pages/Blogs";
 import { Taps } from "./pages/Categories";
-import { DeletePending, Details, Pending, PendingEnrolls, Published } from "./pages/Courses";
+import { AddCourse, DeletePending, Details, Pending, PendingEnrolls, Published } from "./pages/Courses";
 import { AddExam, Exams, Questions } from "./pages/Exams";
 import { Dashboard } from "./pages/Dashboard";
 import { Supervisors } from "./pages/Supervisors";
@@ -52,6 +52,7 @@ function App() {
             element={<Details isPublished={true} />}
           />
           <Route path="published-courses" element={<Published />} />
+          <Route path="courses/add-course" element={<AddCourse />} />
           <Route path="exams" element={<Exams />} />
           <Route
             path="exams/add-exam"

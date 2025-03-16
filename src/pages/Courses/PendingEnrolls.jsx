@@ -2,6 +2,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEffect, useState } from "react";
 import { getPendingEnrolls } from "../../utils/courses";
 import EnrollModal from "./EnrollModal";
+import empty from "../../assets/Empty-amico.svg";
 
 const PendingEnrolls = () => {
   const [enrolls, setEnrolls] = useState([]);
@@ -19,6 +20,7 @@ const PendingEnrolls = () => {
       {isModalOpen && (
         <EnrollModal setIsModalOpen={setIsModalOpen} enroll={selectedEnroll} />
       )}
+
       <div className="overflow-x-auto px-6">
         <table className="min-w-full bg-gray-100 rounded-lg">
           <thead className="bg-white  whitespace-nowrap">
@@ -61,7 +63,17 @@ const PendingEnrolls = () => {
               </tr>
             ))}
           </tbody>
-        </table>
+        </table>{" "}
+        {enrolls?.length < 1 && (
+          <div className="center flex-col">
+            <img
+              src={empty}
+              alt="Empty state"
+              className="w-full h-full max-w-[500px]"
+            />
+            <h2 className="text-2xl text-center font-bold">No Results found</h2>
+          </div>
+        )}
       </div>
     </>
   );

@@ -3,13 +3,13 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { deleteCourse, getPendingDeleteCourses } from "../../utils/courses";
 import Swal from "sweetalert2";
-
+import empty from "../../assets/Empty-amico.svg";
 const DeletePending = () => {
   const [courses, setCourses] = useState([]);
   useEffect(() => {
     const fetchCourses = async () => {
       let res = await getPendingDeleteCourses();
-      setCourses(res?.data);
+      if (res?.isSuccess) setCourses(res?.data);
     };
     fetchCourses();
   }, []);
@@ -25,6 +25,16 @@ const DeletePending = () => {
   return (
     <>
       <div className="px-6">
+        {courses?.length < 1 && (
+          <div className="center flex-col">
+            <img
+              src={empty}
+              alt="Empty state"
+              className="w-full h-full max-w-[500px]"
+            />
+            <h2 className="text-2xl text-center font-bold">No Results found</h2>
+          </div>
+        )}
         <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
           {courses?.map((item) => (
             <div
