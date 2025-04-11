@@ -291,7 +291,7 @@ const AddBooks = ({ isUpdateMode, details }) => {
               {details ? (
                 <Link
                   to={`/books/update-book/${params?.id}`}
-                  className="px-5 min-w-36 py-3 bg-primary text-white disabled:opacity-50 rounded-full focus:outline-none  border border-transparent"
+                  className="px-5 text-current min-w-36 py-3 bg-primary text-white disabled:opacity-50 rounded-full focus:outline-none  border border-transparent"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? "Loading..." : "Edit Book"}
@@ -300,7 +300,7 @@ const AddBooks = ({ isUpdateMode, details }) => {
                 <button
                   type="button"
                   onClick={handleSubmit(handleUpdateBook)}
-                  className="px-5 min-w-36 py-3 bg-primary text-white disabled:opacity-50 rounded-full focus:outline-none  border border-transparent"
+                  className="px-5 text-current min-w-36 py-3 bg-primary text-white disabled:opacity-50 rounded-full focus:outline-none  border border-transparent"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? "Saving..." : "Save changes"}
@@ -309,7 +309,7 @@ const AddBooks = ({ isUpdateMode, details }) => {
                 <button
                   type="button"
                   onClick={handleSubmit(handleAddBook)}
-                  className="px-5 min-w-36 py-3 bg-primary text-white disabled:opacity-50 rounded-full focus:outline-none  border border-transparent"
+                  className="px-5 text-current min-w-36 py-3 bg-primary text-white disabled:opacity-50 rounded-full focus:outline-none  border border-transparent"
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? "Adding..." : "Publish Now"}

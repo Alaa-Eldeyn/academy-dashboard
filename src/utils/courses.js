@@ -1,5 +1,14 @@
 import Swal from "sweetalert2";
 import customAxios from "./axios";
+import { z } from "zod";
+const schema = z.object({
+  title: z.string().min(1, { message: "Title is required" }),
+  subCategoryID: z.string().min(1, { message: "Sub Category is required" }),
+  duration: z.string().min(1, { message: "Duration is required" }),
+  price: z.string().min(0, { message: "Price is required" }).default("0"),
+  preview: z.string().min(1, { message: "Preview is required" }),
+  thumbnail: z.any(),
+});
 
 const getAllCourses = async () => {
   try {
@@ -270,7 +279,19 @@ const rejectEnroll = async (data) => {
     return { isSuccess: false };
   }
 };
-
+const addCourse = async (data) => {
+  try {
+    let response = await customAxios.post("/Course/AddCourse", data, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+    return response?.data;
+  } catch (error) {
+    console.error(error);
+    return { isSuccess: false };
+  }
+};
 export {
   getAllCourses,
   getOneCourse,
@@ -287,4 +308,6 @@ export {
   approveEnroll,
   rejectEnroll,
   searchCourses,
+  schema,
+  addCourse,
 };

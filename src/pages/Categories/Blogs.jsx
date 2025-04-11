@@ -185,9 +185,6 @@ const Blogs = () => {
                       className="flex-1 line-clamp-1 px-4 py-3"
                     >
                       {name}
-                      <span className="bg-[#FFF2F7] inline-block text-black text-xs rounded-full mx-3 py-1 px-3">
-                        10 Sub Categories
-                      </span>
                     </span>
                     <span>
                       <Icon
@@ -214,12 +211,7 @@ const Blogs = () => {
                       key={i}
                       className="bg-white shadow-sm px-4 py-2 rounded-lg flex items-center justify-between"
                     >
-                      <span className="flex-1 line-clamp-1">
-                        {name}
-                        <span className="bg-[#FFF2F7] inline-block text-black text-xs rounded-full mx-3 py-1 px-3">
-                          Category name
-                        </span>
-                      </span>
+                      <span className="flex-1 line-clamp-1">{name}</span>
                       <span className="center gap-3">
                         <Icon
                           icon="fluent:arrow-move-24-regular"

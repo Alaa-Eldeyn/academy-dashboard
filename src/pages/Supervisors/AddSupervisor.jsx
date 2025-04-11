@@ -1,18 +1,19 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { addUser, schema } from "../../utils/users";
+import { addSupervisor, schema } from "../../utils/users";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import Swal from "sweetalert2";
 
-const AddUsers = () => {
+const AddSupervisor = () => {
   const {
     register,
     handleSubmit,
     getValues,
     formState: { errors, isSubmitting },
   } = useForm({ resolver: zodResolver(schema) });
-  const handleAddUser = async () => {
+
+  const handleAddSupervisor = async () => {
     if (getValues("password") !== getValues("confirmPassword")) {
       toast.error("Passwords do not match");
       return;
@@ -25,22 +26,25 @@ const AddUsers = () => {
       email: getValues("email"),
       phoneNumber: getValues("phoneNumber"),
     };
-    let res = await addUser(data);
+    let res = await addSupervisor(data);
     if (res.isSuccess) {
       await Swal.fire({
         icon: "success",
-        title: "User Added Successfully",
+        title: "Supervisor Added Successfully",
         showConfirmButton: false,
         timer: 500,
       });
-      window.location.href = "/users";
+      window.location.href = "/supervisors";
     } else {
-      toast.error(res?.message || "An error occurred while adding the user");
+      toast.error(
+        res?.message || "An error occurred while adding the supervisor"
+      );
     }
   };
+
   return (
     <div className="px-6">
-      <h1 className="text-2xl font-bold text-primary">Add User</h1>
+      <h1 className="text-2xl font-bold text-primary">Add Supervisor</h1>
       <h2 className="text-lg my-3 font-bold">Personal Information</h2>
       <form className="max-w-[600px]">
         <div className="grid grid-cols-1 gap-x-6 md:grid-cols-2">
@@ -58,9 +62,9 @@ const AddUsers = () => {
               {...register("firstName")}
               placeholder="Enter First Name"
             />
-            {errors && errors?.firstName && (
+            {errors?.firstName && (
               <span className="text-sm text-red-500 mb-3 block">
-                {errors?.firstName?.message}
+                {errors.firstName.message}
               </span>
             )}
           </div>
@@ -78,9 +82,9 @@ const AddUsers = () => {
               {...register("lastName")}
               placeholder="Enter Last Name"
             />
-            {errors && errors?.lastName && (
+            {errors?.lastName && (
               <span className="text-sm text-red-500 mb-3 block">
-                {errors?.lastName?.message}
+                {errors.lastName.message}
               </span>
             )}
           </div>
@@ -99,9 +103,9 @@ const AddUsers = () => {
             {...register("phoneNumber")}
             placeholder="+[country code][number] (e.g., +1234567890)"
           />
-          {errors && errors?.phoneNumber && (
+          {errors?.phoneNumber && (
             <span className="text-sm text-red-500 mb-3 block">
-              {errors?.phoneNumber?.message}
+              {errors.phoneNumber.message}
             </span>
           )}
         </div>
@@ -119,9 +123,9 @@ const AddUsers = () => {
             {...register("email")}
             placeholder="Enter Email"
           />
-          {errors && errors?.email && (
+          {errors?.email && (
             <span className="text-sm text-red-500 mb-3 block">
-              {errors?.email?.message}
+              {errors.email.message}
             </span>
           )}
         </div>
@@ -140,9 +144,9 @@ const AddUsers = () => {
             {...register("password")}
             placeholder="Enter Password"
           />
-          {errors && errors?.password && (
+          {errors?.password && (
             <span className="text-sm text-red-500 mb-3 block">
-              {errors?.password?.message}
+              {errors.password.message}
             </span>
           )}
         </div>
@@ -160,9 +164,9 @@ const AddUsers = () => {
             {...register("confirmPassword")}
             placeholder="Confirm Password"
           />
-          {errors && errors?.confirmPassword && (
+          {errors?.confirmPassword && (
             <span className="text-sm text-red-500 mb-3 block">
-              {errors?.confirmPassword?.message}
+              {errors.confirmPassword.message}
             </span>
           )}
         </div>
@@ -171,11 +175,11 @@ const AddUsers = () => {
             type="button"
             className="main-btn"
             disabled={isSubmitting}
-            onClick={handleSubmit(handleAddUser)}
+            onClick={handleSubmit(handleAddSupervisor)}
           >
-            {isSubmitting ? "Adding User..." : "Add User"}
+            {isSubmitting ? "Adding Supervisor..." : "Add Supervisor"}
           </button>
-          <Link to={"/users"} className="second-btn">
+          <Link to={"/supervisors"} className="second-btn">
             Go Back
           </Link>
         </div>
@@ -184,4 +188,4 @@ const AddUsers = () => {
   );
 };
 
-export default AddUsers;
+export default AddSupervisor;

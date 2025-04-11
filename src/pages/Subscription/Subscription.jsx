@@ -2,6 +2,7 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEffect, useState } from "react";
 import LocalEnrollModal from "./LocalEnrollModal";
 import { getPendingLocalEnrolls } from "../../utils/localSubscription";
+import empty from "../../assets/Empty-amico.svg";
 
 const Subscription = () => {
   const [enrolls, setEnrolls] = useState([]);
@@ -61,6 +62,16 @@ const Subscription = () => {
             ))}
           </tbody>
         </table>
+        {enrolls?.length < 1 && (
+          <div className="center flex-col">
+            <img
+              src={empty}
+              alt="Empty state"
+              className="w-full h-full max-w-[500px]"
+            />
+            <h2 className="text-2xl text-center font-bold">No Results found</h2>
+          </div>
+        )}
       </div>
     </>
   );
