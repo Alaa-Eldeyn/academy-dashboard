@@ -49,6 +49,20 @@ const addUser = async (data) => {
   }
 };
 
+const addSupervisor = async (data) => {
+  try {
+    let response = await customAxios.post(`User/register-supervisor`, data, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return { isSuccess: false };
+  }
+};
+
 const getAllUsers = async (page) => {
   try {
     let response = await customAxios.get(
@@ -59,6 +73,60 @@ const getAllUsers = async (page) => {
     console.log(error);
     return { isSuccess: false };
   }
+};
+
+const getAllSupervisors = async (page) => {
+  try {
+    let response = await customAxios.get(
+      `Dashboard/GetAllSupervisorsPaginated?page=${page}&pageSize=10`
+    );
+    return response.data;
+  } catch (error) {
+    console.log(error);
+    return { isSuccess: false };
+  }
+};
+
+const deleteSupervisor = async (supervisorId) => {
+  const customSwal = Swal.mixin({
+    customClass: {
+      confirmButton: "bg-red-500 text-white mr-5 py-3 px-8 rounded-full",
+      cancelButton: "bg-[#FEF3FF] text-black  py-3 px-8 rounded-full",
+      title: "text-red-500",
+      icon: "!text-red-500 !border-red-500",
+    },
+    buttonsStyling: false,
+  });
+  const result = await customSwal.fire({
+    icon: "warning",
+    title: "Delete This Supervisor?",
+    text: "Are You Sure that you want to delete this Supervisor?",
+    showCancelButton: true,
+    confirmButtonText: "Delete",
+    confirmButtonColor: "#d33",
+    cancelButtonColor: "#3085d6",
+  });
+
+  if (result.isConfirmed) {
+    try {
+      let response = await customAxios.delete(
+        `Dashboard/DeleteUser/${supervisorId}`
+      );
+      if (response.data.isSuccess) {
+        await Swal.fire({
+          icon: "success",
+          title: "User Deleted Successfully",
+          showConfirmButton: false,
+          timer: 1000,
+        });
+        return response.data;
+      }
+    } catch (error) {
+      console.log(error);
+      return { isSuccess: false };
+    }
+  }
+  return { isSuccess: false };
 };
 
 const deleteUser = async (userId) => {
@@ -101,4 +169,12 @@ const deleteUser = async (userId) => {
   return { isSuccess: false };
 };
 
-export { getAllUsers, deleteUser, schema, addUser };
+export {
+  getAllUsers,
+  deleteUser,
+  schema,
+  addUser,
+  addSupervisor,
+  getAllSupervisors,
+  deleteSupervisor,
+};

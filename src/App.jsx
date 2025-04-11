@@ -11,7 +11,7 @@ import { Taps } from "./pages/Categories";
 import { AddCourse, DeletePending, Details, Pending, PendingEnrolls, Published } from "./pages/Courses";
 import { AddExam, Exams, Questions } from "./pages/Exams";
 import { Dashboard } from "./pages/Dashboard";
-import { Supervisors } from "./pages/Supervisors";
+import { AddSupervisor, Supervisors } from "./pages/Supervisors";
 import { AddUsers, Users } from "./pages/Users";
 import { ForgetPass, Login, ResetPass } from "./auth";
 import Subscription from "./pages/Subscription/Subscription";
@@ -33,6 +33,7 @@ function App() {
         >
           <Route index element={<Dashboard />} />
           <Route path="supervisors" element={<Supervisors />} />
+          <Route path="supervisors/add-supervisor" element={<AddSupervisor />} />
           <Route path="users" element={<Users />} />
           <Route path="users/add-user" element={<AddUsers />} />
           <Route path="categories" element={<Taps />} />

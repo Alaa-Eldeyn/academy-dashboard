@@ -1,3 +1,4 @@
 import Supervisors from "./Supervisors";
+import AddSupervisor from "./AddSupervisor";
 
-export {  Supervisors}
+export { AddSupervisor, Supervisors };

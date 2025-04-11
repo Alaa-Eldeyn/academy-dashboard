@@ -13,11 +13,11 @@ function Sidebar() {
       icon: <Icon icon="radix-icons:dashboard" className="text-xl" />,
       title: "Dashboard",
     },
-    // {
-    //   link: "supervisors",
-    //   icon: <Icon icon="mingcute:user-setting-line" className="text-2xl" />,
-    //   title: "Supervisors",
-    // },
+    {
+      link: "supervisors",
+      icon: <Icon icon="mingcute:user-setting-line" className="text-2xl" />,
+      title: "Supervisors",
+    },
     {
       link: "users",
       icon: <Icon icon="solar:user-outline" className="text-2xl" />,
@@ -81,7 +81,7 @@ function Sidebar() {
   ];
 
   const handleDropdownClick = (index) => {
-    if (index === 3) setIsCoursesOpen(!isCoursesOpen);
+    if (index === 4) setIsCoursesOpen(!isCoursesOpen);
   };
 
   const handleLinkClick = (link) => {
