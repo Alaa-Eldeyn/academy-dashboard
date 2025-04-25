@@ -139,14 +139,14 @@ const logIn = async (data) => {
     if (response?.data?.isSuccess) {
       const user = response?.data?.data;
 
-      const isAdmin = user?.roles?.some((role) => role.name === "Admin");
+      const hasAccess = user?.roles?.some(
+        (role) => role.name === "Admin" || role.name === "Supervisor"
+      );
 
-      if (isAdmin) {
+      if (hasAccess) {
         toast.success("Login successfully");
         addToken(response?.data?.token);
         addUser(user);
-        // هنا تحط التوجيه للداشبورد لو انت بتستخدم React Router مثلاً
-        // navigate("/dashboard");
         return { isSuccess: true };
       } else {
         toast.error("You are not authorized to access the dashboard");
@@ -167,7 +167,6 @@ const logIn = async (data) => {
     return { isSuccess: false };
   }
 };
-
 
 const forgetPass = async (email) => {
   try {
