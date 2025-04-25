@@ -135,10 +135,23 @@ const signUp = async (data) => {
 const logIn = async (data) => {
   try {
     const response = await axios.post(`${baseURL}/api/User/login`, data);
+
     if (response?.data?.isSuccess) {
-      toast.success("Login successfully");
-      addToken(response?.data?.token);
-      addUser(response?.data?.data);
+      const user = response?.data?.data;
+
+      const hasAccess = user?.roles?.some(
+        (role) => role.name === "Admin" || role.name === "Supervisor"
+      );
+
+      if (hasAccess) {
+        toast.success("Login successfully");
+        addToken(response?.data?.token);
+        addUser(user);
+        return { isSuccess: true };
+      } else {
+        toast.error("You are not authorized to access the dashboard");
+        return { isSuccess: false };
+      }
     } else {
       if (response?.data?.message === "can't find this user name") {
         toast.error("Please enter the email you registered with");
@@ -147,6 +160,7 @@ const logIn = async (data) => {
       }
       console.log("error", response?.data);
     }
+
     return response?.data;
   } catch (err) {
     console.error("Error:", err);
