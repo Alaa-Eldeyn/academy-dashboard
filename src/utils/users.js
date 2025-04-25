@@ -170,9 +170,9 @@ const deleteUser = async (userId) => {
 };
 
 export {
+  schema,
   getAllUsers,
   deleteUser,
-  schema,
   addUser,
   addSupervisor,
   getAllSupervisors,
