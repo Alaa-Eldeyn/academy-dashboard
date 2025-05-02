@@ -33,8 +33,6 @@ const Exams = () => {
       return;
     }
     let res = await addCategory(newCategoryName, "Exams");
-    console.log(res);
-
     if (res?.isSuccess) {
       toast.success("Category added successfully");
       setNewCategoryName("");

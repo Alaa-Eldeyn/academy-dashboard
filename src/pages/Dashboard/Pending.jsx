@@ -14,7 +14,6 @@ const Pending = () => {
     const fetchCourses = async () => {
       let res = await getPendingCourses();
       setCourses(res?.data);
-      console.log(res?.data);
     };
     fetchCourses();
   }, []);

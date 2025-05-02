@@ -16,8 +16,6 @@ const DeleteSubModal = ({
       setError(true);
       return;
     }
-    console.log(sub.current.value);
-    
   };
   const justDeleteSubCategory = async () => {
     let response = await deleteSubCategory(subCategoryToDelete);

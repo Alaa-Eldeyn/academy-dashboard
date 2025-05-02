@@ -11,7 +11,6 @@ const Users = () => {
   const [search, setSearch] = useState("");
   const fetchAllUsers = async () => {
     let res = await getAllUsers(page);
-    console.log(res);
     if (res?.isSuccess) {
       setUsers(res?.data?.users);
     } else {
@@ -33,7 +32,6 @@ const Users = () => {
   const handleSearch = async () => {
     if (search !== "") {
       let res = await getFilteredUsers(search);
-      console.log(res);
 
       if (res?.isSuccess) {
         setUsers(res?.data?.users || []);
