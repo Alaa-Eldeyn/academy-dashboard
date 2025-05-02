@@ -106,9 +106,20 @@ const updateBook = async (id, data) => {
     return { isSuccess: false };
   }
 };
-
+const getFilteredBooks = async (search) => {
+  try {
+    let response = await customAxios.get(
+      `/Book/GetBooksFilteredPaginated?title=${search}`
+    );
+    return response?.data;
+  } catch (error) {
+    console.log(error);
+    return { isSuccess: false };
+  }
+};
 export {
   schema,
+  getFilteredBooks,
   addBook,
   updateBook,
   getBook,

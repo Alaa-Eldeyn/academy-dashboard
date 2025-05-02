@@ -21,6 +21,17 @@ const getAllExams = async () => {
     return { isSuccess: false };
   }
 };
+const getFilteredExams = async (search) => {
+  try {
+    let response = await customAxios.get(
+      `/StandardTest/GetStandardTestsFilteredPaginated?title=${search}`
+    );
+    return response?.data;
+  } catch (error) {
+    console.log(error);
+    return { isSuccess: false };
+  }
+};
 
 const addExam = async (data) => {
   try {
@@ -219,6 +230,7 @@ const deleteQuestion = async (id) => {
 export {
   getAllExams,
   addExam,
+  getFilteredExams,
   deleteExam,
   // addUserToExam,
   schema,

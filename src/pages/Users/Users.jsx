@@ -1,17 +1,24 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { deleteUser, getAllUsers } from "../../utils/users";
+import { deleteUser, getAllUsers, getFilteredUsers } from "../../utils/users";
 import Pagination from "../../components/Pagination";
+import { toast } from "react-toastify";
 
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [page, setPage] = useState(1);
+  const [search, setSearch] = useState("");
+  const fetchAllUsers = async () => {
+    let res = await getAllUsers(page);
+    console.log(res);
+    if (res?.isSuccess) {
+      setUsers(res?.data?.users);
+    } else {
+      toast.error(res?.message || "Something went wrong");
+    }
+  };
   useEffect(() => {
-    const fetchAllUsers = async () => {
-      let res = await getAllUsers(page);
-      setUsers(res?.data);
-    };
     fetchAllUsers();
   }, [page]);
   const handleDeleteUser = async (id) => {
@@ -23,22 +30,42 @@ const Users = () => {
       }));
     }
   };
+  const handleSearch = async () => {
+    if (search !== "") {
+      let res = await getFilteredUsers(search);
+      console.log(res);
+
+      if (res?.isSuccess) {
+        setUsers(res?.data?.users || []);
+      } else {
+        toast.error(res?.message || "Something went wrong");
+        setSearch("");
+        fetchAllUsers();
+      }
+    }
+  };
   return (
     <div className="px-6">
       <div className=" flex flex-wrap flex-col sm:flex-row items-center justify-between gap-8 w-auto mb-6">
-        <div className="bg-white flex w-full sm:max-w-md p-1 rounded-full overflow-hidden">
+        <form className="bg-white flex w-full sm:max-w-md p-1 rounded-full overflow-hidden">
           <input
             type="text"
             placeholder="Search By user Title here"
             className="rounded-full w-full outline-none bg-white border-none pl-4 text-sm"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
           />
           <button
-            type="button"
+            type="submit"
             className="bg-[#FBE1EC] hover:bg-primary hover:text-white transition-all text-black text-sm rounded-full px-5 py-2.5"
+            onClick={(e) => {
+              e.preventDefault();
+              handleSearch();
+            }}
           >
             Search
           </button>
-        </div>
+        </form>
         <Link
           to="/users/add-user"
           className="border border-pink-600 text-pink-600 text-sm px-4 py-3 flex items-center gap-2 rounded-xl w-full sm:w-auto"
@@ -67,7 +94,7 @@ const Users = () => {
           </thead>
 
           <tbody className="text-center whitespace-nowrap divide-y bg-white divide-gray-200">
-            {users?.users?.map((user, index) => (
+            {users?.map((user, index) => (
               <tr key={index}>
                 <td className="size-10 bg-gray-100">{index + 1}</td>
                 <td className="p-4 text-sm">

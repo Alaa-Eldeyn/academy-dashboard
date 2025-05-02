@@ -169,6 +169,28 @@ const deleteUser = async (userId) => {
   return { isSuccess: false };
 };
 
+const getFilteredSupervisors = async (search) => {
+  try {
+    let response = await customAxios.get(`/Dashboard/SearchSupervisorsByName?name=${search}`);
+    return response?.data;
+  } catch (error) {
+    console.log(error);
+    return { isSuccess: false };
+  }
+};
+
+const getFilteredUsers = async (search) => {
+  try {
+    let response = await customAxios.get(
+      `/Dashboard/SearchNormalUsersByName?name=${search}`
+    );
+    return response?.data;
+  } catch (error) {
+    console.log(error);
+    return { isSuccess: false };
+  }
+};
+
 export {
   schema,
   getAllUsers,
@@ -177,4 +199,6 @@ export {
   addSupervisor,
   getAllSupervisors,
   deleteSupervisor,
+  getFilteredSupervisors,
+  getFilteredUsers,
 };

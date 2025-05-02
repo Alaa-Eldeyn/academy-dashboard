@@ -1,31 +1,28 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
-import { getAllExams, searchExams } from "../../utils/Exams";
+import { getAllExams, getFilteredExams } from "../../utils/Exams";
 import { deleteExam } from "../../utils/Exams";
+import { toast } from "react-toastify";
 
 const Exams = () => {
   const [exams, setExams] = useState([]);
-  const [filteredExams, setFilteredExams] = useState([]);
   const [search, setSearch] = useState("");
+  const fetchExams = async () => {
+    let res = await getAllExams();
+    if (res?.isSuccess) {
+      setExams(res?.data || []);
+    } else {
+      setExams([]);
+    }
+  };
   useEffect(() => {
-    const fetchCourses = async () => {
-      let res = await getAllExams();
-      if (res?.isSuccess) {
-        setExams(res?.data);
-        setFilteredExams(res?.data);
-      } else {
-        setExams([]);
-        setFilteredExams([]);
-      }
-    };
-    fetchCourses();
+    fetchExams();
   }, []);
   const handleDeleteExam = async (id) => {
     let res = await deleteExam(id);
     if (res?.isSuccess) {
       setExams(exams.filter((exam) => exam.id !== id));
-      setFilteredExams(filteredExams.filter((exam) => exam.id !== id));
     }
   };
   // const handleAddUser = async (id) => {
@@ -34,11 +31,13 @@ const Exams = () => {
   // };
   const handleSearch = async (e) => {
     e.preventDefault();
-    let res = searchExams(search);
+    let res = await getFilteredExams(search);
     if (res?.isSuccess) {
-      setFilteredExams(res?.data);
+      setExams(res?.data?.tests || []);
     } else {
-      setFilteredExams([]);
+      toast.error(res?.message || "Something went wrong!");
+      setSearch("");
+      fetchExams();
     }
   };
   return (
@@ -50,12 +49,7 @@ const Exams = () => {
             placeholder="Search By exam name here"
             className="rounded-full w-full outline-none bg-white border-none pl-4 text-sm"
             value={search}
-            onChange={(e) => {
-              if (e.target.value === "") {
-                setFilteredExams(exams);
-              }
-              setSearch(e.target.value);
-            }}
+            onChange={(e) => setSearch(e.target.value)}
           />
           <button
             type="submit"
@@ -76,7 +70,7 @@ const Exams = () => {
         </Link>
       </div>
       <div className="grid grid-col-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
-        {filteredExams?.map((item) => (
+        {exams?.map((item) => (
           <div
             key={item?.id}
             className="rounded-3xl p-3 overflow-hidden shadow-md border"

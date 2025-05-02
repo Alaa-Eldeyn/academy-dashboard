@@ -1,20 +1,21 @@
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
-import { deleteBlog, getAllBlogs, searchBlogs } from "../../utils/blogs";
+import { deleteBlog, getAllBlogs, getFilteredBlogs } from "../../utils/blogs";
 import Pagination from "../../components/Pagination";
+import { toast } from "react-toastify";
 
 const Blogs = () => {
   const [blogs, setBlogs] = useState([]);
   const [filteredBlogs, setFilteredBlogs] = useState([]);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+  const fetchAllBlogs = async () => {
+    let res = await getAllBlogs(page);
+    setBlogs(res?.data.blogs || []);
+    setFilteredBlogs(res?.data.blogs || []);
+  };
   useEffect(() => {
-    const fetchAllBlogs = async () => {
-      let res = await getAllBlogs(page);
-      setBlogs(res?.data);
-      setFilteredBlogs(res?.data);
-    };
     fetchAllBlogs();
   }, [page]);
   const handleDeleteBlog = async (id) => {
@@ -32,11 +33,14 @@ const Blogs = () => {
   };
   const handleSearch = async (e) => {
     e.preventDefault();
-    let res = searchBlogs(search);
+    let res = await getFilteredBlogs(search);
     if (res?.isSuccess) {
-      setFilteredBlogs(res?.data);
+      setBlogs(res?.data.items || []);
+      setFilteredBlogs(res?.data.items || []);
     } else {
-      setFilteredBlogs([]);
+      toast.error(res?.message || "Something went wrong!");
+      setSearch("");
+      fetchAllBlogs();
     }
   };
   return (
@@ -48,12 +52,7 @@ const Blogs = () => {
             placeholder="Search By Blog Title here"
             className="rounded-full w-full outline-none bg-white border-none pl-4 text-sm"
             value={search}
-            onChange={(e) => {
-              if (e.target.value === "") {
-                setFilteredBlogs(blogs);
-              }
-              setSearch(e.target.value);
-            }}
+            onChange={(e) => setSearch(e.target.value)}
           />
           <button
             type="submit"
@@ -91,7 +90,7 @@ const Blogs = () => {
           </thead>
 
           <tbody className="text-center whitespace-nowrap divide-y bg-white divide-gray-200">
-            {filteredBlogs?.blogs?.map((blog, index) => (
+            {filteredBlogs?.map((blog, index) => (
               <tr key={index}>
                 <td className="size-10 bg-gray-100">{index + 1}</td>
                 <td>

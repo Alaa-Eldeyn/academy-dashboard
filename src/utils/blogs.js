@@ -109,12 +109,23 @@ const updateBlog = async (data) => {
     return { isSuccess: false };
   }
 };
-
+const getFilteredBlogs = async (search) => {
+  try {
+    let response = await customAxios.get(
+      `/Blog/GetBlogsFilteredPaginated?title=${search}`
+    );
+    return response?.data;
+  } catch (error) {
+    console.log(error);
+    return { isSuccess: false };
+  }
+};
 export {
   schema,
   addBlog,
   updateBlog,
   getBlog,
+  getFilteredBlogs,
   getAllBlogs,
   deleteBlog,
   searchBlogs,

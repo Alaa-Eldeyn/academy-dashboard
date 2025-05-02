@@ -1,8 +1,9 @@
 import { Link } from "react-router-dom";
 import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEffect, useState } from "react";
-import { deleteBook, getAllBooks, searchBooks } from "../../utils/books";
+import { deleteBook, getAllBooks, getFilteredBooks } from "../../utils/books";
 import Pagination from "../../components/Pagination";
+import { toast } from "react-toastify";
 
 function Books() {
   const [books, setBooks] = useState([]);
@@ -10,12 +11,14 @@ function Books() {
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
+  const fetchAllBooks = async () => {
+    let res = await getAllBooks(page);
+    if (res?.isSuccess) {
+      setBooks(res?.data?.items || []);
+      setFilteredBooks(res?.data?.items || []);
+    }
+  };
   useEffect(() => {
-    const fetchAllBooks = async () => {
-      let res = await getAllBooks(page);
-      setBooks(res?.data);
-      setFilteredBooks(res?.data);
-    };
     fetchAllBooks();
   }, [page]);
   const handleDeleteBook = async (id) => {
@@ -33,11 +36,14 @@ function Books() {
   };
   const handleSearch = async (e) => {
     e.preventDefault();
-    let res = searchBooks(search);
+    let res = await getFilteredBooks(search);
     if (res?.isSuccess) {
-      setFilteredBooks(res?.data);
+      setBooks(res?.data.items || []);
+      setFilteredBooks(res?.data.items || []);
     } else {
-      setFilteredBooks([]);
+      toast.error(res?.message || "Something went wrong!");
+      setSearch("");
+      fetchAllBooks();
     }
   };
   return (
@@ -49,12 +55,7 @@ function Books() {
             placeholder="Search By Book Title here"
             className="rounded-full w-full outline-none bg-white border-none pl-4 text-sm"
             value={search}
-            onChange={(e) => {
-              if (e.target.value === "") {
-                setFilteredBooks(books);
-              }
-              setSearch(e.target.value);
-            }}
+            onChange={(e) => setSearch(e.target.value)}
           />
           <button
             type="submit"
@@ -97,7 +98,7 @@ function Books() {
           </thead>
 
           <tbody className="text-center whitespace-nowrap divide-y bg-white divide-gray-200">
-            {filteredBooks?.items?.map((book, index) => (
+            {filteredBooks?.map((book, index) => (
               <tr key={index}>
                 <td className="size-10 bg-gray-100">{index + 1}</td>
                 <td>
