@@ -7,15 +7,13 @@ import { toast } from "react-toastify";
 
 function Books() {
   const [books, setBooks] = useState([]);
-  const [filteredBooks, setFilteredBooks] = useState([]);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
 
   const fetchAllBooks = async () => {
     let res = await getAllBooks(page);
     if (res?.isSuccess) {
-      setBooks(res?.data?.items || []);
-      setFilteredBooks(res?.data?.items || []);
+      setBooks(res?.data || []);
     }
   };
   useEffect(() => {
@@ -24,13 +22,9 @@ function Books() {
   const handleDeleteBook = async (id) => {
     const res = await deleteBook(id);
     if (res?.isSuccess) {
-      setBooks((prevBooks) => ({
-        ...prevBooks,
-        items: prevBooks?.items?.filter((book) => book?.id !== id),
-      }));
-      setFilteredBooks((prevBooks) => ({
-        ...prevBooks,
-        items: prevBooks?.items?.filter((book) => book?.id !== id),
+      setBooks((prev) => ({
+        ...prev,
+        items: prev?.items?.filter((book) => book?.id !== id),
       }));
     }
   };
@@ -38,8 +32,10 @@ function Books() {
     e.preventDefault();
     let res = await getFilteredBooks(search);
     if (res?.isSuccess) {
-      setBooks(res?.data.items || []);
-      setFilteredBooks(res?.data.items || []);
+      setBooks((prev) => ({
+        ...prev,
+        items: res?.data || [],
+      }));
     } else {
       toast.error(res?.message || "Something went wrong!");
       setSearch("");
@@ -98,7 +94,7 @@ function Books() {
           </thead>
 
           <tbody className="text-center whitespace-nowrap divide-y bg-white divide-gray-200">
-            {filteredBooks?.map((book, index) => (
+            {books?.items?.map((book, index) => (
               <tr key={index}>
                 <td className="size-10 bg-gray-100">{index + 1}</td>
                 <td>

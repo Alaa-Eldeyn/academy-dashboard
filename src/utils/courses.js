@@ -19,7 +19,17 @@ const getAllCourses = async () => {
     return { isSuccess: false };
   }
 };
-
+const getFilteredCourses = async (search) => {
+  try {
+    let response = await customAxios.get(
+      `/Course/GetAllCoursesFilteredPaginated?status=1&title=${search}`
+    );
+    return response?.data;
+  } catch (error) {
+    console.log(error);
+    return { isSuccess: false };
+  }
+};
 const searchCourses = async (title) => {
   try {
     let response = await customAxios.get(`/Course/Search/${title}`);
@@ -294,6 +304,7 @@ const addCourse = async (data) => {
 };
 export {
   getAllCourses,
+  getFilteredCourses,
   getOneCourse,
   getPendingCourses,
   approveCourse,

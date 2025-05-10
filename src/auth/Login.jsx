@@ -3,6 +3,7 @@ import login from "../assets/login.svg";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { logIn, signInSchema } from "../utils/auth";
+import { getUser } from "../utils/LocalStorage";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -15,8 +16,14 @@ const Login = () => {
   });
   const handleLogin = async (data) => {
     let res = await logIn(data);
+      const isAdmin = getUser().roles?.[0]?.name.toLowerCase() === "admin" 
+      const isSuperVisor = getUser().roles?.[0]?.name.toLowerCase() === "supervisor"
     if (res?.isSuccess) {
-      navigate("/")
+      if(isAdmin){
+        navigate("/")
+      } else if(isSuperVisor){
+        navigate("/exams")
+      }
     }
   };
   return (

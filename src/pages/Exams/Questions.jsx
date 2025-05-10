@@ -9,6 +9,7 @@ import {
   getTestQuestions,
 } from "../../utils/Exams";
 import EditQuestionModal from "./EditQuestionModal";
+import { toast } from "react-toastify";
 
 const Questions = () => {
   let params = useParams();
@@ -46,10 +47,18 @@ const Questions = () => {
   };
 
   const fetchExam = async () => {
-    let { data } = await getExam(params?.id);
-    setExam(data);
+    let res = await getExam(params?.id);
+    if(res?.isSuccess){
+      setExam(res?.data);
+    }else{
+      toast.error(res?.message || "Something went wrong while getting exams")
+    }
     let questions = await getTestQuestions(params?.id);
-    setQuestions(questions?.data);
+    if(questions?.isSuccess){
+      setQuestions(questions?.data);
+    }else{
+      toast.error(questions?.message || "Something went wrong while getting questions")
+    }
   };
   useEffect(() => {
     fetchExam();
@@ -101,7 +110,7 @@ const Questions = () => {
         </div>
         <hr className="mb-3" />
         <h2 className="font-bold text-lg mb-3">
-          Exam Questions {`(${questions?.length})`}
+          Exam Questions {`(${questions?.length || 0})`}
         </h2>
         <div className=" flex flex-wrap flex-col sm:flex-row items-center justify-between gap-8 w-auto mb-6">
           <div className="bg-white flex w-full sm:max-w-md p-1 rounded-full overflow-hidden">

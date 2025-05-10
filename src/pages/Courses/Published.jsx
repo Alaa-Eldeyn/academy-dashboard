@@ -2,30 +2,29 @@ import { Icon } from "@iconify/react/dist/iconify.js";
 import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import {
-  // addUserToCourse,
   getApprovedCourses,
+  getFilteredCourses,
   requestDelete,
-  searchCourses,
 } from "../../utils/courses";
+import { toast } from "react-toastify";
 
 const Published = () => {
   const [courses, setCourses] = useState([]);
-  const [filteredCourses, setFilteredCourses] = useState([]);
   const [search, setSearch] = useState("");
 
+  const fetchCourses = async () => {
+    let res = await getApprovedCourses();
+    console.log(res);
+    
+    setCourses(res?.data);
+  };
   useEffect(() => {
-    const fetchCourses = async () => {
-      let res = await getApprovedCourses();
-      setCourses(res?.data);
-      setFilteredCourses(res?.data);
-    };
     fetchCourses();
   }, []);
   const requestDeleteCourse = async (id) => {
     let res = await requestDelete(id);
     if (res?.isSuccess) {
       setCourses(courses.filter((course) => course.id !== id));
-      setFilteredCourses(filteredCourses.filter((course) => course.id !== id));
     }
   };
   // const handleAddUser = async (id) => {
@@ -34,11 +33,15 @@ const Published = () => {
   // };
   const handleSearch = async (e) => {
     e.preventDefault();
-    let res = searchCourses(search);
+    let res = await getFilteredCourses(search);
+    console.log(res);
+    
     if (res?.isSuccess) {
-      setFilteredCourses(res?.data);
+      setCourses(res?.data?.items || []);
     } else {
-      setFilteredCourses([]);
+      toast.error(res?.message || "Something went wrong!");
+      setSearch("");
+      fetchCourses();
     }
   };
   return (
@@ -50,12 +53,7 @@ const Published = () => {
             placeholder="Search By course Title here"
             className="rounded-full w-full outline-none bg-white border-none pl-4 text-sm"
             value={search}
-            onChange={(e) => {
-              if (e.target.value === "") {
-                setFilteredCourses(courses);
-              }
-              setSearch(e.target.value);
-            }}
+            onChange={(e) => setSearch(e.target.value)}
           />
           <button
             type="submit"
@@ -99,7 +97,7 @@ const Published = () => {
           </thead>
 
           <tbody className="text-center whitespace-nowrap divide-y bg-white divide-gray-200">
-            {filteredCourses?.map((course, index) => (
+            {courses?.map((course, index) => (
               <tr key={index}>
                 <td className="size-10 bg-gray-100">{index + 1}</td>
                 <td className="p-4 text-sm">{course?.title}</td>

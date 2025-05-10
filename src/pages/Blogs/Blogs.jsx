@@ -7,13 +7,14 @@ import { toast } from "react-toastify";
 
 const Blogs = () => {
   const [blogs, setBlogs] = useState([]);
-  const [filteredBlogs, setFilteredBlogs] = useState([]);
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const fetchAllBlogs = async () => {
     let res = await getAllBlogs(page);
-    setBlogs(res?.data.blogs || []);
-    setFilteredBlogs(res?.data.blogs || []);
+    console.log(res);
+    if (res?.isSuccess) {
+      setBlogs(res?.data || []);
+    }
   };
   useEffect(() => {
     fetchAllBlogs();
@@ -21,13 +22,9 @@ const Blogs = () => {
   const handleDeleteBlog = async (id) => {
     const res = await deleteBlog(id);
     if (res?.isSuccess) {
-      setBlogs((prevBlogs) => ({
-        ...prevBlogs,
-        blogs: prevBlogs.blogs.filter((blog) => blog.id !== id),
-      }));
-      setFilteredBlogs((prevBlogs) => ({
-        ...prevBlogs,
-        blogs: prevBlogs.blogs.filter((blog) => blog.id !== id),
+      setBlogs((prev) => ({
+        ...prev,
+        blogs: prev?.blogs?.filter((blog) => blog?.id !== id),
       }));
     }
   };
@@ -35,8 +32,10 @@ const Blogs = () => {
     e.preventDefault();
     let res = await getFilteredBlogs(search);
     if (res?.isSuccess) {
-      setBlogs(res?.data.items || []);
-      setFilteredBlogs(res?.data.items || []);
+      setBlogs((prev) => ({
+        ...prev,
+        blogs: res?.data?.items || [],
+      }));
     } else {
       toast.error(res?.message || "Something went wrong!");
       setSearch("");
@@ -90,7 +89,7 @@ const Blogs = () => {
           </thead>
 
           <tbody className="text-center whitespace-nowrap divide-y bg-white divide-gray-200">
-            {filteredBlogs?.map((blog, index) => (
+            {blogs?.blogs?.map((blog, index) => (
               <tr key={index}>
                 <td className="size-10 bg-gray-100">{index + 1}</td>
                 <td>

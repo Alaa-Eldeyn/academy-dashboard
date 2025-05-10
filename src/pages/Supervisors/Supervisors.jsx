@@ -16,7 +16,12 @@ const Supervisors = () => {
 
   const fetchAllSupervisors = async () => {
     let res = await getAllSupervisors(page);
-    setSupervisors(res?.data);
+    if (res?.isSuccess) {
+      setSupervisors(res?.data);
+    } else {
+      toast.error(res?.message || "Something went wrong");
+    }
+
   };
   useEffect(() => {
     fetchAllSupervisors();
@@ -27,10 +32,14 @@ const Supervisors = () => {
     if (res?.isSuccess) {
       setSupervisors((prevSupervisors) => ({
         ...prevSupervisors,
-        supervisors: prevSupervisors.supervisors.filter(
-          (supervisor) => supervisor.id !== id
+        users: prevSupervisors.users.filter(
+          (user) => user.id !== id
         ),
       }));
+    } else {
+      toast.error(
+        res?.message || "Something went wrong while deleting user"
+      );
     }
   };
 
@@ -38,7 +47,7 @@ const Supervisors = () => {
     if (search !== "") {
       let res = await getFilteredSupervisors(search);
       if (res?.isSuccess) {
-        setSupervisors(res?.data?.users || []);
+        setSupervisors(res?.data);
       } else {
         toast.error(res?.message || "Something went wrong");
         setSearch("");

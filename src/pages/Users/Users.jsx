@@ -12,7 +12,7 @@ const Users = () => {
   const fetchAllUsers = async () => {
     let res = await getAllUsers(page);
     if (res?.isSuccess) {
-      setUsers(res?.data?.users);
+      setUsers(res?.data);
     } else {
       toast.error(res?.message || "Something went wrong");
     }
@@ -27,20 +27,22 @@ const Users = () => {
         ...prevUsers,
         users: prevUsers.users.filter((user) => user.id !== id),
       }));
+    } else {
+      toast.error(
+        res?.message || "Something went wrong while deleting user"
+      );
     }
   };
   const handleSearch = async () => {
-    if (search !== "") {
       let res = await getFilteredUsers(search);
 
       if (res?.isSuccess) {
-        setUsers(res?.data?.users || []);
+        setUsers(res?.data);
       } else {
         toast.error(res?.message || "Something went wrong");
         setSearch("");
         fetchAllUsers();
       }
-    }
   };
   return (
     <div className="px-6">
@@ -92,7 +94,7 @@ const Users = () => {
           </thead>
 
           <tbody className="text-center whitespace-nowrap divide-y bg-white divide-gray-200">
-            {users?.map((user, index) => (
+            {users?.users?.map((user, index) => (
               <tr key={index}>
                 <td className="size-10 bg-gray-100">{index + 1}</td>
                 <td className="p-4 text-sm">

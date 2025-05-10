@@ -36,7 +36,7 @@ const Courses = () => {
     if (res?.isSuccess) {
       toast.success("Category added successfully");
       setNewCategoryName("");
-      let cat = await getAllCategories();
+      let cat = await getAllCategories("Courses");
       setCategories(cat?.data);
     }
   };

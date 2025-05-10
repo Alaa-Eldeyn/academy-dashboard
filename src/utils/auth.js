@@ -153,7 +153,7 @@ const logIn = async (data) => {
         return { isSuccess: false };
       }
     } else {
-      if (response?.data?.message === "can't find this user name") {
+      if (response?.data?.message === "Can't find this username") {
         toast.error("Please enter the email you registered with");
       } else {
         toast.error("Wrong Password");

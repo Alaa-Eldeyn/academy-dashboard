@@ -119,8 +119,8 @@ const deleteSupervisor = async (supervisorId) => {
           showConfirmButton: false,
           timer: 1000,
         });
-        return response.data;
       }
+      return response.data;
     } catch (error) {
       console.log(error);
       return { isSuccess: false };
@@ -159,8 +159,8 @@ const deleteUser = async (userId) => {
           showConfirmButton: false,
           timer: 1000,
         });
-        return response.data;
       }
+      return response.data;
     } catch (error) {
       console.log(error);
       return { isSuccess: false };

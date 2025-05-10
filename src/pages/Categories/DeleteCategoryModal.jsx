@@ -6,6 +6,7 @@ import {
   moveSubCategory,
 } from "../../utils/categories";
 import { useRef, useState } from "react";
+import { toast } from "react-toastify";
 
 const DeleteCategoryModal = ({
   categoryToDelete,
@@ -13,41 +14,95 @@ const DeleteCategoryModal = ({
   categories,
   setCategories,
   setSubCategories,
-  type
+  type,
 }) => {
   const cat = useRef();
   const [error, setError] = useState(false);
+  const [loadingMoveDelete, setLoadingMoveDelete] = useState(false);
+  const [loadingJustDelete, setLoadingJustDelete] = useState(false);
+
   const moveAndDeleteCategory = async () => {
     if (!cat.current.value) {
       setError(true);
       return;
     }
 
-    let { data } = await getSubs(categoryToDelete);
-    await Promise.all(
-      data?.map(async (sub) => {
-        return await moveSubCategory(sub?.id, {
-          categoryId: cat.current.value,
-        });
-      })
-    );
+    setLoadingMoveDelete(true);
 
-    let response = await deleteCategory(categoryToDelete);
-    if (response?.isSuccess) {
-      let cat = await getAllCategories(type);
-      setCategories(cat?.data);
-      setSubCategories([]);
-      setDeleteCategoryModal(false);
+    try {
+      let res = await getSubs(categoryToDelete);
+
+      if (res?.isSuccess) {
+        await Promise.all(
+          res?.data?.map(async (sub) => {
+            return await moveSubCategory(sub?.id, {
+              categoryId: cat.current.value,
+            });
+          })
+        );
+        let response = await deleteCategory(categoryToDelete);
+        if (response?.isSuccess) {
+          let catData = await getAllCategories(type);
+          setCategories(catData?.data);
+          setSubCategories([]);
+          setDeleteCategoryModal(false);
+        } else {
+          toast.error(
+            response?.message ||
+              "Something went wrong while deleting category"
+          );
+        }
+      } else if (
+        res?.message === "No subcategories found for the specified category."
+      ) {
+        toast.info(
+          "No subcategories found for the specified category, will Delete Category Directly."
+        );
+        let response = await deleteCategory(categoryToDelete);
+        if (response?.isSuccess) {
+          let catData = await getAllCategories(type);
+          setCategories(catData?.data);
+          setSubCategories([]);
+          setDeleteCategoryModal(false);
+        } else {
+          toast.error(
+            response?.message ||
+              "Something went wrong while deleting category"
+          );
+        }
+      } else {
+        toast.error(
+          res?.message || "Something went wrong while moving subcategories"
+        );
+      }
+    } catch {
+      toast.error("Unexpected error happened.");
     }
+
+    setLoadingMoveDelete(false);
   };
+
   const justDeleteCategory = async () => {
-    let response = await deleteCategory(categoryToDelete);
-    if (response?.isSuccess) {
-      let cat = await getAllCategories(type);
-      setCategories(cat?.data);
-      setSubCategories([]);
-      setDeleteCategoryModal(false);
+    setLoadingJustDelete(true);
+
+    try {
+      let response = await deleteCategory(categoryToDelete);
+      if (response?.isSuccess) {
+        let catData = await getAllCategories(type);
+        setCategories(catData?.data);
+        setSubCategories([]);
+        setDeleteCategoryModal(false);
+      } else {
+        toast.error(
+          response?.message ||
+            "Something went wrong while deleting category"
+        );
+      }
+    } catch {
+      toast.error("Unexpected error happened.");
     }
+
+    setLoadingJustDelete(false);
   };
 
   return (
@@ -102,19 +157,26 @@ const DeleteCategoryModal = ({
           )}
           <div className="center gap-3">
             <button
-              onClick={() => moveAndDeleteCategory()}
-              className="px-8 py-3 bg-primary text-white text-xs rounded-full focus:outline-none  border border-transparent"
+              onClick={moveAndDeleteCategory}
+              className="px-8 py-3 min-w-[230px] bg-primary text-white text-xs rounded-full focus:outline-none border border-transparent flex items-center justify-center"
+              disabled={loadingMoveDelete}
             >
-              Move and Delete Category
+              {loadingMoveDelete ? (
+                <span className="animate-spin h-5 w-5 border-2 border-white border-t-transparent rounded-full"></span>
+              ) : (
+                "Move and Delete Category"
+              )}
             </button>
             <button
-              onClick={() => {
-                justDeleteCategory();
-                setDeleteCategoryModal(false);
-              }}
-              className="px-8 py-3 rounded-full text-xs border bg-[#FEF8FF] text-black"
+              onClick={justDeleteCategory}
+              className="px-8 py-3 min-w-[230px] rounded-full text-xs border bg-[#FEF8FF] text-black flex items-center justify-center"
+              disabled={loadingJustDelete}
             >
-              Delete Category With Subcategories
+              {loadingJustDelete ? (
+                <span className="animate-spin h-5 w-5 border-2 border-black border-t-transparent rounded-full"></span>
+              ) : (
+                "Delete Category With Subcategories"
+              )}
             </button>
           </div>
         </div>

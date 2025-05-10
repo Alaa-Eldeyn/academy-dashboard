@@ -156,6 +156,7 @@ const AddExam = ({ isUpdateMode }) => {
               type="number"
               placeholder="Enter Price"
               className={`input`}
+              min="0"
               {...register("price")}
             />
           </div>

@@ -34,6 +34,7 @@ const Exams = () => {
     let res = await getFilteredExams(search);
     if (res?.isSuccess) {
       setExams(res?.data?.tests || []);
+      console.log(res?.data?.tests);
     } else {
       toast.error(res?.message || "Something went wrong!");
       setSearch("");

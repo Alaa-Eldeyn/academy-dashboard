@@ -1,13 +1,19 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
 import { Icon } from "@iconify/react/dist/iconify.js";
+import { getUser } from "../utils/LocalStorage";
 
 function Sidebar() {
   const [isCoursesOpen, setIsCoursesOpen] = useState(false);
   const [activeLink, setActiveLink] = useState("");
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const isAdmin = getUser().roles?.[0]?.name.toLowerCase() === "admin" 
+  const isSuperVisor = getUser().roles?.[0]?.name.toLowerCase() === "supervisor"
+  
+  let sidebarItem = [];
 
-  const sidebarItem = [
+  if (isAdmin) {
+      sidebarItem=[
     {
       link: "/",
       icon: <Icon icon="radix-icons:dashboard" className="text-xl" />,
@@ -79,6 +85,33 @@ function Sidebar() {
       title: "Medical Books",
     },
   ];
+  } else if (isSuperVisor) {
+      sidebarItem=[
+    
+    {
+      link: "categories",
+      icon: <Icon icon="ph:network" className="text-2xl" />,
+      title: "Categories",
+    },
+    {
+      link: "exams",
+      icon: <Icon icon="hugeicons:note-edit" className="text-2xl" />,
+      title: "Exams",
+    },
+    {
+      link: "blogs",
+      icon: <Icon icon="carbon:blog" className="text-2xl" />,
+      title: "Blogs",
+    },
+    {
+      link: "books",
+      icon: <Icon icon="solar:book-outline" className="text-2xl" />,
+      title: "Medical Books",
+    },
+  ];
+  } else {
+    sidebarItem=[]
+  }
 
   const handleDropdownClick = (index) => {
     if (index === 4) setIsCoursesOpen(!isCoursesOpen);
