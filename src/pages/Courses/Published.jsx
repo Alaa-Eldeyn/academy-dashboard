@@ -12,14 +12,12 @@ import Pagination from './../../components/Pagination';
 const Published = () => {
   const [courses, setCourses] = useState([]);
   const [search, setSearch] = useState("");
-  const [paginationInfo, setPaginationInfo] = useState();
   const [page, setPage] = useState(1);
 
   const fetchCourses = async () => {
     let res = await getApprovedCourses(page);
     if (res?.isSuccess) {
-      setCourses(res?.data?.courses || []);
-      setPaginationInfo(res?.data);
+      setCourses(res?.data);
     } else {
       toast.error(res?.message || "Something went wrong!");
     }
@@ -30,15 +28,17 @@ const Published = () => {
   const requestDeleteCourse = async (id) => {
     let res = await requestDelete(id);
     if (res?.isSuccess) {
-      setCourses(courses.filter((course) => course.id !== id));
+      setCourses((prevCourses) => ({
+        ...prevCourses,
+        items: prevCourses.items.filter((course) => course?.id !== id),
+      }));
     }
   };
   const handleSearch = async (e) => {
     e.preventDefault();
     let res = await getFilteredCourses(search, page);
     if (res?.isSuccess) {
-      setCourses(res?.data?.items || []);
-      setPaginationInfo(res?.data);
+      setCourses(res?.data);
     } else {
       toast.error(res?.message || "Something went wrong!");
       setSearch("");
@@ -98,7 +98,7 @@ const Published = () => {
           </thead>
 
           <tbody className="text-center whitespace-nowrap divide-y bg-white divide-gray-200">
-            {courses?.map((course, index) => (
+            {courses?.items?.map((course, index) => (
               <tr key={index}>
                 <td className="size-10 bg-gray-100">{index + 1}</td>
                 <td className="p-4 text-sm">{course?.title}</td>
@@ -135,7 +135,7 @@ const Published = () => {
         </table>
       </div>
     </div>
-    <Pagination page={page} setPage={setPage} info={paginationInfo} />
+    <Pagination page={page} setPage={setPage} info={courses} />
   </>
   );
 };

@@ -68,7 +68,7 @@ const AddCourse = () => {
         },
         willClose: () => {
           clearInterval(timerInterval);
-          navigate(`/published-courses`);
+          navigate(`/pending-courses`);
         },
       });
     }
@@ -146,10 +146,10 @@ const AddCourse = () => {
                 className={`input`}
                 step={0.5}
                 {...register("duration")}
+                min={0}
               />
               {errors && errors?.duration && (
                 <span className="text-red-500 text-sm">
-                  {" "}
                   {errors?.duration?.message}
                 </span>
               )}
