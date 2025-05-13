@@ -16,12 +16,12 @@ const Login = () => {
   });
   const handleLogin = async (data) => {
     let res = await logIn(data);
-      const isAdmin = getUser().roles?.[0]?.name.toLowerCase() === "admin" 
-      const isSuperVisor = getUser().roles?.[0]?.name.toLowerCase() === "supervisor"
+    const isAdmin = getUser()?.roles?.[0]?.name?.toLowerCase() === "admin"
+    const isSuperVisor = getUser()?.roles?.[0]?.name?.toLowerCase() === "supervisor"
     if (res?.isSuccess) {
-      if(isAdmin){
+      if (isAdmin) {
         navigate("/")
-      } else if(isSuperVisor){
+      } else if (isSuperVisor) {
         navigate("/exams")
       }
     }
@@ -38,7 +38,7 @@ const Login = () => {
             <div className="text-center w-full mx-auto">
               <span className="text-secondary">Welcome to</span>
               <h3 className="text-primary text-2xl font-bold max-md:text-center">
-                MedLearn Hub
+                Practice2Pass
               </h3>
             </div>
             <div className="my-6">

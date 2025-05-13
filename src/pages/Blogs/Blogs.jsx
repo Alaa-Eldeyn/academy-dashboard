@@ -100,8 +100,8 @@ const Blogs = () => {
                   />
                 </td>
                 <td className="p-4 text-sm">{blog?.title}</td>
-                <td className="px-6 py-3">Hisham Mousa</td>
-                <td className="px-6 py-3">21 Sep 2024</td>
+                <td className="px-6 py-3">{blog?.authorFullName}</td>
+                <td className="px-6 py-3">{blog?.createdOn?.split("T")[0]}</td>
                 <td className="py-3 flex items-center gap-2 justify-center">
                   <button
                     onClick={() => handleDeleteBlog(blog?.id)}

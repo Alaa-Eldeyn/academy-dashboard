@@ -25,16 +25,11 @@ const Exams = () => {
       setExams(exams.filter((exam) => exam.id !== id));
     }
   };
-  // const handleAddUser = async (id) => {
-  //   let res = await addUserToExam(id);
-  //   console.log(res);
-  // };
   const handleSearch = async (e) => {
     e.preventDefault();
     let res = await getFilteredExams(search);
     if (res?.isSuccess) {
       setExams(res?.data?.tests || []);
-      console.log(res?.data?.tests);
     } else {
       toast.error(res?.message || "Something went wrong!");
       setSearch("");

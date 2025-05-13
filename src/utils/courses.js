@@ -19,10 +19,10 @@ const getAllCourses = async () => {
     return { isSuccess: false };
   }
 };
-const getFilteredCourses = async (search) => {
+const getFilteredCourses = async (search,page) => {
   try {
     let response = await customAxios.get(
-      `/Course/GetAllCoursesFilteredPaginated?status=1&title=${search}`
+      `/Course/GetAllCoursesFilteredPaginated?status=1&title=${search}&page=${page}`
     );
     return response?.data;
   } catch (error) {
@@ -60,9 +60,9 @@ const getPendingDeleteCourses = async () => {
   }
 };
 
-const getApprovedCourses = async () => {
+const getApprovedCourses = async (page) => {
   try {
-    let response = await customAxios.get("/Dashboard/Approved");
+    let response = await customAxios.get(`/Dashboard/Approved?page=${page}`);
     return response?.data;
   } catch (error) {
     console.error(error);

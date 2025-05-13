@@ -183,7 +183,6 @@ const forgetPass = async (email) => {
       window.location.href = "/";
     } else {
       toast.error(res?.data?.message);
-      console.log(res);
     }
   } catch (error) {
     toast.error("Something went wrong, please try again.");
@@ -211,7 +210,6 @@ const resetPassword = async (data) => {
       return res?.data;
     } else {
       toast.error(res?.data?.message);
-      console.log(res);
     }
   } catch (error) {
     console.log(error.response.data);

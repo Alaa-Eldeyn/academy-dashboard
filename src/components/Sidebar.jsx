@@ -87,7 +87,6 @@ function Sidebar() {
   ];
   } else if (isSuperVisor) {
       sidebarItem=[
-    
     {
       link: "categories",
       icon: <Icon icon="ph:network" className="text-2xl" />,
@@ -150,7 +149,7 @@ function Sidebar() {
         <div className="h-full p-3 overflow-y-auto bg-white">
           <Link to={"/"} className="cursor-pointer center">
             <h1 className="font-bold text-xl md:flex mt-2 text-primary">
-              MedLearn Hub
+              Practice2Pass
             </h1>
           </Link>
           <ul className="font-medium mt-10">

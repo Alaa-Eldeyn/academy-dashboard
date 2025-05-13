@@ -93,7 +93,7 @@ const Details = ({ isPublished }) => {
             </div>
           </div>
           <div className="flex gap-2 items-center !mt-4">
-            <span>Alaa Eldeyn</span>
+            <span>{course?.instructorFullName}</span>
           </div>
         </div>
       </div>
@@ -209,20 +209,20 @@ const Details = ({ isPublished }) => {
                               index + 1 == 1
                                 ? "A"
                                 : index + 1 == 2
-                                ? "B"
-                                : index + 1 == 3
-                                ? "C"
-                                : "D"
+                                  ? "B"
+                                  : index + 1 == 3
+                                    ? "C"
+                                    : "D"
                             }
                             defaultChecked={key.isCorrect}
                           />{" "}
                           {index + 1 == 1
                             ? "A"
                             : index + 1 == 2
-                            ? "B"
-                            : index + 1 == 3
-                            ? "C"
-                            : "D"}
+                              ? "B"
+                              : index + 1 == 3
+                                ? "C"
+                                : "D"}
                         </label>
                       ))}
                     </div>

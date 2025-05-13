@@ -7,44 +7,45 @@ import {
   requestDelete,
 } from "../../utils/courses";
 import { toast } from "react-toastify";
+import Pagination from './../../components/Pagination';
 
 const Published = () => {
   const [courses, setCourses] = useState([]);
   const [search, setSearch] = useState("");
+  const [paginationInfo, setPaginationInfo] = useState();
+  const [page, setPage] = useState(1);
 
   const fetchCourses = async () => {
-    let res = await getApprovedCourses();
-    console.log(res);
-    
-    setCourses(res?.data);
+    let res = await getApprovedCourses(page);
+    if (res?.isSuccess) {
+      setCourses(res?.data?.courses || []);
+      setPaginationInfo(res?.data);
+    } else {
+      toast.error(res?.message || "Something went wrong!");
+    }
   };
   useEffect(() => {
     fetchCourses();
-  }, []);
+  }, [page]);
   const requestDeleteCourse = async (id) => {
     let res = await requestDelete(id);
     if (res?.isSuccess) {
       setCourses(courses.filter((course) => course.id !== id));
     }
   };
-  // const handleAddUser = async (id) => {
-  //   let res = await addUserToCourse(id);
-  //   console.log(res);
-  // };
   const handleSearch = async (e) => {
     e.preventDefault();
-    let res = await getFilteredCourses(search);
-    console.log(res);
-    
+    let res = await getFilteredCourses(search, page);
     if (res?.isSuccess) {
       setCourses(res?.data?.items || []);
+      setPaginationInfo(res?.data);
     } else {
       toast.error(res?.message || "Something went wrong!");
       setSearch("");
       fetchCourses();
     }
   };
-  return (
+  return (<>
     <div className="px-6">
       <div className=" flex flex-wrap flex-col sm:flex-row items-center justify-between gap-8 w-auto mb-6">
         <form className="bg-white flex w-full sm:max-w-md p-1 rounded-full overflow-hidden">
@@ -134,6 +135,8 @@ const Published = () => {
         </table>
       </div>
     </div>
+    <Pagination page={page} setPage={setPage} info={paginationInfo} />
+  </>
   );
 };
 

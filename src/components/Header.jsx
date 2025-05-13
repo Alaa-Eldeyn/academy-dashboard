@@ -13,7 +13,7 @@ function Header() {
       <div className="flex flex-wrap items-center justify-between gap-4 w-full">
         <Link to={"/"} className="cursor-pointer">
           <h1 className="font-bold text-xl hidden md:flex text-primary">
-            MedLearn Hub
+            Practice2Pass
           </h1>
         </Link>
         <div className="flex items-center space-x-4">
