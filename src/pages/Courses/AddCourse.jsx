@@ -258,7 +258,7 @@ const AddCourse = () => {
               </div>
               <div className="flex-1 overflow-auto rounded-xl w-full border pink-sc p-2">
                 <ul className="space-y-1 h-40">
-                  {requirements.map((req, i) => (
+                  {requirements?.map((req, i) => (
                     <li
                       key={i}
                       className="flex justify-between rounded-lg border font-bold border-primary py-2 px-4 text-primary"
@@ -268,7 +268,7 @@ const AddCourse = () => {
                         onClick={(e) => {
                           e.preventDefault();
                           setRequirements(
-                            requirements.filter((_, index) => index !== i)
+                            requirements?.filter((_, index) => index !== i)
                           );
                         }}
                       >
@@ -302,7 +302,7 @@ const AddCourse = () => {
               </div>
               <div className="flex-1 overflow-auto rounded-xl w-full border pink-sc p-2">
                 <ul className="space-y-1 h-40">
-                  {objectives.map((obj, i) => (
+                  {objectives?.map((obj, i) => (
                     <li
                       key={i}
                       className="flex justify-between rounded-lg border font-bold border-primary py-2 px-4 text-primary"
@@ -312,7 +312,7 @@ const AddCourse = () => {
                         onClick={(e) => {
                           e.preventDefault();
                           setObjectives(
-                            objectives.filter((_, index) => index !== i)
+                            objectives?.filter((_, index) => index !== i)
                           );
                         }}
                       >
@@ -336,11 +336,15 @@ const AddCourse = () => {
             Cancel
           </button>
           <button
-            className="w-40 bg-primary rounded-xl text-white p-3"
+            className="w-40 bg-primary rounded-xl text-white p-3 disabled:opacity-50 disabled:cursor-not-allowed"
             onClick={handleSubmit(handleAddCourse)}
             disabled={isSubmitting}
           >
-            Add Course
+            {isSubmitting ? (
+              "Loading..."
+            ) : (
+              "Add Course"
+            )}
           </button>
         </div>
       </form>
